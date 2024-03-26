@@ -12,7 +12,7 @@ import androidx.room.TypeConverters
  * Uses the Sandwich entity/table.
  * Uses the DateConverter class to convert dates into a storable format.
  *
- * @property SandwichDao DAO object used to provide access to stored data.
+ * @property DataAccessObject DAO object used to provide access to stored data.
  */
 @Database(entities = [Sandwich::class], version = 1) //TODO update entities
 @TypeConverters(DateConverter::class)
