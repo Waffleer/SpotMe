@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SpotMe</string>
+
+    //Screen Headers
+    <string name="summary_header">Summary Screen</string>
+
+    //Button Labels
+    <string name="back_button">Back</string>
+
+
 </resources>
