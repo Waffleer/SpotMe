@@ -30,7 +30,7 @@ abstract class LocalDatabase : RoomDatabase() {
                 instance = Room.databaseBuilder(
                     context,
                     LocalDatabase::class.java,
-                    "subshop_db" //TODO change to "spotme_db"
+                    "spotme_db" //was called "subshop_db"
                 ).build()
             }
             return instance as LocalDatabase
