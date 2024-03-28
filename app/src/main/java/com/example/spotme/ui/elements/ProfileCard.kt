@@ -16,25 +16,23 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.spotme.data.Person
+import com.example.spotme.data.Profile
 import com.example.spotme.data.StaticDataSource
 
 @Composable
-fun SummaryCard(
-    person: Person,
+fun ProfileCard(
+    profile: Profile,
     modifier: Modifier = Modifier
     ) {
     var total: Double = 0.0
 
-    person.debts.forEach{debt -> //Totals all of the transactions for every debt
+    profile.debts.forEach{debt -> //Totals all of the transactions for every debt
         debt.transactions.forEach{ trans ->
             if(trans.canceled == false){
                 total += trans.amount
             }
         }
     }
-
-
 
     Card(modifier = modifier
         .padding(12.dp)
@@ -44,7 +42,7 @@ fun SummaryCard(
         Column {
             Text(
                 textAlign = TextAlign.Start,
-                text = person.displayName,
+                text = profile.displayName,
                 modifier = Modifier
                     .padding(start = 12.dp, top = 4.dp),
             )
@@ -68,5 +66,5 @@ fun SummaryCard(
 @Preview
 @Composable
 fun PreviewSummeryCard(){
-    SummaryCard(person = StaticDataSource.persons[0])
+    ProfileCard(profile = StaticDataSource.profiles[0])
 }

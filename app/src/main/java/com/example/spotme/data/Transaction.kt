@@ -7,5 +7,5 @@ data class Transaction(
     val amount: Double,
     val description: String,
     val canceled: Boolean,
-    //val date: Date,
+    val date: Date = Date(0),
 )
