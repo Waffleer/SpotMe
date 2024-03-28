@@ -132,7 +132,7 @@ fun SpotMeApp(
         // val oldOrders by databaseViewModel.oldSubsUiModel.collectAsState()
         NavHost(
             navController = navController,
-            startDestination = SpotMeScreen.Details.name,
+            startDestination = SpotMeScreen.Summary.name,
             modifier = Modifier
                 .fillMaxSize()
                 //.verticalScroll(rememberScrollState()) why does this kill my app???
