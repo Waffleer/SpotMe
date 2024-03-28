@@ -45,7 +45,7 @@ import java.util.Date
  */
 enum class SpotMeScreen(@StringRes val title: Int) {
     Summary(title = R.string.summary_header),
-    //Add Screens Here
+    // TODO add other screens here
 }
 
 /**
