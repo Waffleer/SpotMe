@@ -133,24 +133,11 @@ fun SpotMeApp(
                 //.verticalScroll(rememberScrollState()) why does this kill my app???
                 .padding(innerPadding)
         ) {
-
-
-
             composable(route = SpotMeScreen.Summary.name) {
                 SummaryScreen(
                     localUiState = localUiState,
                 ) //Update SummaryScreen() later
             }
-
-
-
-
-
-
-
-
-
-
             /* Add Navigation to other screens here like so:
             composable(route = SubShopScreen.Order.name) {
 
