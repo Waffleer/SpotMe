@@ -6,7 +6,6 @@ data class Profile (
     val id: Long?,
     val name: String,
     val bio: String,
-    val displayName: String,
     val profileImage: String = "No idea what type this should be",
     val debts: List<Debt> = listOf(),
     val paymentPreference:  PaymentType,
