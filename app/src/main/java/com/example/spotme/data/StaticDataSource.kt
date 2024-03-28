@@ -5,11 +5,14 @@ object StaticDataSource {
         Transaction(1,100.0,"Description of the transaction1", false),
         Transaction(2,-200.0,"Description of the transaction2", false),
         Transaction(3,5.0,"Description of the transaction3", false),
+        Transaction(4,10000.0,"A very large debt", false),
     )
     val debts: List<Debt> = listOf(
-        Debt(1,1, listOf(this.transactions[0],this.transactions[1],this.transactions[2]))
+        Debt(1,1, "name1", "description1", listOf(this.transactions[0],this.transactions[1],this.transactions[2])),
+        Debt(2,2, null, null,listOf(this.transactions[3])),
     )
     val profiles: List<Profile> = listOf(
-        Profile(1,"Name1","Biography1","Namason", debts = listOf(this.debts[0]), paymentPreference = (PaymentType.NONE))
+        Profile(1,"Namason","Biography1", debts = listOf(this.debts[0]), paymentPreference = (PaymentType.NONE)),
+        Profile(2,"Namason jr","Biography1", debts = listOf(this.debts[1]), paymentPreference = (PaymentType.NONE)),
     )
 }

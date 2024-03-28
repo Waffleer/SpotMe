@@ -16,7 +16,8 @@ import kotlinx.coroutines.flow.update
  */
 data class DetailsUiState (
     // Put State Values Here:
-    val profiles: List<Profile> = listOf()
+    val profiles: List<Profile> = listOf(),
+    val currentProfile: Profile? = null,
 )
 
 class DetailsViewModel : ViewModel() {
@@ -31,9 +32,19 @@ class DetailsViewModel : ViewModel() {
         //Will get profiles from db with desired information
         //For now im just taking from the StaticDataSource
         val profiles = StaticDataSource.profiles
+        //ToDo Change to Database implementation
+
+
         _uiState.value = DetailsUiState(
             profiles = profiles
         )
+    }
+    public fun setCurrentProfile(profile: Profile?){
+        _uiState.update {currentState ->
+            currentState.copy(
+                currentProfile = profile
+            )
+        }
     }
 
 }
