@@ -7,6 +7,10 @@
     //Button Labels
     <string name="back_button">Back</string>
     <string name="details_screen">Details Screen</string>
+    <string name="expanded_profile_screen">Expanded Profile Screen</string>
+    <string name="details">Details</string>
+    <string name="plus_button">+</string>
+    <string name="add_debt">Add Debt</string>
 
 
 </resources>

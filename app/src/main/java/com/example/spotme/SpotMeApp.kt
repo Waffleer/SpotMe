@@ -31,7 +31,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Repository
+import com.example.spotme.ui.AddDebtScreen
 import com.example.spotme.ui.DetailsScreen
+import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
 import com.example.spotme.viewmodels.DatabaseViewModel
 import com.example.spotme.viewmodels.DetailsViewModel
@@ -48,6 +50,8 @@ import java.util.Date
 enum class SpotMeScreen(@StringRes val title: Int) {
     Summary(title = R.string.summary_header),
     Details(title = R.string.details_screen),
+    ExpandedProfile(title = R.string.expanded_profile_screen),
+    AddDebt(title = R.string.add_debt),
     // TODO add other screens here
 }
 
@@ -120,7 +124,8 @@ fun SpotMeApp(
                 currentScreen = currentScreen,
                 canNavigateBack = (navController.previousBackStackEntry != null && (currentScreen != (SpotMeScreen.Summary)) ),
                 navigateUp = {
-                    navController.navigate(SpotMeScreen.Summary.name)
+                    navController.popBackStack() //This sends you to the last screen
+                    //navController.navigate(SpotMeScreen.Summary.name) - what it was before
                 }
             )
         }
@@ -144,6 +149,10 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.Summary.name) {
                 SummaryScreen(
                     localUiState = localUiState,
+                    onDetailsPressed = {
+                        navController.navigate(SpotMeScreen.Details.name)
+                    },
+                    onPlusPressed = {}
                 ) //Update SummaryScreen() later
             }
 
@@ -151,9 +160,27 @@ fun SpotMeApp(
                 DetailsScreen(
                     uiState = detailsUiState,
                     onSummeryPressed = {},
-                    onProfilePressed = {},
-                    onAddPressed = {},
-                ) //Update SummaryScreen() later
+                    onProfilePressed = {
+                        detailsViewModel.setCurrentProfile(it)
+                        navController.navigate(SpotMeScreen.ExpandedProfile.name)
+                    },
+                    onAddPressed = {
+                        detailsViewModel.setCurrentProfile(it)
+                        navController.navigate(SpotMeScreen.AddDebt.name)
+                    },
+                )
+            }
+
+            composable(route = SpotMeScreen.ExpandedProfile.name) {
+                ExpandedProfileScreen(
+                    profile = detailsUiState.currentProfile
+                )
+            }
+
+            composable(route = SpotMeScreen.AddDebt.name) {
+                AddDebtScreen(
+                    profile = detailsUiState.currentProfile
+                )
             }
 
 
