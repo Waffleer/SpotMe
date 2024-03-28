@@ -42,7 +42,7 @@ fun ProfileCard(
         Column {
             Text(
                 textAlign = TextAlign.Start,
-                text = profile.displayName,
+                text = profile.name,
                 modifier = Modifier
                     .padding(start = 12.dp, top = 4.dp),
             )

@@ -31,8 +31,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Repository
+import com.example.spotme.ui.DetailsScreen
 import com.example.spotme.ui.SummaryScreen
 import com.example.spotme.viewmodels.DatabaseViewModel
+import com.example.spotme.viewmodels.DetailsViewModel
 import com.example.spotme.viewmodels.SpotMeViewModel
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -45,6 +47,7 @@ import java.util.Date
  */
 enum class SpotMeScreen(@StringRes val title: Int) {
     Summary(title = R.string.summary_header),
+    Details(title = R.string.details_screen),
     // TODO add other screens here
 }
 
@@ -95,6 +98,7 @@ fun SpotMeAppBar(
  */
 @Composable
 fun SpotMeApp(
+    detailsViewModel: DetailsViewModel = viewModel(),
     localViewModel: SpotMeViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
@@ -123,6 +127,7 @@ fun SpotMeApp(
     ){ innerPadding ->
         // Local UI State from SpotMeViewModel/LocalUiState
         val localUiState by localViewModel.uiState.collectAsState()
+        val detailsUiState by detailsViewModel.uiState.collectAsState()
         // DATABASE State Information Example:
         // val oldOrders by databaseViewModel.oldSubsUiModel.collectAsState()
         NavHost(
@@ -133,11 +138,27 @@ fun SpotMeApp(
                 //.verticalScroll(rememberScrollState()) why does this kill my app???
                 .padding(innerPadding)
         ) {
+
+
+
             composable(route = SpotMeScreen.Summary.name) {
                 SummaryScreen(
                     localUiState = localUiState,
                 ) //Update SummaryScreen() later
             }
+
+            composable(route = SpotMeScreen.Details.name) {
+                DetailsScreen(
+                    uiState = detailsUiState,
+                    onSummeryPressed = {},
+                    onProfilePressed = {},
+                    onAddPressed = {},
+                ) //Update SummaryScreen() later
+            }
+
+
+
+
             /* Add Navigation to other screens here like so:
             composable(route = SubShopScreen.Order.name) {
 

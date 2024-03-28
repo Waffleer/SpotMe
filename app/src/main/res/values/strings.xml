@@ -6,6 +6,7 @@
 
     //Button Labels
     <string name="back_button">Back</string>
+    <string name="details_screen">Details Screen</string>
 
 
 </resources>
