@@ -17,7 +17,8 @@ import kotlinx.coroutines.flow.update
  */
 data class LocalUiState (
     // Put State Values Here:
-    val debtTotal: String = "$0.00" // placeholder
+    val debtTotal: String = "$0.00"
+
 )
 
 class SpotMeViewModel : ViewModel() {
