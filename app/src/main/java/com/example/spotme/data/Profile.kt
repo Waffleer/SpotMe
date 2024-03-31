@@ -10,4 +10,5 @@ data class Profile (
     val debts: List<Debt> = listOf(),
     val paymentPreference:  PaymentType,
     val createdDate: Date = Date(0),
+    val hidden: Boolean = false,
 )
