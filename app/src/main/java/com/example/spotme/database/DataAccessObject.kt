@@ -40,7 +40,7 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
 
     @Transaction // Get Profiles with their Debts
     @Query("SELECT * FROM Profile")
-    fun getProfileWithDebts(): Flow<List<ProfileWithDebts>>
+    fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
 
 
     @Transaction // TODO modify to return a particular debt -< transaction pair
