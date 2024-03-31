@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 
 
@@ -36,4 +37,12 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     suspend fun deleteSandwich(
         sub: Sandwich
     )
+
+    @Transaction // Get Profiles with their Debts
+    @Query("SELECT * FROM Profile")
+    fun getProfileWithDebts(): List<ProfileWithDebts>
+
+    @Transaction // Get Debts with their Transactions.
+    @Query("SELECT * FROM Debt")
+    fun getDebtWithTransactions(): List<DebtWithTransactions>
 }
