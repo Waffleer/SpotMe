@@ -62,7 +62,6 @@ data class Transaction(
 )
 
 //Relationship: Profile -< Debt
-@Entity
 data class ProfileWithDebts(
     @Embedded val profile: Profile,
     @Relation(
@@ -73,7 +72,6 @@ data class ProfileWithDebts(
 )
 
 //Relationship: Debt -< Transaction
-@Entity
 data class DebtWithTransactions(
     @Embedded val debt: Debt,
     @Relation(
