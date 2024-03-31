@@ -18,6 +18,7 @@ import com.example.spotme.viewmodels.LocalUiState
 fun SummaryScreen(
     localUiState: LocalUiState,
     onDetailsPressed: () -> Unit,
+    onGroupsPressed: () -> Unit,
     onPlusPressed: () -> Unit,
 
 ) {
@@ -39,6 +40,12 @@ fun SummaryScreen(
         NavButton(
             labelResourceId = R.string.details,
             onClick = { onDetailsPressed() },
+            modifier = Modifier
+                .padding(12.dp)
+        )
+        NavButton(
+            labelResourceId = R.string.groups,
+            onClick = { onGroupsPressed() },
             modifier = Modifier
                 .padding(12.dp)
         )

@@ -31,11 +31,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Repository
-import com.example.spotme.ui.AddDebtScreen
+import com.example.spotme.ui.AddDebtTransactionScreen
+import com.example.spotme.ui.AddGroupTransactionScreen
 import com.example.spotme.ui.DetailsScreen
+import com.example.spotme.ui.ExpandedGroupScreen
 import com.example.spotme.ui.ExpandedProfileScreen
+import com.example.spotme.ui.GroupsScreen
 import com.example.spotme.ui.SummaryScreen
 import com.example.spotme.viewmodels.DetailsViewModel
+import com.example.spotme.viewmodels.GroupsViewModel
 import com.example.spotme.viewmodels.SpotMeViewModel
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -50,7 +54,10 @@ enum class SpotMeScreen(@StringRes val title: Int) {
     Summary(title = R.string.summary_header),
     Details(title = R.string.details_screen),
     ExpandedProfile(title = R.string.expanded_profile_screen),
-    AddDebt(title = R.string.add_debt),
+    AddDebtTransaction(title = R.string.add_debt_transaction),
+    Groups(title = R.string.groups),
+    ExpandedGroup(title = R.string.expanded_groups_screen),
+    AddGroupTransactions(title = R.string.add_group_transaction),
     // TODO add other screens here
 }
 
@@ -102,6 +109,7 @@ fun SpotMeAppBar(
 @Composable
 fun SpotMeApp(
     detailsViewModel: DetailsViewModel = viewModel(),
+    groupsViewModel: GroupsViewModel = viewModel(),
     localViewModel: SpotMeViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
@@ -132,6 +140,7 @@ fun SpotMeApp(
         // Local UI State from SpotMeViewModel/LocalUiState
         val localUiState by localViewModel.uiState.collectAsState()
         val detailsUiState by detailsViewModel.uiState.collectAsState()
+        val groupsUiState by groupsViewModel.uiState.collectAsState()
         // DATABASE State Information Example:
         // val oldOrders by databaseViewModel.oldSubsUiModel.collectAsState()
         NavHost(
@@ -151,6 +160,9 @@ fun SpotMeApp(
                     onDetailsPressed = {
                         navController.navigate(SpotMeScreen.Details.name)
                     },
+                    onGroupsPressed = {
+                        navController.navigate(SpotMeScreen.Groups.name)
+                    },
                     onPlusPressed = {}
                 ) //Update SummaryScreen() later
             }
@@ -165,7 +177,7 @@ fun SpotMeApp(
                     },
                     onAddPressed = {
                         detailsViewModel.setCurrentProfile(it)
-                        navController.navigate(SpotMeScreen.AddDebt.name)
+                        navController.navigate(SpotMeScreen.AddDebtTransaction.name)
                     },
                 )
             }
@@ -176,11 +188,40 @@ fun SpotMeApp(
                 )
             }
 
-            composable(route = SpotMeScreen.AddDebt.name) {
-                AddDebtScreen(
+            composable(route = SpotMeScreen.AddDebtTransaction.name) {
+                AddDebtTransactionScreen(
                     profile = detailsUiState.currentProfile
                 )
             }
+
+
+            composable(route = SpotMeScreen.Groups.name) {
+                GroupsScreen(
+                    uiState = groupsUiState,
+                    onSummeryPressed = {},
+                    onGroupPressed = {
+                        groupsViewModel.setCurrentGroup(it)
+                        navController.navigate(SpotMeScreen.ExpandedGroup.name)
+                    },
+                    onAddTransactionPressed = {
+                        groupsViewModel.setCurrentGroup(it)
+                        navController.navigate(SpotMeScreen.AddGroupTransactions.name)
+                    },
+                )
+            }
+
+            composable(route = SpotMeScreen.ExpandedGroup.name) {
+                ExpandedGroupScreen(
+                    group = groupsUiState.currentGroup
+                )
+            }
+
+            composable(route = SpotMeScreen.AddGroupTransactions.name) {
+                AddGroupTransactionScreen(
+                    group = groupsUiState.currentGroup
+                )
+            }
+
 
 
 

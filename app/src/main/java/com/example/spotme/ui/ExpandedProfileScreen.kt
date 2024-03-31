@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import com.example.spotme.data.Profile
 import androidx.compose.material3.Text
-import com.example.spotme.ui.elements.ExpandedProfile.ExpandedProfileScreenDebug
+import com.example.spotme.ui.elements.debug.ExpandedProfileScreenDebug
 @Composable
 fun ExpandedProfileScreen(
     profile: Profile?,

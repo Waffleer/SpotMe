@@ -6,4 +6,5 @@ data class Debt (
     val name: String?,
     val description: String?,
     val transactions: List<Transaction> = listOf(),
+    val hidden: Boolean = false,
 )
