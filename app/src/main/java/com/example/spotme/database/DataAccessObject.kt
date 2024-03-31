@@ -16,7 +16,7 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     /**
      * Gets a flow of a list of previously ordered sandwiches.
      * Contains an SQL Query: "SELECT * FROM sandwich"
-     */
+     *//*
     @Query("SELECT * FROM sandwich")
     fun getAll(): Flow<List<Sandwich>>
 
@@ -36,13 +36,23 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Delete
     suspend fun deleteSandwich(
         sub: Sandwich
-    )
+    )*/
 
     @Transaction // Get Profiles with their Debts
     @Query("SELECT * FROM Profile")
-    fun getProfileWithDebts(): List<ProfileWithDebts>
+    fun getProfileWithDebts(): Flow<List<ProfileWithDebts>>
 
-    @Transaction // Get Debts with their Transactions.
+
+    @Transaction // TODO modify to return a particular debt -< transaction pair
     @Query("SELECT * FROM Debt")
-    fun getDebtWithTransactions(): List<DebtWithTransactions>
+    fun getDebtWithTransactions(): Flow<List<DebtWithTransactions>>
+
+    /**
+     * Inserts a new profile into the database.
+     * @param profile profile to be added
+     */
+    @Insert
+    suspend fun insertProfile(
+        profile: Profile
+    )
 }
