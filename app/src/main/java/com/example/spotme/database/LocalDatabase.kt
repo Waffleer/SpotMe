@@ -14,7 +14,7 @@ import androidx.room.TypeConverters
  *
  * @property DataAccessObject DAO object used to provide access to stored data.
  */
-@Database(entities = [Sandwich::class], version = 1) //TODO update entities
+@Database(entities = [Profile::class, Debt::class, Transaction::class], version = 3) //TODO update entities
 @TypeConverters(DateConverter::class)
 abstract class LocalDatabase : RoomDatabase() {
     abstract fun getDao(): DataAccessObject

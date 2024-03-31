@@ -35,7 +35,6 @@ import com.example.spotme.ui.AddDebtScreen
 import com.example.spotme.ui.DetailsScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
-import com.example.spotme.viewmodels.DatabaseViewModel
 import com.example.spotme.viewmodels.DetailsViewModel
 import com.example.spotme.viewmodels.SpotMeViewModel
 import kotlinx.coroutines.launch
@@ -116,7 +115,7 @@ fun SpotMeApp(
     // Instantiate the database, repo, and database view model
     val localDatabase = LocalDatabase.getInstance(LocalContext.current)
     val subRepository = Repository.getRepository(localDatabase)
-    val databaseViewModel = DatabaseViewModel(subRepository)
+    //val databaseViewModel = DatabaseViewModel(subRepository)
 
     Scaffold ( // Used to hold the app bar
         topBar = {
