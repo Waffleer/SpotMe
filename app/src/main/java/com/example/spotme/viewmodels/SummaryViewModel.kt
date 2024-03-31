@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.stateIn
  *
  * @param placeholder grug
  */
-data class DatabaseUiState( //TODO add stuff to here
+data class SummaryUiState( //TODO add stuff to here
     val placeholder: List<Sandwich> = listOf(), // used to be called subHistory btw
     val totalBalance: Double
 )
@@ -26,17 +26,17 @@ data class DatabaseUiState( //TODO add stuff to here
  * @param spotMeRepository a repository that implements RepositoryInterface.
  * @property databaseUiModel database stateflow.
  */
-class DatabaseViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
+class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
 
-    var databaseUiModel: StateFlow<DatabaseUiState> //Stores State collected from database
+    var summaryUiModel: StateFlow<SummaryUiState> //Stores State collected from database
             = spotMeRepository.getSandwiches() //TODO REPLACE getSandwich() with real repo DAO method
         .map { // convert to a flow of DatabaseUiState
-            DatabaseUiState(it, 0.0) //TODO replace 0.0 with total calculating function
+            SummaryUiState(it, 0.0) //TODO replace 0.0 with total calculating function
         }.stateIn(
             // Convert Flow to StateFlow
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = DatabaseUiState(totalBalance = 0.0) //TODO replace 0.0 with total calculating function
+            initialValue = SummaryUiState(totalBalance = 0.0) //TODO replace 0.0 with total calculating function
         )
 
     companion object {
