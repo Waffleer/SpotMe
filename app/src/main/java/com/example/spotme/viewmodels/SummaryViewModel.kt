@@ -2,8 +2,9 @@ package com.example.spotme.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spotme.database.Profile
+import com.example.spotme.database.ProfileWithDebts
 import com.example.spotme.database.RepositoryInterface
-import com.example.spotme.database.Sandwich
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.stateIn
  * @param placeholder grug
  */
 data class SummaryUiState( //TODO add stuff to here
-    val placeholder: List<Sandwich> = listOf(), // used to be called subHistory btw
+    val placeholder: List<ProfileWithDebts> = listOf(), // used to be called subHistory btw
     val totalBalance: Double
 )
 
@@ -29,9 +30,10 @@ data class SummaryUiState( //TODO add stuff to here
 class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
 
     var summaryUiModel: StateFlow<SummaryUiState> //Stores State collected from database
-            = spotMeRepository.getSandwiches() //TODO REPLACE getSandwich() with real repo DAO method
+            = spotMeRepository.getProfileWithDebts() //TODO REPLACE getSandwich() with real repo DAO method
         .map { // convert to a flow of DatabaseUiState
-            SummaryUiState(it, 0.0) //TODO replace 0.0 with total calculating function
+            var balance: Double = 0.0 // Calculate total balance.
+            SummaryUiState(it, balance) //TODO replace 0.0 with total calculating function
         }.stateIn(
             // Convert Flow to StateFlow
             scope = viewModelScope,
