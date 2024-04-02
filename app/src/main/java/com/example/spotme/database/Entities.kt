@@ -28,7 +28,7 @@ data class Debt(
     val profileIdF: Long?,
     @ColumnInfo(name="overall_debt")
     val overallDebt: Double,
-    @ColumnInfo(name = "description")
+    @ColumnInfo(name="description")
     val description: String,
     @ColumnInfo(name="status")
     val canceled: Boolean
@@ -43,7 +43,7 @@ data class Transaction(
     val date: Date,
     @ColumnInfo(name="amount_owed")
     val amount: Double,
-    @ColumnInfo(name = "description")
+    @ColumnInfo(name="description")
     val description: String,
 )
 
