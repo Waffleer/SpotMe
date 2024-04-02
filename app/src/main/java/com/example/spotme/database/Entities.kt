@@ -8,24 +8,6 @@ import androidx.room.PrimaryKey
 import androidx.room.Relation
 import java.util.Date
 
-/**
- * Defines the Sandwich table for the database.
- * @property uid unique identifier and primary key for the sandwich.
- * @property subName stores the name of the sub.
- * @property price stores the price of the sub.
- * @property date stores the date and time that the sub was purchased.
- */ /*
-@Entity // TODO leaving this as an example for now. Replace soon.
-data class Sandwich(
-    @PrimaryKey val uid: Long?,
-    @ColumnInfo(name = "sub_name")
-    val subName: String,
-    @ColumnInfo(name = "price")
-    val price: Double,
-    @ColumnInfo(name = "date")
-    val date: Date
-)*/
-
 @Entity
 data class Profile(
     @PrimaryKey val profileId: Long?,
@@ -43,22 +25,26 @@ data class Profile(
 data class Debt(
     @PrimaryKey val debtId: Long?,
     @ColumnInfo(name="f_profile_id") //Foreign Key
-    val ProfileIdF: Long?
+    val profileIdF: Long?,
+    @ColumnInfo(name="overall_debt")
+    val overallDebt: Double,
+    @ColumnInfo(name="description")
+    val description: String,
+    @ColumnInfo(name="status")
+    val canceled: Boolean
 )
 
 @Entity
 data class Transaction(
-    @PrimaryKey val transaction_id: Long?,
+    @PrimaryKey val transactionId: Long?,
     @ColumnInfo(name="f_debt_id") //Foreign Key
-    val debtId: Long?,
+    val debtIdF: Long?,
     @ColumnInfo(name="date")
     val date: Date,
     @ColumnInfo(name="amount_owed")
     val amount: Double,
-    @ColumnInfo(name = "description")
+    @ColumnInfo(name="description")
     val description: String,
-    @ColumnInfo(name="status")
-    val canceled: Boolean
 )
 
 //Relationship: Profile -< Debt
