@@ -2,6 +2,7 @@ package com.example.spotme.viewmodels
 
 import android.icu.text.NumberFormat
 import androidx.lifecycle.ViewModel
+import com.example.spotme.data.Group
 import com.example.spotme.data.Profile
 import com.example.spotme.data.StaticDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,15 +15,15 @@ import kotlinx.coroutines.flow.update
  *
  * @property profiles stores the list of profiles.
  */
-data class DetailsUiState (
+data class GroupsUiState (
     // Put State Values Here:
-    val profiles: List<Profile> = listOf(),
-    val currentProfile: Profile? = null,
+    val groups: List<Group> = listOf(),
+    val currentGroup: Group? = null,
 )
 
-class DetailsViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(DetailsUiState())
-    val uiState: StateFlow<DetailsUiState> = _uiState.asStateFlow()
+class GroupsViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(GroupsUiState())
+    val uiState: StateFlow<GroupsUiState> = _uiState.asStateFlow()
 
     init {
         initializeUIState()
@@ -31,18 +32,18 @@ class DetailsViewModel : ViewModel() {
     private fun initializeUIState() {
         //Will get profiles from db with desired information
         //For now im just taking from the StaticDataSource
-        val profiles = StaticDataSource.profiles
+        val groups = StaticDataSource.groups
         //ToDo Change to Database implementation
 
 
-        _uiState.value = DetailsUiState(
-            profiles = profiles
+        _uiState.value = GroupsUiState(
+            groups = groups
         )
     }
-    public fun setCurrentProfile(profile: Profile?){
+    public fun setCurrentGroup(group: Group){
         _uiState.update {currentState ->
             currentState.copy(
-                currentProfile = profile
+                currentGroup = group
             )
         }
     }
