@@ -179,6 +179,11 @@ fun SpotMeApp(
                         detailsViewModel.setCurrentProfile(it)
                         navController.navigate(SpotMeScreen.AddDebtTransaction.name)
                     },
+                    onFilterAmountHighPressed = {
+                        detailsViewModel.filter_profiles_debt_amount_high()
+                    },onFilterAmountLowPressed = {
+                        detailsViewModel.filter_profiles_debt_amount_low()
+                    }
                 )
             }
 

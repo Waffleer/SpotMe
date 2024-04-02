@@ -16,7 +16,7 @@ fun ExpandedProfileScreenDebug(
     ) {
     Column (
         modifier = Modifier
-            //.verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState())
     ) {
         Text(text = "id: ${profile.id}")
         Text(text = "name: ${profile.name}")

@@ -1,6 +1,7 @@
 package com.example.spotme.viewmodels
 
 import android.icu.text.NumberFormat
+import androidx.compose.runtime.produceState
 import androidx.lifecycle.ViewModel
 import com.example.spotme.data.Profile
 import com.example.spotme.data.StaticDataSource
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.update
 data class DetailsUiState (
     // Put State Values Here:
     val profiles: List<Profile> = listOf(),
+    val filter_profiles: List<Profile> = listOf(),
     val currentProfile: Profile? = null,
 )
 
@@ -36,9 +38,57 @@ class DetailsViewModel : ViewModel() {
 
 
         _uiState.value = DetailsUiState(
-            profiles = profiles
+            profiles = profiles,
+            filter_profiles = profiles,
         )
     }
+
+    public fun filter_profiles_debt_amount_high(){
+        val sorted : MutableList<Profile> = mutableListOf()
+        var profiles : MutableList<Profile> = _uiState.value.profiles.toMutableList()
+        while(!profiles.isEmpty()){
+            var p: Profile? = null
+            profiles.forEach {
+                if (p == null) {
+                    p = it
+                }
+                if (it.amount > p!!.amount) {
+                    p = it
+                }
+            }
+            p?.let { sorted.add(it) }
+            profiles.remove(p)
+        }
+        _uiState.update {currentState ->
+            currentState.copy(
+                filter_profiles = sorted
+            )
+        }
+    }
+
+    public fun filter_profiles_debt_amount_low(){
+        val sorted : MutableList<Profile> = mutableListOf()
+        var profiles : MutableList<Profile> = _uiState.value.profiles.toMutableList()
+        while(!profiles.isEmpty()){
+            var p: Profile? = null
+            profiles.forEach {
+                    if (p == null) {
+                        p = it
+                    }
+                    if (it.amount < p!!.amount) {
+                        p = it
+                    }
+            }
+            p?.let { sorted.add(it) }
+            profiles.remove(p)
+        }
+        _uiState.update {currentState ->
+            currentState.copy(
+                filter_profiles = sorted
+            )
+        }
+    }
+
     public fun setCurrentProfile(profile: Profile?){
         _uiState.update {currentState ->
             currentState.copy(
@@ -46,5 +96,4 @@ class DetailsViewModel : ViewModel() {
             )
         }
     }
-
 }

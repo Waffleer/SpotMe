@@ -13,7 +13,10 @@
     <string name="add_debt_transaction">Add Debt</string>
     <string name="groups">Group</string>
     <string name="add_group_transaction">Add Group</string>
+    <string name="filter">Filter</string>
     <string name="expanded_groups_screen">Expanded Group Screen</string>
+    <string name="filter_amount_high">Filter Amount High</string>
+    <string name="filter_amount_low">Filter Amount Low</string>
 
 
 </resources>
