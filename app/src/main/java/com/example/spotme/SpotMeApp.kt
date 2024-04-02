@@ -122,7 +122,7 @@ fun SpotMeApp(
 
     // Instantiate the database, repo, and database view model
     val localDatabase = LocalDatabase.getInstance(LocalContext.current)
-    val subRepository = Repository.getRepository(localDatabase)
+    val spotMeRepository = Repository.getRepository(localDatabase)
     //val databaseViewModel = DatabaseViewModel(subRepository)
 
     Scaffold ( // Used to hold the app bar
@@ -156,7 +156,7 @@ fun SpotMeApp(
 
             composable(route = SpotMeScreen.Summary.name) {
                 SummaryScreen(
-                    localUiState = localUiState,
+                    repository = spotMeRepository,
                     onDetailsPressed = {
                         navController.navigate(SpotMeScreen.Details.name)
                     },

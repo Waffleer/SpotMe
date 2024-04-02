@@ -16,8 +16,11 @@ import kotlinx.coroutines.flow.stateIn
  * @param placeholder grug
  */
 data class SummaryUiState( //TODO add stuff to here
-    val placeholder: List<ProfileWithDebts> = listOf(), // used to be called subHistory btw
+    val profilesWithDebts: List<ProfileWithDebts> = listOf(), // used to be called subHistory btw
     val totalBalance: Double
+    // val mainDebtor: Profile
+    // val mainCreditor: Profile
+
 )
 
 /**
