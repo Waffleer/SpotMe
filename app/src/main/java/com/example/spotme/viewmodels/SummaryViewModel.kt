@@ -18,6 +18,9 @@ import kotlinx.coroutines.flow.stateIn
 data class SummaryUiState( //TODO add stuff to here
     val profilesWithDebts: List<ProfileWithDebts> = listOf(), // used to be called subHistory btw
     val totalBalance: Double
+    // val mainDebtor: Profile
+    // val mainCreditor: Profile
+
 )
 
 /**
