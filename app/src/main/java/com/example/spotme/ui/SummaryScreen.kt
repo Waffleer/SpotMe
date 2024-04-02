@@ -36,6 +36,7 @@ import com.example.spotme.viewmodels.SummaryViewModel
 fun SummaryScreen(
     repository: RepositoryInterface,
     onDetailsPressed: () -> Unit,
+    onGroupsPressed: () -> Unit,
     onPlusPressed: () -> Unit,
     modifier: Modifier = Modifier
     ) {

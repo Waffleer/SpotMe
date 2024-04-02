@@ -12,6 +12,7 @@ interface RepositoryInterface { //
     //TODO change so that this grabs a specific debt's transactions
     fun getDebtWithTransactions(): Flow<List<DebtWithTransactions>>
     suspend fun insertProfile(profile: Profile)
+
 }
 
 /**

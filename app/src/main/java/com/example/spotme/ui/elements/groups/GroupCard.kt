@@ -1,4 +1,4 @@
-package com.example.spotme.ui.elements.details
+package com.example.spotme.ui.elements.groups
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -22,25 +22,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.spotme.R
-import com.example.spotme.data.Profile
+import com.example.spotme.data.Group
 import com.example.spotme.data.StaticDataSource
 import com.example.spotme.ui.elements.NavButton
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileCard(
-    profile: Profile,
-    onClicked: (Profile) -> Unit,
-    onPlusClicked: (Profile) -> Unit,
+fun GroupCard(
+    group: Group,
+    onClicked: (Group) -> Unit,
+    onPlusClicked: (Group) -> Unit,
     modifier: Modifier = Modifier
     ) {
     var total: Double = 0.0
 
-    profile.debts.forEach{debt -> //Totals all of the transactions for every debt
-        debt.transactions.forEach{ trans ->
-            if(trans.canceled == false){
-                total += trans.amount
-            }
-        }
+    group.transactions.transactions.forEach{
+        total += it.amount
     }
 
     Card(modifier = modifier
@@ -51,7 +47,7 @@ fun ProfileCard(
     ) {
         Row {
             Card(
-                onClick = {onClicked(profile)}
+                onClick = {onClicked(group)}
             ) {
                 Column(
                     Modifier.width(160.dp)
@@ -59,7 +55,7 @@ fun ProfileCard(
                 {
                     Text(
                         textAlign = TextAlign.Start,
-                        text = profile.name,
+                        text = group.name,
                         modifier = Modifier
                             .padding(start = 12.dp, top = 4.dp),
                     )
@@ -77,7 +73,7 @@ fun ProfileCard(
                     )
                 }
             }
-            NavButton(labelResourceId = R.string.plus_button, onClick = { onPlusClicked(profile) })
+            NavButton(labelResourceId = R.string.plus_button, onClick = { onPlusClicked(group) })
         }
     }
 }
@@ -85,6 +81,6 @@ fun ProfileCard(
 
 @Preview
 @Composable
-fun PreviewProfileCard(){
-    ProfileCard(profile = StaticDataSource.profiles[0], {}, {})
+fun PreviewGroupCard(){
+    GroupCard(group = StaticDataSource.groups[0], {}, {})
 }
