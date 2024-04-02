@@ -28,20 +28,20 @@ data class SummaryUiState( //TODO add stuff to here
  * @property databaseUiModel database stateflow.
  */
 class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
-//
-//    var summaryUiModel: StateFlow<SummaryUiState> //Stores State collected from database
-//            = spotMeRepository.getProfileWithDebts() //TODO REPLACE getSandwich() with real repo DAO method
-//        .map { // convert to a flow of DatabaseUiState
-//            var balance: Double = 0.0 // Calculate total balance.
-//            SummaryUiState(it, balance) //TODO replace 0.0 with total calculating function
-//        }.stateIn(
-//            // Convert Flow to StateFlow
-//            scope = viewModelScope,
-//            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-//            initialValue = SummaryUiState(totalBalance = 0.0) //TODO replace 0.0 with total calculating function
-//        )
-//
-//    companion object {
-//        private const val TIMEOUT_MILLIS = 5_000L
-//    }
+
+    var summaryUiModel: StateFlow<SummaryUiState> //Stores State collected from database
+            = spotMeRepository.getProfilesWithDebts() //TODO REPLACE getSandwich() with real repo DAO method
+        .map { // convert to a flow of DatabaseUiState
+            var balance: Double = 0.0 // Calculate total balance.
+            SummaryUiState(it, balance) //TODO replace 0.0 with total calculating function
+        }.stateIn(
+            // Convert Flow to StateFlow
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = SummaryUiState(totalBalance = 0.0) //TODO replace 0.0 with total calculating function
+        )
+
+    companion object {
+        private const val TIMEOUT_MILLIS = 5_000L
+    }
 }
