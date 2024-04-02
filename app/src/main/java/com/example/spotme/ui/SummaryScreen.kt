@@ -36,7 +36,7 @@ import com.example.spotme.viewmodels.SummaryViewModel
 fun SummaryScreen(
     repository: RepositoryInterface,
     onDetailsPressed: () -> Unit,
-    onGroupsPressed: () -> Unit,
+    //onGroupsPressed: () -> Unit,
     onPlusPressed: () -> Unit,
     modifier: Modifier = Modifier
     ) {
@@ -80,14 +80,18 @@ fun SummaryScreen(
                 modifier = Modifier
                     .padding(12.dp)
             )
+//            NavButton(
+//                labelResourceId = R.string.groups,
+//                onClick = { onGroupsPressed() },
+//                modifier = Modifier
+//                    .padding(12.dp)
+//            )
             NavButton(
                 labelResourceId = R.string.plus_button,
                 onClick = { onPlusPressed() },
                 modifier = Modifier
                     .padding(12.dp)
             )
-
         }
-
     }
 }
