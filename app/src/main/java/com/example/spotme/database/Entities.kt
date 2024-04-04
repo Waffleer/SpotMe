@@ -11,40 +11,32 @@ import java.util.Date
 @Entity
 data class Profile(
     @PrimaryKey val profileId: Long?,
-    @ColumnInfo(name="name")
     val name: String,
-    @ColumnInfo(name="bio")
-    val bio: String,
-    @ColumnInfo(name="payment_preference")
+    val description: String,
     val paymentPreference: String,
-    @ColumnInfo("debt_issue_date")
-    val date: Date
+    val totalDebt: Double,
+    val createdDate: Date,
 )
 
 @Entity
 data class Debt(
     @PrimaryKey val debtId: Long?,
-    @ColumnInfo(name="f_profile_id") //Foreign Key
-    val profileIdF: Long?,
-    @ColumnInfo(name="overall_debt")
-    val overallDebt: Double,
-    @ColumnInfo(name="description")
+    val f_profile_id: Long?,
+    val name: String,
+    val totalDebt: Double,
     val description: String,
-    @ColumnInfo(name="status")
-    val canceled: Boolean
+    val canceled: Boolean,
+    val createdDate: Date,
 )
 
 @Entity
 data class Transaction(
     @PrimaryKey val transactionId: Long?,
-    @ColumnInfo(name="f_debt_id") //Foreign Key
-    val debtIdF: Long?,
-    @ColumnInfo(name="date")
-    val date: Date,
-    @ColumnInfo(name="amount_owed")
+    val f_debt_id: Long?, //Foreign Key
+    val createdDate: Date,
     val amount: Double,
-    @ColumnInfo(name="description")
     val description: String,
+    val canceled: Boolean,
 )
 
 //Relationship: Profile -< Debt
