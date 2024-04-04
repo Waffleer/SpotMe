@@ -178,7 +178,7 @@ fun SpotMeApp(
 
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
-                    profile = detailsUiState.currentProfile
+                    profile = detailsUiState.currentProfile,
                 )
             }
 
