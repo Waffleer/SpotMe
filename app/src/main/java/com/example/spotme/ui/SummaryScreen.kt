@@ -40,7 +40,8 @@ fun SummaryScreen(
     modifier: Modifier = Modifier
     ) {
     val summaryViewModel = SummaryViewModel(repository)
-    val summaryUiState by summaryViewModel.summaryUiModel.collectAsState()
+    val profilesWithDebts by summaryViewModel.profilesWithDebts.collectAsState()
+    val totalBalance by summaryViewModel.totalBalance.collectAsState()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -61,7 +62,7 @@ fun SummaryScreen(
             ) {
                 Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
                     Text("Balance:")
-                    Text("$" + summaryUiState.totalBalance.toString(), modifier)
+                    Text("$" + totalBalance.totalBalance.toString(), modifier)
                 }
             }
         }
@@ -85,8 +86,6 @@ fun SummaryScreen(
                 modifier = Modifier
                     .padding(12.dp)
             )
-
         }
-
     }
 }
