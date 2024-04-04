@@ -11,6 +11,8 @@ interface RepositoryInterface { //
     fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
     //TODO change so that this grabs a specific debt's transactions
     fun getDebtWithTransactions(): Flow<List<DebtWithTransactions>>
+    fun getTotalBalance(): Flow<Double>
+
     suspend fun insertProfile(profile: Profile)
 
 }
@@ -26,26 +28,15 @@ interface RepositoryInterface { //
 class Repository(val dao: DataAccessObject):
     RepositoryInterface { // TODO currently setup for sandwiches. Change that.
 
-    /**
-     * Gets a Flow of a List of Sandwiches.
-     */ /*
-    override fun getSandwiches(): Flow<List<Sandwich>>
-            = dao.getAll()
-
-    /**
-     * Inserts a sandwich into the database.
-     * @param sub the Sandwich to be inserted.
-     */
-    override suspend fun insertSandwich(sub: Sandwich)
-            = dao.insertSandwich(sub)
-    */
-
     override fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
         = dao.getProfilesWithDebts()
 
     // TODO modify to return a particular debt with it's transactions
     override fun getDebtWithTransactions(): Flow<List<DebtWithTransactions>>
         = dao.getDebtWithTransactions()
+
+    override fun getTotalBalance(): Flow<Double>
+        = dao.getTotalBalance()
 
     override suspend fun insertProfile(profile: Profile) {
         dao.insertProfile(profile)

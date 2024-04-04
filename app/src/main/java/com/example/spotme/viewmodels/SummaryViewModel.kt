@@ -15,13 +15,11 @@ import kotlinx.coroutines.flow.stateIn
  *
  * @param placeholder grug
  */
-data class SummaryUiState( //TODO add stuff to here
-    val profilesWithDebts: List<ProfileWithDebts> = listOf(), // used to be called subHistory btw
-    val totalBalance: Double
-    // val mainDebtor: Profile
-    // val mainCreditor: Profile
-
+data class ProfilesWithDebtsState(
+    val profilesWithDebts: List<ProfileWithDebts> = listOf(),
 )
+data class TotalBalance(val totalBalance: Double = 0.0)
+
 
 /**
  * Creates a stateflow that is updated whenever
@@ -32,16 +30,25 @@ data class SummaryUiState( //TODO add stuff to here
  */
 class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
 
-    var summaryUiModel: StateFlow<SummaryUiState> //Stores State collected from database
+    var profilesWithDebts: StateFlow<ProfilesWithDebtsState> //Stores State collected from database
             = spotMeRepository.getProfilesWithDebts() //TODO REPLACE getSandwich() with real repo DAO method
         .map { // convert to a flow of DatabaseUiState
-            var balance: Double = 0.0 // Calculate total balance.
-            SummaryUiState(it, balance) //TODO replace 0.0 with total calculating function
+            ProfilesWithDebtsState(it) //TODO replace 0.0 with total calculating function
         }.stateIn(
             // Convert Flow to StateFlow
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = SummaryUiState(totalBalance = 0.0) //TODO replace 0.0 with total calculating function
+            initialValue = ProfilesWithDebtsState()
+        )
+
+    var totalBalance: StateFlow<TotalBalance>
+            = spotMeRepository.getTotalBalance()
+        .map {
+            TotalBalance(it)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = TotalBalance()
         )
 
     companion object {

@@ -40,7 +40,8 @@ fun SummaryScreen(
     modifier: Modifier = Modifier
     ) {
     val summaryViewModel = SummaryViewModel(repository)
-    val summaryUiState by summaryViewModel.summaryUiModel.collectAsState()
+    val profilesWithDebts by summaryViewModel.profilesWithDebts.collectAsState()
+    val totalBalance by summaryViewModel.totalBalance.collectAsState()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -59,12 +60,45 @@ fun SummaryScreen(
                     .wrapContentHeight()
                     .padding(dimensionResource(R.dimen.padding_small))
             ) {
-                Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                    Text("Balance:")
-                    Text("$" + summaryUiState.totalBalance.toString(), modifier)
+                Row(modifier.padding(dimensionResource(R.dimen.padding_small))) {
+                    Text("Overall Balance:")
+                    Text("$" + totalBalance.totalBalance.toString(), modifier)
+                }
+            }
+            Row(){
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    ),
+                    modifier = modifier
+                        .wrapContentHeight()
+                        .padding(dimensionResource(R.dimen.padding_small))
+                        .weight(1f)
+                ) {
+                    Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
+                        Text("Largest Debtor:")
+                        Text("name")
+                        Text("$" )
+                    }
+                }
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    ),
+                    modifier = modifier
+                        .wrapContentHeight()
+                        .padding(dimensionResource(R.dimen.padding_small))
+                        .weight(1f)
+                ) {
+                    Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
+                        Text("Main Creditor:")
+                        Text("name")
+                        Text("$" )
+                    }
                 }
             }
         }
+
         //Basic Nav Buttons
         Row( //NavButtons
             verticalAlignment = Alignment.CenterVertically,
@@ -85,8 +119,6 @@ fun SummaryScreen(
                 modifier = Modifier
                     .padding(12.dp)
             )
-
         }
-
     }
 }

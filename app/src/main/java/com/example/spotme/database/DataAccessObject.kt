@@ -47,6 +47,9 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Query("SELECT * FROM Debt")
     fun getDebtWithTransactions(): Flow<List<DebtWithTransactions>>
 
+    @Query("SELECT SUM(overall_debt) FROM Debt")
+    fun getTotalBalance(): Flow<Double>
+
     /**
      * Inserts a new profile into the database.
      * @param profile profile to be added
