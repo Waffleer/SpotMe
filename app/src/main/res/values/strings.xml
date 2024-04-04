@@ -18,5 +18,14 @@
     <string name="filter_amount_high">Filter Amount High</string>
     <string name="filter_amount_low">Filter Amount Low</string>
 
+    //Expanded Profile Screen strings
+    <string name="about">About</string>
+    <string name="memberSince">Member Since: </string>
+    <string name="debtsTrans">Debts and Transactions</string>
+
+
+
+    //picture labels
+    <string name="logo1">logo</string>
 
 </resources>
