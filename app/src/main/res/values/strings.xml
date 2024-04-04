@@ -15,5 +15,14 @@
     <string name="add_group_transaction">Add Group</string>
     <string name="expanded_groups_screen">Expanded Group Screen</string>
 
+    //Expanded Profile Screen strings
+    <string name="about">About</string>
+    <string name="memberSince">Member Since: </string>
+    <string name="debtsTrans">Debts and Transactions</string>
+
+
+
+    //picture labels
+    <string name="logo1">logo</string>
 
 </resources>
