@@ -20,9 +20,7 @@ fun DetailsScreen(
     onAddPressed: (Profile) -> Unit,
     onFilterAmountHighPressed: () -> Unit,
     onFilterAmountLowPressed: () -> Unit,
-
     ) {
-
     Column {
         Text("I am supposed to be the Details screen")
         Column {
@@ -45,7 +43,4 @@ fun DetailsScreen(
                 .padding(12.dp)
         )
     }
-
-
-
 }

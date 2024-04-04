@@ -17,12 +17,12 @@ import kotlinx.coroutines.flow.update
  */
 data class DetailsUiState (
     // Put State Values Here:
-    val profiles: List<Profile> = listOf(),
     val filter_profiles: List<Profile> = listOf(),
     val currentProfile: Profile? = null,
 )
 
 class DetailsViewModel : ViewModel() {
+    private var profiles: List<Profile> = listOf()
     private val _uiState = MutableStateFlow(DetailsUiState())
     val uiState: StateFlow<DetailsUiState> = _uiState.asStateFlow()
 
@@ -33,19 +33,18 @@ class DetailsViewModel : ViewModel() {
     private fun initializeUIState() {
         //Will get profiles from db with desired information
         //For now im just taking from the StaticDataSource
-        val profiles = StaticDataSource.profiles
+        profiles = StaticDataSource.profiles
         //ToDo Change to Database implementation
 
 
         _uiState.value = DetailsUiState(
-            profiles = profiles,
             filter_profiles = profiles,
         )
     }
 
     public fun filter_profiles_debt_amount_high(){
         val sorted : MutableList<Profile> = mutableListOf()
-        var profiles : MutableList<Profile> = _uiState.value.profiles.toMutableList()
+        var profiles : MutableList<Profile> = profiles.toMutableList()
         while(!profiles.isEmpty()){
             var p: Profile? = null
             profiles.forEach {
@@ -68,7 +67,8 @@ class DetailsViewModel : ViewModel() {
 
     public fun filter_profiles_debt_amount_low(){
         val sorted : MutableList<Profile> = mutableListOf()
-        var profiles : MutableList<Profile> = _uiState.value.profiles.toMutableList()
+        var profiles : MutableList<Profile> = profiles.toMutableList()
+        println(profiles)
         while(!profiles.isEmpty()){
             var p: Profile? = null
             profiles.forEach {
@@ -79,7 +79,10 @@ class DetailsViewModel : ViewModel() {
                         p = it
                     }
             }
-            p?.let { sorted.add(it) }
+            p?.let {
+                sorted.add(it)
+                println(it)
+            }
             profiles.remove(p)
         }
         _uiState.update {currentState ->

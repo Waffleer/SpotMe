@@ -31,7 +31,9 @@ abstract class LocalDatabase : RoomDatabase() {
                     context,
                     LocalDatabase::class.java,
                     "spotme_db"
-                ).build()
+                )
+                //.fallbackToDestructiveMigration() //destorys db
+                .build()
             }
             return instance as LocalDatabase
         }
