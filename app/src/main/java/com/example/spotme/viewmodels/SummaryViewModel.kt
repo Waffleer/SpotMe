@@ -21,6 +21,7 @@ data class ProfilesWithDebtsState(
 data class TotalBalance(val totalBalance: Double = 0.0)
 
 
+
 /**
  * Creates a stateflow that is updated whenever
  * a change to the database is made.
@@ -50,6 +51,8 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = TotalBalance()
         )
+
+
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
