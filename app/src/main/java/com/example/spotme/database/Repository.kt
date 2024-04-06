@@ -11,6 +11,7 @@ interface RepositoryInterface { //
     fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
     //TODO change so that this grabs a specific debt's transactions
     fun getDebtWithTransactions(): Flow<List<DebtWithTransactions>>
+
     fun getTotalBalance(): Flow<Double>
 
     suspend fun insertProfile(profile: Profile)
@@ -34,6 +35,7 @@ class Repository(val dao: DataAccessObject):
     // TODO modify to return a particular debt with it's transactions
     override fun getDebtWithTransactions(): Flow<List<DebtWithTransactions>>
         = dao.getDebtWithTransactions()
+
 
     override fun getTotalBalance(): Flow<Double>
         = dao.getTotalBalance()
