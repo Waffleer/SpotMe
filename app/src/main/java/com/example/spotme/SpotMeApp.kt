@@ -152,6 +152,8 @@ fun SpotMeApp(
                         navController.navigate(SpotMeScreen.Details.name)
                     },
                     onPlusPressed = {},
+                    onPrimaryCreditorClicked = {},
+                    onPrimaryDebtorClicked = {}
                 ) //Update SummaryScreen() later
             }
 

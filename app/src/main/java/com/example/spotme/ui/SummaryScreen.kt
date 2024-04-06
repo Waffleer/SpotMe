@@ -1,6 +1,7 @@
 package com.example.spotme.ui
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,17 +32,22 @@ import com.example.spotme.database.RepositoryInterface
 import com.example.spotme.ui.elements.NavButton
 import com.example.spotme.viewmodels.LocalUiState
 import com.example.spotme.viewmodels.SummaryViewModel
+import kotlin.math.absoluteValue
 
 @Composable
 fun SummaryScreen(
     repository: RepositoryInterface,
     onDetailsPressed: () -> Unit,
     onPlusPressed: () -> Unit,
+    onPrimaryDebtorClicked: (Long) -> Unit,
+    onPrimaryCreditorClicked: (Long) -> Unit,
     modifier: Modifier = Modifier
     ) {
     val summaryViewModel = SummaryViewModel(repository)
     val profilesWithDebts by summaryViewModel.profilesWithDebts.collectAsState()
     val totalBalance by summaryViewModel.totalBalance.collectAsState()
+    val primaryDebtor by summaryViewModel.primaryDebtor.collectAsState()
+    val primaryCreditor by summaryViewModel.primaryCreditor.collectAsState()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -81,11 +87,13 @@ fun SummaryScreen(
                         .wrapContentHeight()
                         .padding(dimensionResource(R.dimen.padding_small))
                         .weight(1f)
+                        .clickable{ onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!) }
                 ) {
                     Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
                         Text("Primary Debtor:", style = MaterialTheme.typography.titleMedium)
-                        Text("name")
-                        Text("$" )
+                        Text(primaryDebtor.largestDebtor.name)
+                        Text("Owes You: ")
+                        Text("$" + primaryDebtor.largestDebtor.totalDebt.absoluteValue)
                     }
                 }
                 Card(
@@ -96,11 +104,13 @@ fun SummaryScreen(
                         .wrapContentHeight()
                         .padding(dimensionResource(R.dimen.padding_small))
                         .weight(1f)
+                        .clickable { onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!) }
                 ) {
                     Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
                         Text("Primary Creditor:", style = MaterialTheme.typography.titleMedium)
-                        Text("name")
-                        Text("$" )
+                        Text(primaryCreditor.largestCreditor.name)
+                        Text("You Owe: ")
+                        Text("$" + primaryCreditor.largestCreditor.totalDebt.absoluteValue)
                     }
                 }
             }
