@@ -43,13 +43,23 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
 
 
-    @Transaction // TODO modify to return a particular debt -< transaction pair
-    @Query("SELECT * FROM Debt")
-    fun getDebtWithTransactions(): Flow<List<DebtWithTransactions>>
+
+    @Transaction // Get a particular debt with all of it's transactions.
+    @Query("SELECT * FROM Debt WHERE debtId = :debtId")
+    fun getDebtWithTransactions(debtId: Long?): Flow<List<DebtWithTransactions>>
 
 
-    @Query("SELECT SUM(totalDebt) FROM Debt")
+    @Query("SELECT SUM(totalDebt) FROM Profile")
     fun getTotalBalance(): Flow<Double>
+
+    @Query("SELECT profileId, name, totalDebt FROM Profile ORDER BY totalDebt DESC LIMIT 1")
+    fun getLargestDebtor(): Flow<ProfileDebtTuple>
+
+    @Query("SELECT profileId, name, totalDebt FROM Profile ORDER BY totalDebt LIMIT 1")
+    fun getLargestCreditor(): Flow<ProfileDebtTuple>
+
+    @Query("SELECT * FROM Profile Where profileId = :profileId")
+    fun getSpecificProfile(profileId: Long?)
 
     /**
      * Inserts a new profile into the database.

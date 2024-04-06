@@ -3,6 +3,7 @@ package com.example.spotme.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spotme.database.Profile
+import com.example.spotme.database.ProfileDebtTuple
 import com.example.spotme.database.ProfileWithDebts
 import com.example.spotme.database.RepositoryInterface
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,6 +21,12 @@ data class ProfilesWithDebtsState(
 )
 data class TotalBalance(val totalBalance: Double = 0.0)
 
+data class LargestCreditor(
+    val largestCreditor: ProfileDebtTuple = ProfileDebtTuple(0,"placeholder",0.0)
+)
+data class LargestDebtor(
+    val largestDebtor: ProfileDebtTuple = ProfileDebtTuple(0,"placeholder",0.0)
+)
 
 
 /**
@@ -34,7 +41,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     var profilesWithDebts: StateFlow<ProfilesWithDebtsState> //Stores State collected from database
             = spotMeRepository.getProfilesWithDebts() //TODO REPLACE getSandwich() with real repo DAO method
         .map { // convert to a flow of DatabaseUiState
-            ProfilesWithDebtsState(it) //TODO replace 0.0 with total calculating function
+            ProfilesWithDebtsState(it)
         }.stateIn(
             // Convert Flow to StateFlow
             scope = viewModelScope,
@@ -52,7 +59,25 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             initialValue = TotalBalance()
         )
 
+    var primaryCreditor: StateFlow<LargestCreditor>
+            = spotMeRepository.getLargestCreditor()
+        .map {
+            LargestCreditor(it?: ProfileDebtTuple(0,"placeholder",0.0))
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = LargestCreditor()
+        )
 
+    var primaryDebtor: StateFlow<LargestDebtor>
+            = spotMeRepository.getLargestCreditor()
+        .map {
+            LargestDebtor(it?: ProfileDebtTuple(0,"placeholder",0.0))
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = LargestDebtor()
+        )
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L

@@ -9,10 +9,11 @@ import kotlinx.coroutines.flow.Flow
  */
 interface RepositoryInterface { //
     fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
-    //TODO change so that this grabs a specific debt's transactions
-    fun getDebtWithTransactions(): Flow<List<DebtWithTransactions>>
-
+    fun getDebtWithTransactions(debtId: Long?): Flow<List<DebtWithTransactions>>
     fun getTotalBalance(): Flow<Double>
+
+    fun getLargestDebtor(): Flow<ProfileDebtTuple>
+    fun getLargestCreditor(): Flow<ProfileDebtTuple>
 
     suspend fun insertProfile(profile: Profile)
 
@@ -33,12 +34,18 @@ class Repository(val dao: DataAccessObject):
         = dao.getProfilesWithDebts()
 
     // TODO modify to return a particular debt with it's transactions
-    override fun getDebtWithTransactions(): Flow<List<DebtWithTransactions>>
-        = dao.getDebtWithTransactions()
+    override fun getDebtWithTransactions(debtId: Long?): Flow<List<DebtWithTransactions>>
+        = dao.getDebtWithTransactions(debtId)
 
 
     override fun getTotalBalance(): Flow<Double>
         = dao.getTotalBalance()
+
+    override fun getLargestDebtor(): Flow<ProfileDebtTuple>
+        = dao.getLargestDebtor()
+
+    override fun getLargestCreditor(): Flow<ProfileDebtTuple>
+        = dao.getLargestCreditor()
 
     override suspend fun insertProfile(profile: Profile) {
         dao.insertProfile(profile)

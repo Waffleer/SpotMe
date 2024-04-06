@@ -58,3 +58,9 @@ data class DebtWithTransactions(
     )
     val transactions: List<Transaction>
 )
+
+data class ProfileDebtTuple(
+    @ColumnInfo(name = "profileId") val profileId: Long?,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "totalDebt") val totalDebt: Double,
+)
