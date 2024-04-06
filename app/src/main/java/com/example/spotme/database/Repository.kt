@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.Flow
  * Interface outlining SubRepository class
  */
 interface RepositoryInterface { //
+    fun getEverything(): Flow<List<ProfileWithEverything>>
     fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
-    fun getDebtWithTransactions(debtId: Long?): Flow<List<DebtWithTransactions>>
+    fun getDebtWithTransactions(debtId: Long?): Flow<DebtWithTransactions>
     fun getTotalBalance(): Flow<Double>
-
     fun getLargestDebtor(): Flow<ProfileDebtTuple>
     fun getLargestCreditor(): Flow<ProfileDebtTuple>
 
@@ -30,11 +30,13 @@ interface RepositoryInterface { //
 class Repository(val dao: DataAccessObject):
     RepositoryInterface { // TODO currently setup for sandwiches. Change that.
 
+    override fun getEverything(): Flow<List<ProfileWithEverything>>
+        = dao.getEverything()
     override fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
         = dao.getProfilesWithDebts()
 
     // TODO modify to return a particular debt with it's transactions
-    override fun getDebtWithTransactions(debtId: Long?): Flow<List<DebtWithTransactions>>
+    override fun getDebtWithTransactions(debtId: Long?): Flow<DebtWithTransactions>
         = dao.getDebtWithTransactions(debtId)
 
 

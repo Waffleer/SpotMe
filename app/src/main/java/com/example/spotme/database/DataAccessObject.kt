@@ -38,15 +38,17 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
         sub: Sandwich
     )*/
 
-    @Transaction // Get Profiles with their Debts
+    @Transaction // Get ALL Profiles with their Debts
     @Query("SELECT * FROM Profile")
     fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
 
-
+    @Transaction // Get ALL profiles with EVERYTHING
+    @Query("SELECT * FROM Profile")
+    fun getEverything() : Flow<List<ProfileWithEverything>>
 
     @Transaction // Get a particular debt with all of it's transactions.
     @Query("SELECT * FROM Debt WHERE debtId = :debtId")
-    fun getDebtWithTransactions(debtId: Long?): Flow<List<DebtWithTransactions>>
+    fun getDebtWithTransactions(debtId: Long?): Flow<DebtWithTransactions>
 
 
     @Query("SELECT SUM(totalDebt) FROM Profile")
