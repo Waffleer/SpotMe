@@ -45,11 +45,12 @@ fun SummaryScreen(
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.Center
     ) {
         Column(modifier = modifier
             .padding(dimensionResource(R.dimen.padding_medium))
-            .weight(1f)
+            .weight(1f),
+            //verticalArrangement = Arrangement.Center
         ) {
             Card(
                 colors = CardDefaults.cardColors(
@@ -60,9 +61,15 @@ fun SummaryScreen(
                     .wrapContentHeight()
                     .padding(dimensionResource(R.dimen.padding_small))
             ) {
-                Row(modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                    Text("Overall Balance:")
-                    Text("$" + totalBalance.totalBalance.toString(), modifier)
+                Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
+                    Text("Overall Balance: ",
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = modifier
+                    )
+                    Text("$" + totalBalance.totalBalance.toString(),
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = modifier
+                    )
                 }
             }
             Row(){
@@ -76,7 +83,7 @@ fun SummaryScreen(
                         .weight(1f)
                 ) {
                     Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                        Text("Largest Debtor:")
+                        Text("Primary Debtor:", style = MaterialTheme.typography.titleMedium)
                         Text("name")
                         Text("$" )
                     }
@@ -91,10 +98,25 @@ fun SummaryScreen(
                         .weight(1f)
                 ) {
                     Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                        Text("Main Creditor:")
+                        Text("Primary Creditor:", style = MaterialTheme.typography.titleMedium)
                         Text("name")
                         Text("$" )
                     }
+                }
+            }
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                ),
+                modifier = modifier
+                    .wrapContentHeight()
+                    .padding(dimensionResource(R.dimen.padding_small))
+                    .fillMaxWidth()
+            ) {
+                Row(modifier.padding(dimensionResource(R.dimen.padding_small))) {
+                    Text("Oldest Debt:", style = MaterialTheme.typography.titleMedium)
+                    Text("name")
+                    Text("$" )
                 }
             }
         }
