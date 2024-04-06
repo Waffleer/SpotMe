@@ -48,6 +48,7 @@ fun SummaryScreen(
     val totalBalance by summaryViewModel.totalBalance.collectAsState()
     val primaryDebtor by summaryViewModel.primaryDebtor.collectAsState()
     val primaryCreditor by summaryViewModel.primaryCreditor.collectAsState()
+    val oldestDebt by summaryViewModel.oldestDebt.collectAsState()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -87,7 +88,7 @@ fun SummaryScreen(
                         .wrapContentHeight()
                         .padding(dimensionResource(R.dimen.padding_small))
                         .weight(1f)
-                        .clickable{ onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!) }
+                        .clickable { onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!) }
                 ) {
                     Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
                         Text("Primary Debtor:", style = MaterialTheme.typography.titleMedium)
@@ -123,10 +124,15 @@ fun SummaryScreen(
                     .padding(dimensionResource(R.dimen.padding_small))
                     .fillMaxWidth()
             ) {
-                Row(modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                    Text("Oldest Debt:", style = MaterialTheme.typography.titleMedium)
-                    Text("name")
-                    Text("$" )
+                Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
+                    Row(modifier) {
+                        Text("Oldest Debt: ", style = MaterialTheme.typography.titleMedium)
+                        Text(oldestDebt.oldestDebt.name)
+                    }
+                    Text("Amount: $" + oldestDebt.oldestDebt.totalDebt.toString(),
+                        style = MaterialTheme.typography.titleMedium)
+                    Text("Date: " + oldestDebt.oldestDebt.createdDate.toString(),
+                        style = MaterialTheme.typography.titleMedium )
                 }
             }
         }
