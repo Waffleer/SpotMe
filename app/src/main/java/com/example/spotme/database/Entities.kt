@@ -75,7 +75,7 @@ data class ProfileWithEverything(
     @Relation(
         entity = Debt::class,
         parentColumn = "profileId",
-        entityColumn = "f_debt_id"
+        entityColumn = "f_profile_id"
     )
     val debtsWithTransactions: List<DebtWithTransactions>
 
