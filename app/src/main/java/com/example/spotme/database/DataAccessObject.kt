@@ -59,7 +59,7 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     fun getLargestCreditor(): Flow<ProfileDebtTuple>
 
     @Query("SELECT * FROM Profile Where profileId = :profileId")
-    fun getSpecificProfile(profileId: Long?)
+    fun getSpecificProfile(profileId: Long?): Flow<Profile>
 
     /**
      * Inserts a new profile into the database.
