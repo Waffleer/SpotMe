@@ -14,6 +14,7 @@ interface RepositoryInterface { //
     fun getTotalBalance(): Flow<Double>
     fun getLargestDebtor(): Flow<ProfileDebtTuple>
     fun getLargestCreditor(): Flow<ProfileDebtTuple>
+    fun getOldestDebt(): Flow<Debt>
 
     suspend fun insertProfile(profile: Profile)
 
@@ -34,21 +35,16 @@ class Repository(val dao: DataAccessObject):
         = dao.getEverything()
     override fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
         = dao.getProfilesWithDebts()
-
-    // TODO modify to return a particular debt with it's transactions
     override fun getDebtWithTransactions(debtId: Long?): Flow<DebtWithTransactions>
         = dao.getDebtWithTransactions(debtId)
-
-
     override fun getTotalBalance(): Flow<Double>
         = dao.getTotalBalance()
-
     override fun getLargestDebtor(): Flow<ProfileDebtTuple>
         = dao.getLargestDebtor()
-
     override fun getLargestCreditor(): Flow<ProfileDebtTuple>
         = dao.getLargestCreditor()
-
+    override fun getOldestDebt(): Flow<Debt>
+        = dao.getOldestDebt()
     override suspend fun insertProfile(profile: Profile) {
         dao.insertProfile(profile)
     }

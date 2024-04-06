@@ -13,43 +13,10 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface DataAccessObject { // TODO currently setup for sandwiches. Change that.
-    /**
-     * Gets a flow of a list of previously ordered sandwiches.
-     * Contains an SQL Query: "SELECT * FROM sandwich"
-     *//*
-    @Query("SELECT * FROM sandwich")
-    fun getAll(): Flow<List<Sandwich>>
-
-    /**
-     * Inserts a new sandwich into the database.
-     * @param sub the Sandwich to be inserted.
-     */
-    @Insert
-    suspend fun insertSandwich(
-        sub: Sandwich
-    )
-
-    /**
-     * Used to delete a sandwich.
-     * @param sub the Sandwich to be deleted.
-     */
-    @Delete
-    suspend fun deleteSandwich(
-        sub: Sandwich
-    )*/
-
-    @Transaction // Get ALL Profiles with their Debts
-    @Query("SELECT * FROM Profile")
-    fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
 
     @Transaction // Get ALL profiles with EVERYTHING
     @Query("SELECT * FROM Profile")
     fun getEverything() : Flow<List<ProfileWithEverything>>
-
-    @Transaction // Get a particular debt with all of it's transactions.
-    @Query("SELECT * FROM Debt WHERE debtId = :debtId")
-    fun getDebtWithTransactions(debtId: Long?): Flow<DebtWithTransactions>
-
 
     @Query("SELECT SUM(totalDebt) FROM Profile")
     fun getTotalBalance(): Flow<Double>
@@ -60,8 +27,27 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Query("SELECT profileId, name, totalDebt FROM Profile ORDER BY totalDebt LIMIT 1")
     fun getLargestCreditor(): Flow<ProfileDebtTuple>
 
-    @Query("SELECT * FROM Profile Where profileId = :profileId")
+    @Query("SELECT * FROM Debt ORDER BY createdDate LIMIT 1")
+    fun getOldestDebt(): Flow<Debt>
+
+    // <--- Get Specific Entity --->
+    @Query("SELECT * FROM Profile WHERE profileId = :profileId")
     fun getSpecificProfile(profileId: Long?): Flow<Profile>
+
+    @Query("SELECT * FROM Debt WHERE debtId = :debtId")
+    fun getSpecificDebt(debtId: Long?): Flow<Debt>
+
+    @Query("SELECT * FROM 'Transaction' WHERE transactionId = :transactionId")
+    fun getSpecificTransaction(transactionId: Long?): Flow<com.example.spotme.database.Transaction>
+
+    // <--- Get One To Many Relationships --->
+    @Transaction // Get ALL Profiles with their Debts
+    @Query("SELECT * FROM Profile")
+    fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
+
+    @Transaction // Get a particular debt with all of it's transactions.
+    @Query("SELECT * FROM Debt WHERE debtId = :debtId")
+    fun getDebtWithTransactions(debtId: Long?): Flow<DebtWithTransactions>
 
     /**
      * Inserts a new profile into the database.
