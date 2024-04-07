@@ -79,7 +79,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     var primaryCreditor: StateFlow<LargestCreditor>
             = spotMeRepository.getLargestCreditor()
         .map {
-            LargestCreditor(it?: ProfileDebtTuple(0,"placeholder",0.0))
+            LargestCreditor(it?: ProfileDebtTuple(0,"Namerson",0.0))
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -89,7 +89,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     var primaryDebtor: StateFlow<LargestDebtor>
             = spotMeRepository.getLargestCreditor()
         .map {
-            LargestDebtor(it?: ProfileDebtTuple(0,"placeholder",0.0))
+            LargestDebtor(it?: ProfileDebtTuple(0,"Namerson Jr.",0.0))
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -102,7 +102,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             OldestDebt(it?: Debt(
                 debtId = 0,
                 f_profile_id = 0,
-                name = "placeholder",
+                name = "Debt Name",
                 totalDebt = 0.0,
                 description = "placeholder description",
                 canceled = false,
