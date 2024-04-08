@@ -78,7 +78,7 @@ fun ProfileCard(
 fun PlusButton(modifier: Modifier = Modifier, onClick: () -> Unit, iconSize: Dp = 24.dp) {
     Box(modifier = modifier) {
         Box(
-            modifier = Modifier
+            modifier = modifier.clickable(onClick = onClick)
                 .size(iconSize + 24.dp)
                 .background(Color.Black, CircleShape),
             contentAlignment = Alignment.Center
