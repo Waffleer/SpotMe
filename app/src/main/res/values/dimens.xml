@@ -4,5 +4,7 @@
     <dimen name="padding_medium">16dp</dimen>
     <dimen name="thickness_divider">1dp</dimen>
     <dimen name="detail_card_list_padding_top">24dp</dimen>
+    <dimen name="plus_button_size">32dp</dimen>
+
 
 </resources>
