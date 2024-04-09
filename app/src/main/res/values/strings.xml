@@ -13,7 +13,19 @@
     <string name="add_debt_transaction">Add Debt</string>
     <string name="groups">Group</string>
     <string name="add_group_transaction">Add Group</string>
+    <string name="filter">Filter</string>
     <string name="expanded_groups_screen">Expanded Group Screen</string>
+    <string name="filter_amount_high">Filter Amount High</string>
+    <string name="filter_amount_low">Filter Amount Low</string>
 
+    //Expanded Profile Screen strings
+    <string name="about">About</string>
+    <string name="memberSince">Member Since: </string>
+    <string name="debtsTrans">Debts and Transactions</string>
+
+
+
+    //picture labels
+    <string name="logo1">logo</string>
 
 </resources>

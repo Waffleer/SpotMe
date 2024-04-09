@@ -4,62 +4,51 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Junction
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import java.util.Date
 
-/**
- * Defines the Sandwich table for the database.
- * @property uid unique identifier and primary key for the sandwich.
- * @property subName stores the name of the sub.
- * @property price stores the price of the sub.
- * @property date stores the date and time that the sub was purchased.
- */ /*
-@Entity // TODO leaving this as an example for now. Replace soon.
-data class Sandwich(
-    @PrimaryKey val uid: Long?,
-    @ColumnInfo(name = "sub_name")
-    val subName: String,
-    @ColumnInfo(name = "price")
-    val price: Double,
-    @ColumnInfo(name = "date")
-    val date: Date
-)*/
-
+// <--- ENTITIES --->
 @Entity
 data class Profile(
     @PrimaryKey val profileId: Long?,
-    @ColumnInfo(name="name")
     val name: String,
-    @ColumnInfo(name="bio")
-    val bio: String,
-    @ColumnInfo(name="payment_preference")
+    val description: String,
     val paymentPreference: String,
-    @ColumnInfo("debt_issue_date")
-    val date: Date
+    val totalDebt: Double,
+    val createdDate: Date,
 )
 
 @Entity
 data class Debt(
     @PrimaryKey val debtId: Long?,
-    @ColumnInfo(name="f_profile_id") //Foreign Key
-    val ProfileIdF: Long?
+    val f_profile_id: Long?,
+    val name: String,
+    val totalDebt: Double,
+    val description: String,
+    val canceled: Boolean,
+    val createdDate: Date,
 )
 
 @Entity
 data class Transaction(
-    @PrimaryKey val transaction_id: Long?,
-    @ColumnInfo(name="f_debt_id") //Foreign Key
-    val debtId: Long?,
-    @ColumnInfo(name="date")
-    val date: Date,
-    @ColumnInfo(name="amount_owed")
+    @PrimaryKey val transactionId: Long?,
+    val f_debt_id: Long?, //Foreign Key
+    val createdDate: Date,
     val amount: Double,
-    @ColumnInfo(name = "description")
     val description: String,
-    @ColumnInfo(name="status")
-    val canceled: Boolean
+    val canceled: Boolean,
 )
+
+@Entity(primaryKeys = ["debtId","transactionId"])
+data class DebtTransactionsCrossRef(
+    val debtId: Long?,
+    val transactionId: Long?
+)
+
+
+// <--- RELATIONAL OBJECTS --->
 
 //Relationship: Profile -< Debt
 data class ProfileWithDebts(
@@ -79,4 +68,23 @@ data class DebtWithTransactions(
         entityColumn = "f_debt_id",
     )
     val transactions: List<Transaction>
+)
+
+data class ProfileWithEverything(
+    @Embedded val profile: Profile,
+    @Relation(
+        entity = Debt::class,
+        parentColumn = "profileId",
+        entityColumn = "f_profile_id"
+    )
+    val debtsWithTransactions: List<DebtWithTransactions>
+
+)
+
+// <--- SPECIFIC TUPLES --->
+
+data class ProfileDebtTuple(
+    @ColumnInfo(name = "profileId") val profileId: Long?,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "totalDebt") val totalDebt: Double,
 )

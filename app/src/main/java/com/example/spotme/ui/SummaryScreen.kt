@@ -1,6 +1,7 @@
 package com.example.spotme.ui
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,25 +32,32 @@ import com.example.spotme.database.RepositoryInterface
 import com.example.spotme.ui.elements.NavButton
 import com.example.spotme.viewmodels.LocalUiState
 import com.example.spotme.viewmodels.SummaryViewModel
+import kotlin.math.absoluteValue
 
 @Composable
 fun SummaryScreen(
     repository: RepositoryInterface,
     onDetailsPressed: () -> Unit,
-    onGroupsPressed: () -> Unit,
     onPlusPressed: () -> Unit,
+    onPrimaryDebtorClicked: (Long) -> Unit,
+    onPrimaryCreditorClicked: (Long) -> Unit,
     modifier: Modifier = Modifier
     ) {
     val summaryViewModel = SummaryViewModel(repository)
-    val summaryUiState by summaryViewModel.summaryUiModel.collectAsState()
+    val profilesWithDebts by summaryViewModel.profilesWithDebts.collectAsState()
+    val totalBalance by summaryViewModel.totalBalance.collectAsState()
+    val primaryDebtor by summaryViewModel.primaryDebtor.collectAsState()
+    val primaryCreditor by summaryViewModel.primaryCreditor.collectAsState()
+    val oldestDebt by summaryViewModel.oldestDebt.collectAsState()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.Center
     ) {
         Column(modifier = modifier
             .padding(dimensionResource(R.dimen.padding_medium))
-            .weight(1f)
+            .weight(1f),
+            //verticalArrangement = Arrangement.Center
         ) {
             Card(
                 colors = CardDefaults.cardColors(
@@ -61,11 +69,74 @@ fun SummaryScreen(
                     .padding(dimensionResource(R.dimen.padding_small))
             ) {
                 Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                    Text("Balance:")
-                    Text("$" + summaryUiState.totalBalance.toString(), modifier)
+                    Text("Overall Balance: ",
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = modifier
+                    )
+                    Text("$" + totalBalance.totalBalance.toString(),
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = modifier
+                    )
+                }
+            }
+            Row(){
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    ),
+                    modifier = modifier
+                        .wrapContentHeight()
+                        .padding(dimensionResource(R.dimen.padding_small))
+                        .weight(1f)
+                        .clickable { onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!) }
+                ) {
+                    Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
+                        Text("Primary Debtor:", style = MaterialTheme.typography.titleMedium)
+                        Text(primaryDebtor.largestDebtor.name)
+                        Text("Owes You: ")
+                        Text("$" + primaryDebtor.largestDebtor.totalDebt.absoluteValue)
+                    }
+                }
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    ),
+                    modifier = modifier
+                        .wrapContentHeight()
+                        .padding(dimensionResource(R.dimen.padding_small))
+                        .weight(1f)
+                        .clickable { onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!) }
+                ) {
+                    Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
+                        Text("Primary Creditor:", style = MaterialTheme.typography.titleMedium)
+                        Text(primaryCreditor.largestCreditor.name)
+                        Text("You Owe: ")
+                        Text("$" + primaryCreditor.largestCreditor.totalDebt.absoluteValue)
+                    }
+                }
+            }
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                ),
+                modifier = modifier
+                    .wrapContentHeight()
+                    .padding(dimensionResource(R.dimen.padding_small))
+                    .fillMaxWidth()
+            ) {
+                Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
+                    Row(modifier) {
+                        Text("Oldest Debt: ", style = MaterialTheme.typography.titleMedium)
+                        Text(oldestDebt.oldestDebt.name)
+                    }
+                    Text("Amount: $" + oldestDebt.oldestDebt.totalDebt.toString(),
+                        style = MaterialTheme.typography.titleMedium)
+                    Text("Date: " + oldestDebt.oldestDebt.createdDate.toString(),
+                        style = MaterialTheme.typography.titleMedium )
                 }
             }
         }
+
         //Basic Nav Buttons
         Row( //NavButtons
             verticalAlignment = Alignment.CenterVertically,
@@ -86,8 +157,6 @@ fun SummaryScreen(
                 modifier = Modifier
                     .padding(12.dp)
             )
-
         }
-
     }
 }
