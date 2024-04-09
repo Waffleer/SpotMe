@@ -29,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Repository
 import com.example.spotme.ui.AddDebtTransactionScreen
@@ -152,8 +153,14 @@ fun SpotMeApp(
                         navController.navigate(SpotMeScreen.Details.name)
                     },
                     onPlusPressed = {},
-                    onPrimaryCreditorClicked = {},
-                    onPrimaryDebtorClicked = {}
+                    onPrimaryCreditorClicked = {
+                        detailsViewModel.setCurrentProfile(StaticDataSource.profiles[0])
+                        navController.navigate(SpotMeScreen.ExpandedProfile.name)
+                                               },
+                    onPrimaryDebtorClicked = {
+                        detailsViewModel.setCurrentProfile(StaticDataSource.profiles[0])
+                        navController.navigate(SpotMeScreen.ExpandedProfile.name)
+                    }
                 ) //Update SummaryScreen() later
             }
 

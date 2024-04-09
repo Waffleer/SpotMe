@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.example.spotme.data.Profile
@@ -44,7 +46,8 @@ fun ExpandedProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.inverseOnSurface)
-                .padding(top = dimensionResource(R.dimen.detail_card_list_padding_top)),
+                .padding(top = dimensionResource(R.dimen.detail_card_list_padding_top))
+                .verticalScroll(rememberScrollState()),
         ) {
             Text(
                 text = profile.name,
