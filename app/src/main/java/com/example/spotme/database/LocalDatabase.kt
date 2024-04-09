@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.spotme.data.DebugData
 
 
 /**
@@ -14,7 +16,10 @@ import androidx.room.TypeConverters
  *
  * @property DataAccessObject DAO object used to provide access to stored data.
  */
-@Database(entities = [Profile::class, Debt::class, Transaction::class], version = 5) //TODO update entities
+@Database(
+    entities = [Profile::class, Debt::class, Transaction::class],
+    version = 5
+) //TODO update entities
 @TypeConverters(DateConverter::class)
 abstract class LocalDatabase : RoomDatabase() {
     abstract fun getDao(): DataAccessObject
@@ -32,8 +37,18 @@ abstract class LocalDatabase : RoomDatabase() {
                     LocalDatabase::class.java,
                     "spotme_db"
                 )
-                //.fallbackToDestructiveMigration() //destorys db
-                .build()
+                    // Ran when the database is first created.
+                    .addCallback(object : Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+
+                            // Uncomment to reset the database to debug data on creation
+                            DebugData.resetDB(getInstance(context))
+                        }
+                    })
+
+                    //.fallbackToDestructiveMigration() // Destroys DB to update schema
+                    .build()
             }
             return instance as LocalDatabase
         }

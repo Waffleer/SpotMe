@@ -1,7 +1,6 @@
 package com.example.spotme.database
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
@@ -16,7 +15,7 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
 
     @Transaction // Get ALL profiles with EVERYTHING
     @Query("SELECT * FROM Profile")
-    fun getEverything() : Flow<List<ProfileWithEverything>>
+    fun getEverything(): Flow<List<ProfileWithEverything>>
 
     @Query("SELECT SUM(totalDebt) FROM Profile")
     fun getTotalBalance(): Flow<Double>
@@ -54,7 +53,25 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
      * @param profile profile to be added
      */
     @Insert
-    suspend fun insertProfile(
+    fun insertProfile(
         profile: Profile
+    )
+
+    /**
+     * Inserts a new debt into the database.
+     * @param debt debt to be added
+     */
+    @Insert
+    fun insertDebt(
+        debt: Debt
+    )
+
+    /**
+     * Inserts a new transaction into the database.
+     * @param transaction transaction to be added
+     */
+    @Insert
+    fun insertTransaction(
+        transaction: com.example.spotme.database.Transaction
     )
 }
