@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.spotme.data.DebugData
 
 
@@ -37,20 +36,20 @@ abstract class LocalDatabase : RoomDatabase() {
                     LocalDatabase::class.java,
                     "spotme_db"
                 )
-                    // Ran when the database is first created.
-                    .addCallback(object : Callback() {
-                        override fun onCreate(db: SupportSQLiteDatabase) {
-                            super.onCreate(db)
-
-                            // Uncomment to reset the database to debug data on creation
-                            DebugData.resetDB(getInstance(context))
-                        }
-                    })
-
                     //.fallbackToDestructiveMigration() // Destroys DB to update schema
                     .build()
+
+                // Uncomment to reset DB to default data
+                instance?.resetInitialData()
             }
             return instance as LocalDatabase
         }
+    }
+
+    /**
+     * Resets the db to initial debug data
+     */
+    private fun resetInitialData() {
+        DebugData.resetInitialData(instance as LocalDatabase)
     }
 }

@@ -5,6 +5,7 @@ import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Profile
 import com.example.spotme.database.Transaction
 import java.util.Date
+import java.util.concurrent.Executors
 
 object DebugData {
     val profiles = listOf(
@@ -91,16 +92,26 @@ object DebugData {
     )
 
     /**
-     * Resets the database and appends some debug data.
+     * Resets the db to initial debug data
      */
-    fun resetDB(db: LocalDatabase) {
-        // Reset the database
-        val dao = db.getDao()
-        db.clearAllTables()
+    fun resetInitialData(db: LocalDatabase) {
 
-        // Append debug data
-        profiles.forEach { dao.insertProfile(it) }
-        debts.forEach { dao.insertDebt(it) }
-        transactions.forEach { dao.insertTransaction(it) }
+        // Run on a background thread
+        Executors.newSingleThreadExecutor().execute {
+
+            // Get the database
+            val dao = db.getDao()
+
+            // Force a database call to ensure it's open
+            dao.getEverything()
+
+            // Clear the database
+            db.clearAllTables()
+
+            // Append debug data
+            profiles.forEach { dao.insertProfile(it) }
+            debts.forEach { dao.insertDebt(it) }
+            transactions.forEach { dao.insertTransaction(it) }
+        }
     }
 }
