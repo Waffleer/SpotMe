@@ -3,7 +3,6 @@ package com.example.spotme.database
 import kotlinx.coroutines.flow.Flow
 
 
-
 /**
  * Interface outlining SubRepository class
  */
@@ -72,8 +71,8 @@ class Repository(val dao: DataAccessObject):
      * Provides a SubRepository instance
      * @return the singular instance of SubRepository
      */
-    companion object{
-        private var repository:RepositoryInterface? = null
+    companion object {
+        private var repository: RepositoryInterface? = null
         fun getRepository(database: LocalDatabase):
                 RepositoryInterface {
             if (repository == null) {
