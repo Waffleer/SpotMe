@@ -130,7 +130,7 @@ fun ExpandedProfileScreen(
                             )
                             Text(text = trans.description)
                             Text(text = "Canceled - ${trans.canceled}")
-                            Text(text = "Transaction Made - ${trans.date}\n")
+                            Text(text = "Transaction Made - ${trans.createdDate}\n")
                         }
                     }
                 }

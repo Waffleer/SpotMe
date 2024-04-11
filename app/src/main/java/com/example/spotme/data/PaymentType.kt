@@ -1,5 +1,11 @@
 package com.example.spotme.data
 
-enum class PaymentType {
-    PAYPAL, VENMO, MONERO, NONE
+import androidx.annotation.StringRes
+import com.example.spotme.R
+
+enum class PaymentType(val title: String) {
+    PAYPAL("paypal"),
+    VENMO("venmo"),
+    MONERO("monero"),
+    NONE("none"),
 }

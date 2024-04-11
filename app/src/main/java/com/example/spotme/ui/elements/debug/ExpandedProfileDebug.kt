@@ -21,7 +21,7 @@ fun ExpandedProfileScreenDebug(
         Text(text = "id: ${profile.id}")
         Text(text = "name: ${profile.name}")
         Text(text = "bio: ${profile.description}")
-        Text(text = "profileImage: ${profile.profileImage}")
+        //Text(text = "profileImage: ${profile.profileImage}")
         Text(text = "createDate: ${profile.createdDate}")
         Text(text = "paymentPreferences: ${profile.paymentPreference}")
         Text(text = "Debts: ")
@@ -35,7 +35,7 @@ fun ExpandedProfileScreenDebug(
                 Text(text = "       amount: ${trans.amount}")
                 Text(text = "       description: ${trans.description}")
                 Text(text = "       canceled: ${trans.canceled}")
-                Text(text = "       date: ${trans.date}")
+                Text(text = "       date: ${trans.createdDate}")
             }
         }
     }
