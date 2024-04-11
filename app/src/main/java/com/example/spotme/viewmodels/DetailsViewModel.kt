@@ -3,11 +3,17 @@ package com.example.spotme.viewmodels
 import android.icu.text.NumberFormat
 import androidx.compose.runtime.produceState
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.spotme.data.Profile
 import com.example.spotme.data.StaticDataSource
+import com.example.spotme.database.ProfileWithEverything
+import com.example.spotme.database.RepositoryInterface
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 /**
@@ -19,9 +25,15 @@ data class DetailsUiState (
     // Put State Values Here:
     val filter_profiles: List<Profile> = listOf(),
     val currentProfile: Profile? = null,
+    val currentProfileId: Long? = 0
 )
 
-class DetailsViewModel : ViewModel() {
+data class ProfileEntity (
+    val selectedProfile : ProfileWithEverything
+)
+
+
+class DetailsViewModel (spotMeRepository: RepositoryInterface) : ViewModel() {
     private var profiles: List<Profile> = listOf()
     private val _uiState = MutableStateFlow(DetailsUiState())
     val uiState: StateFlow<DetailsUiState> = _uiState.asStateFlow()
@@ -98,5 +110,19 @@ class DetailsViewModel : ViewModel() {
                 currentProfile = profile
             )
         }
+    }
+
+    var profileWithDebts: StateFlow<ProfileEntity> //Stores State collected from database
+            = spotMeRepository.getSpecificProfileWithEverything(uiState.value.currentProfileId) //TODO REPLACE getSandwich() with real repo DAO method
+        .map { // convert to a flow of DatabaseUiState
+            ProfileEntity(it)
+        }.stateIn(
+            // Convert Flow to StateFlow
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(DetailsViewModel.TIMEOUT_MILLIS),
+            initialValue = ProfileEntity(StaticDataSource.profile)
+        )
+    companion object {
+        private const val TIMEOUT_MILLIS = 5_000L
     }
 }
