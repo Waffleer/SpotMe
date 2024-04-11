@@ -122,7 +122,7 @@ fun ExpandedProfileScreen(
                     )
 
                     // Display each debt and its transactions
-                    profile.debts.forEach { debt ->
+                    profile.debts?.forEach { debt ->
                         Text(
                             text = "${debt.name}",
                             modifier = Modifier.padding(bottom = 8.dp),
@@ -130,7 +130,7 @@ fun ExpandedProfileScreen(
                             textDecoration = TextDecoration.Underline
                         )
                         Text(text = "${debt.description}\n")
-                        debt.transactions.forEach { trans ->
+                        debt.transactions?.forEach { trans ->
                             Text(text = "$${trans.amount}",
                                 modifier = Modifier,
                                 fontWeight = FontWeight.Bold,

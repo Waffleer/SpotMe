@@ -7,7 +7,7 @@ data class Debt (
     val userID: Long?,
     val name: String,
     val description: String,
-    val transactions: List<Transaction> = listOf(),
+    val transactions: List<Transaction>?,
     val amount: Double,
     val canceled: Boolean,
     val createdDate: Date = Date(0),
