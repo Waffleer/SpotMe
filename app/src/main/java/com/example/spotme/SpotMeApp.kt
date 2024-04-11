@@ -187,6 +187,7 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
                     profile = detailsUiState.currentProfile,
+                    repository = spotMeRepository
                 )
             }
 

@@ -1,5 +1,7 @@
 package com.example.spotme.data
 
+import com.example.spotme.database.ProfileWithEverything
+
 object StaticDataSource {
     val transactions: List<Transaction> = listOf(
         Transaction(1,1,100.0,"Description of the transaction1", false),
@@ -17,5 +19,12 @@ object StaticDataSource {
         Profile(2,"Namason jr","Biography1", debts = listOf(this.debts[1]), paymentPreference = (PaymentType.NONE), amount = 200.00),
         Profile(3,"Jason","Jasons Bio", debts = listOf(this.debts[0]), paymentPreference = (PaymentType.NONE), amount = -100.00),
     )
+
+    val profile: ProfileWithEverything = ProfileWithEverything(
+        profile = com.example.spotme.database.Profile(1, "placeholder", "Placeholder","venmo",0.0,java.util.Date()),
+        debtsWithTransactions = listOf()
+    )
+
+
 
 }
