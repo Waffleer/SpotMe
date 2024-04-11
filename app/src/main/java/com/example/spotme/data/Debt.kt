@@ -10,6 +10,6 @@ data class Debt (
     val transactions: List<Transaction> = listOf(),
     val amount: Double,
     val canceled: Boolean,
-    val createdDate: Date,
+    val createdDate: Date = Date(0),
     val hidden: Boolean = false,
 )
