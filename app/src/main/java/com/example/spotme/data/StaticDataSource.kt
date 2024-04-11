@@ -1,10 +1,13 @@
 package com.example.spotme.data
 
+import com.example.spotme.database.ProfileWithEverything
 import com.example.spotme.database.DebtWithTransactions
 import com.example.spotme.database.ProfileWithEverything
 import java.util.Date
 
+
 object StaticDataSource {
+    // TODO: Move to `DebugData` class
     val transactions: List<Transaction> = listOf(
         Transaction(1,1,100.0,"Description of the transaction1", false),
         Transaction(2,1,-200.0,"Description of the transaction2", false),
@@ -17,9 +20,35 @@ object StaticDataSource {
         Debt(3,3, "", "",listOf(this.transactions[2]),500.00, false),
     )
     val profiles: List<Profile> = listOf(
-        Profile(1,"Namason","Biography1", debts = listOf(this.debts[0]), paymentPreference = (PaymentType.NONE), amount = 100.00),
-        Profile(2,"Namason jr","Biography1", debts = listOf(this.debts[1]), paymentPreference = (PaymentType.NONE), amount = 200.00),
-        Profile(3,"Jason","Jasons Bio", debts = listOf(this.debts[0]), paymentPreference = (PaymentType.NONE), amount = -100.00),
+        Profile(
+            1,
+            "Namason",
+            "Biography1",
+            debts = listOf(this.debts[0]),
+            paymentPreference = (PaymentType.NONE),
+            amount = 100.00
+        ),
+        Profile(
+            2,
+            "Namason jr",
+            "Biography1",
+            debts = listOf(this.debts[1]),
+            paymentPreference = (PaymentType.NONE),
+            amount = 200.00
+        ),
+        Profile(
+            3,
+            "Jason",
+            "Jasons Bio",
+            debts = listOf(this.debts[0]),
+            paymentPreference = (PaymentType.NONE),
+            amount = -100.00
+        ),
+    )
+
+    val profile: ProfileWithEverything = ProfileWithEverything(
+        profile = com.example.spotme.database.Profile(1, "placeholder", "Placeholder","venmo",0.0,java.util.Date()),
+        debtsWithTransactions = listOf()
     )
 
     val eProfiles: List<com.example.spotme.database.Profile> = listOf(
@@ -42,5 +71,4 @@ object StaticDataSource {
     val profilesWithEverything: List<ProfileWithEverything> = listOf(
         ProfileWithEverything(this.eProfiles[0],this.debtsWithTransactions_s)
     )
-
 }

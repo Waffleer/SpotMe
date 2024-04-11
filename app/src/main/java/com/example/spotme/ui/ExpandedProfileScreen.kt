@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.example.spotme.data.Profile
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +26,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spotme.R
+import com.example.spotme.database.RepositoryInterface
 import com.example.spotme.ui.elements.debug.ExpandedProfileScreenDebug
+import com.example.spotme.viewmodels.DetailsViewModel
 
 /**
  * Composable function to display an expanded profile screen.
@@ -36,8 +39,12 @@ import com.example.spotme.ui.elements.debug.ExpandedProfileScreenDebug
 @Composable
 fun ExpandedProfileScreen(
     profile: Profile?,
+    repository: RepositoryInterface,
     modifier: Modifier = Modifier,
 ) {
+    val detailsViewModel = DetailsViewModel(repository)
+    val profileEntity = detailsViewModel.profileWithDebts.collectAsState()
+
     // Check if profile is null
     if (profile == null) {
         Text("Profile is null, please fix")

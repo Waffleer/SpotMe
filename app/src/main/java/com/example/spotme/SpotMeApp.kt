@@ -140,7 +140,6 @@ fun SpotMeApp(
             startDestination = SpotMeScreen.Summary.name,
             modifier = Modifier
                 .fillMaxSize()
-                //.verticalScroll(rememberScrollState()) why does this kill my app???
                 .padding(innerPadding)
         ) {
 
@@ -188,6 +187,7 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
                     profile = detailsUiState.currentProfile,
+                    repository = spotMeRepository
                 )
             }
 
