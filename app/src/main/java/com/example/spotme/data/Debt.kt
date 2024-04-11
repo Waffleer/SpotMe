@@ -1,11 +1,15 @@
 package com.example.spotme.data
 
+import java.util.Date
+
 data class Debt (
     val id: Long?,
     val userID: Long?,
-    val name: String?,
-    val description: String?,
+    val name: String,
+    val description: String,
     val transactions: List<Transaction> = listOf(),
     val amount: Double,
+    val canceled: Boolean,
+    val createdDate: Date,
     val hidden: Boolean = false,
 )
