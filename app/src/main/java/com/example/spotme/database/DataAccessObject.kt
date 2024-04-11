@@ -18,6 +18,9 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Query("SELECT * FROM Profile")
     fun getEverything() : Flow<List<ProfileWithEverything>>
 
+    @Query("SELECT * FROM Profile WHERE profileId = :profileId")
+    fun getSpecificProfileWithEverything(profileId: Long?) : Flow<ProfileWithEverything>
+
     @Query("SELECT SUM(totalDebt) FROM Profile")
     fun getTotalBalance(): Flow<Double>
 
@@ -56,5 +59,22 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Insert
     suspend fun insertProfile(
         profile: Profile
+    )
+    /**
+     * Inserts a new Debt into the database.
+     * @param debt Debt to be added
+     */
+    @Insert
+    suspend fun insertDebt(
+            debt: Debt
+    )
+
+    /**
+     * Inserts a new Transaction into the database.
+     * @param transaction Transaction to be added
+     */
+    @Insert
+    suspend fun insertTransaction(
+        transaction: com.example.spotme.database.Transaction
     )
 }
