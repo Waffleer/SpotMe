@@ -102,9 +102,8 @@ fun SpotMeAppBar(
  */
 @Composable
 fun SpotMeApp(
-    detailsViewModel: DetailsViewModel = viewModel(),
     localViewModel: SpotMeViewModel = viewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     //get current backstack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -116,6 +115,7 @@ fun SpotMeApp(
     // Instantiate the database, repo, and database view model
     val localDatabase = LocalDatabase.getInstance(LocalContext.current)
     val spotMeRepository = Repository.getRepository(localDatabase)
+    val detailsViewModel: DetailsViewModel = DetailsViewModel(spotMeRepository)
     //val databaseViewModel = DatabaseViewModel(subRepository)
 
     Scaffold ( // Used to hold the app bar
@@ -133,6 +133,11 @@ fun SpotMeApp(
         // Local UI State from SpotMeViewModel/LocalUiState
         val localUiState by localViewModel.uiState.collectAsState()
         val detailsUiState by detailsViewModel.uiState.collectAsState()
+        val details_Profiles by detailsViewModel.profilesFlow.collectAsState()
+        //val detailsCurrentProfile by detailsViewModel.profilesFlow.collectAsState()
+        val detailsCurrentProfile = StaticDataSource.profiles[0]
+
+
         // DATABASE State Information Example:
         // val oldOrders by databaseViewModel.oldSubsUiModel.collectAsState()
         NavHost(
@@ -166,6 +171,7 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.Details.name) {
                 DetailsScreen(
                     uiState = detailsUiState,
+                    details_Profiles = details_Profiles,
                     onSummeryPressed = {},
                     onProfilePressed = {
                         detailsViewModel.setCurrentProfile(it)
@@ -186,14 +192,15 @@ fun SpotMeApp(
 
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
-                    profile = detailsUiState.currentProfile,
-                    repository = spotMeRepository
+                    //profile = detailsUiState.currentProfile
+                    profile = detailsCurrentProfile
                 )
             }
 
             composable(route = SpotMeScreen.AddDebtTransaction.name) {
                 AddDebtTransactionScreen(
-                    profile = detailsUiState.currentProfile
+                    //profile = detailsUiState.currentProfile
+                    profile = detailsCurrentProfile
                 )
             }
 

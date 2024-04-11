@@ -4,6 +4,8 @@ import android.icu.text.NumberFormat
 import androidx.compose.runtime.produceState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spotme.data.Debt
+import com.example.spotme.data.PaymentType
 import com.example.spotme.data.Profile
 import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.RepositoryInterface
@@ -18,6 +20,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import java.util.Date
 
 /**
  * Stores SpotMeApp's UI state for details screen.
@@ -27,42 +30,53 @@ import kotlinx.coroutines.flow.update
 data class DetailsUiState (
     // Put State Values Here:
     val filter_profiles: List<Profile> = listOf(),
-    val currentProfile: Profile? = null,
-    val currentProfileId: Long? = 0
+    val currentProfileId: Long? = 0,
+    //val currentProfile: Profile = Profile(0,"","",0.0,listOf(),PaymentType.NONE, Date(0),false),
 )
 
-data class ProfileEntity (
-    val selectedProfile : ProfileWithEverything
+data class DetailsCurrentProfile(
+    val currentProfile: Profile = Profile(0,"","",0.0,listOf(),PaymentType.NONE, Date(0),false),
+    )
+
+data class Details_Profiles(
+    val profiles: List<Profile> = listOf(),
 )
+
+
+//data class ProfileEntity (
+//    val selectedProfile : ProfileWithEverything
+//)
 
 
 class DetailsViewModel (
-    //spotMeRepository: RepositoryInterface
+    repo: RepositoryInterface
     ) : ViewModel() {
     private var profiles: List<Profile> = listOf()
     private val _uiState = MutableStateFlow(DetailsUiState())
-    val uiState: StateFlow<DetailsUiState> = _uiState.asStateFlow()
 
-    init {
-        initializeUIState()
-    }
+    val uiState: StateFlow<DetailsUiState> = _uiState.asStateFlow()
+    //init {
+    //    initializeUIState()
+    //}
 
     private fun initializeUIState() {
         //Will get profiles from db with desired information
         //For now im just taking from the StaticDataSource
-        val eProfiles: List<com.example.spotme.database.Profile> = StaticDataSource.eProfiles
-        val con: MutableList<Profile> = mutableListOf()
+        //val eProfiles: List<com.example.spotme.database.Profile> = StaticDataSource.eProfiles
+        //val con: MutableList<Profile> = mutableListOf()
         //ToDo Change to Database implementation
-        eProfiles.forEach{
-            con.add(
-                eProfile_to_uProfile(it, null)
-            )
-        }
-        profiles = con.toList()
+
+
+//        eProfiles.forEach{
+//            con.add(
+//                eProfile_to_uProfile(it, null)
+//            )
+//        }
+//        profiles = con.toList()
 
 
         _uiState.value = DetailsUiState(
-            filter_profiles = profiles,
+            filter_profiles = profilesFlow.value.profiles,
         )
     }
 
@@ -121,28 +135,52 @@ class DetailsViewModel (
         var profiles : MutableList<Profile> = profiles.toMutableList()
     }
 
-    public fun setCurrentProfile(profile: Profile?){
-        //TODO Search db and get ProfileWithEverything Based Off of profile id
-        val profileWithEverything = StaticDataSource.profilesWithEverything[0]
-
-        val con: Profile = eProfileWithEverything_to_uProfile(profileWithEverything)
+    public fun setCurrentProfile(profile: Profile){
+        //val profileWithEverything = StaticDataSource.profilesWithEverything[0]
+        //val con: Profile = eProfileWithEverything_to_uProfile(profileWithEverything)
         _uiState.update {currentState ->
             currentState.copy(
-                currentProfile = con
+                currentProfileId = profile.id
             )
         }
     }
 
-//    var profileWithDebts: StateFlow<ProfileEntity> //Stores State collected from database
-//            = spotMeRepository.getSpecificProfileWithEverything(uiState.value.currentProfileId) //TODO REPLACE getSandwich() with real repo DAO method
+
+
+    var profilesFlow: StateFlow<Details_Profiles>
+            = repo.getProfiles()
+        .map{
+            println("Filter Profiles Stateflow")
+            println(it)
+            var con: MutableList<Profile> = mutableListOf()
+            it.forEach {p ->
+                con.add(eProfile_to_uProfile(p, null))
+            }
+            //Sort con for filter
+
+
+
+
+            Details_Profiles(con)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(DetailsViewModel.TIMEOUT_MILLIS),
+            initialValue = Details_Profiles(profiles = listOf())
+        )
+
+
+//    var CurrentProfile: StateFlow<DetailsUiState> //Stores State collected from database
+//            = repo.getSpecificProfileWithEverything(uiState.value.currentProfileId)
 //        .map { // convert to a flow of DatabaseUiState
-//            ProfileEntity(it)
+//            val prof = eProfileWithEverything_to_uProfile(it)
+//            DetailsUiState(currentProfile = prof)
 //        }.stateIn(
 //            // Convert Flow to StateFlow
 //            scope = viewModelScope,
 //            started = SharingStarted.WhileSubscribed(DetailsViewModel.TIMEOUT_MILLIS),
-//            initialValue = ProfileEntity(StaticDataSource.profile)
+//            initialValue = DetailsUiState(currentProfile = Profile(0,"","",0.0,listOf(),PaymentType.NONE, Date(0),false))
 //        )
+
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }

@@ -11,6 +11,8 @@ interface RepositoryInterface { //
      // Gets ALL profiles with ALL of their debts and transactions
     fun getEverything(): Flow<List<ProfileWithEverything>>
     //Gets SPECIFIC profile with ALL debts and transactions
+    fun getProfiles(): Flow<List<Profile>>
+    //Gets list of all profiles without debts
     fun getSpecificProfileWithEverything(profileId: Long?): Flow<ProfileWithEverything>
     //Get ALL profiles with ALL debts
     fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
@@ -43,6 +45,8 @@ class Repository(val dao: DataAccessObject):
 
     override fun getEverything(): Flow<List<ProfileWithEverything>>
         = dao.getEverything()
+    override fun getProfiles(): Flow<List<Profile>>
+            = dao.getProfiles()
     override fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
         = dao.getProfilesWithDebts()
     override fun getSpecificProfileWithEverything(profileId: Long?): Flow<ProfileWithEverything>

@@ -39,12 +39,9 @@ import com.example.spotme.viewmodels.DetailsViewModel
 @Composable
 fun ExpandedProfileScreen(
     profile: Profile?,
-    repository: RepositoryInterface,
+    //repository: RepositoryInterface,
     modifier: Modifier = Modifier,
 ) {
-    val detailsViewModel = DetailsViewModel(
-        //repository
-    )
     //val profileEntity = detailsViewModel.profileWithDebts.collectAsState()
 
     // Check if profile is null

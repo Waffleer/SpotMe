@@ -95,6 +95,8 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             initialValue = LargestDebtor()
         )
 
+
+
     var oldestDebt: StateFlow<OldestDebt>
         = spotMeRepository.getOldestDebt()
         .map{

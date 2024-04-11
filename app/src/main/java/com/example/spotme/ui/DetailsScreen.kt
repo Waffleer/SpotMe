@@ -11,10 +11,12 @@ import com.example.spotme.data.Profile
 import com.example.spotme.ui.elements.NavButton
 import com.example.spotme.ui.elements.details.ProfileCard
 import com.example.spotme.viewmodels.DetailsUiState
+import com.example.spotme.viewmodels.Details_Profiles
 
 @Composable
 fun DetailsScreen(
     uiState: DetailsUiState,
+    details_Profiles: Details_Profiles,
     onSummeryPressed: () -> Unit,
     onProfilePressed: (Profile) -> Unit,
     onAddPressed: (Profile) -> Unit,
@@ -24,7 +26,7 @@ fun DetailsScreen(
     Column {
         Text("I am supposed to be the Details screen")
         Column {
-            uiState.filter_profiles.forEach{
+            details_Profiles.profiles.forEach{
                 ProfileCard(profile = it, onProfilePressed, onAddPressed)
                 //TODO update ProfileCard Function to make it look nice
                 //TODO add + button
