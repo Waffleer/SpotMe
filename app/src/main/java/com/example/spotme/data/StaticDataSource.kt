@@ -2,7 +2,6 @@ package com.example.spotme.data
 
 import com.example.spotme.database.ProfileWithEverything
 import com.example.spotme.database.DebtWithTransactions
-import com.example.spotme.database.ProfileWithEverything
 import java.util.Date
 
 

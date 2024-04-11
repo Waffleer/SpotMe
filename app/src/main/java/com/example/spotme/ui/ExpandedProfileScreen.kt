@@ -42,8 +42,10 @@ fun ExpandedProfileScreen(
     repository: RepositoryInterface,
     modifier: Modifier = Modifier,
 ) {
-    val detailsViewModel = DetailsViewModel(repository)
-    val profileEntity = detailsViewModel.profileWithDebts.collectAsState()
+    val detailsViewModel = DetailsViewModel(
+        //repository
+    )
+    //val profileEntity = detailsViewModel.profileWithDebts.collectAsState()
 
     // Check if profile is null
     if (profile == null) {
