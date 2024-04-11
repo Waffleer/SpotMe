@@ -36,15 +36,6 @@ fun ProfileCard(
     onPlusClicked: (Profile) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var total: Double = 0.0
-
-    profile.debts.forEach { debt -> //Totals all of the transactions for every debt
-        debt.transactions.forEach { trans ->
-            if (trans.canceled == false) {
-                total += trans.amount
-            }
-        }
-    }
 
     @Composable
     fun Modifier.totalColor(total: Double): Modifier {
@@ -95,10 +86,10 @@ fun ProfileCard(
                         )
                         Text(
                             textAlign = TextAlign.Start,
-                            text = "$$total",
+                            text = "$${profile.amount}",
                             modifier = Modifier
                                 .padding(start = 12.dp, bottom = 4.dp)
-                                .totalColor(total),
+                                .totalColor(profile.amount),
                         )
                     }
                 }

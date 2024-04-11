@@ -16,7 +16,6 @@ import java.util.Date
 
 /**
  * Data class that stores Database State Information.
- *
  * @param placeholder grug
  */
 data class ProfilesWithDebtsState(

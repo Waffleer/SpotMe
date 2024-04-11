@@ -5,6 +5,10 @@ import androidx.compose.runtime.produceState
 import androidx.lifecycle.ViewModel
 import com.example.spotme.data.Profile
 import com.example.spotme.data.StaticDataSource
+import com.example.spotme.data.eProfileWithEverything_to_uProfile
+import com.example.spotme.data.eProfile_to_uProfile
+import com.example.spotme.database.ProfileWithDebts
+import com.example.spotme.database.ProfileWithEverything
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,8 +37,15 @@ class DetailsViewModel : ViewModel() {
     private fun initializeUIState() {
         //Will get profiles from db with desired information
         //For now im just taking from the StaticDataSource
-        profiles = StaticDataSource.profiles
+        val eProfiles: List<com.example.spotme.database.Profile> = StaticDataSource.eProfiles
+        val con: MutableList<Profile> = mutableListOf()
         //ToDo Change to Database implementation
+        eProfiles.forEach{
+            con.add(
+                eProfile_to_uProfile(it, null)
+            )
+        }
+        profiles = con.toList()
 
 
         _uiState.value = DetailsUiState(
@@ -92,10 +103,19 @@ class DetailsViewModel : ViewModel() {
         }
     }
 
+    public fun filter_profiles_by_substring(str: String){
+        val sorted : MutableList<Profile> = mutableListOf()
+        var profiles : MutableList<Profile> = profiles.toMutableList()
+    }
+
     public fun setCurrentProfile(profile: Profile?){
+        //TODO Search db and get ProfileWithEverything Based Off of profile id
+        val profileWithEverything = StaticDataSource.profilesWithEverything[0]
+
+        val con: Profile = eProfileWithEverything_to_uProfile(profileWithEverything)
         _uiState.update {currentState ->
             currentState.copy(
-                currentProfile = profile
+                currentProfile = con
             )
         }
     }
