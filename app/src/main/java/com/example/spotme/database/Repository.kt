@@ -37,7 +37,7 @@ interface RepositoryInterface { //
  * Overrides the methods outlined by the SandwichRepositoryInterface
  * by essentially wrapping them around the subsDAO methods.
  *
- * @param subsDao used to access database data.
+ * @param dao used to access database data.
  */
 class Repository(val dao: DataAccessObject):
     RepositoryInterface {
