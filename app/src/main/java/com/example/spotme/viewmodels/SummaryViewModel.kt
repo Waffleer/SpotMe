@@ -3,6 +3,7 @@ package com.example.spotme.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.PrimaryKey
+import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.Debt
 import com.example.spotme.database.Profile
 import com.example.spotme.database.ProfileDebtTuple
@@ -24,12 +25,12 @@ data class ProfilesWithDebtsState(
 data class TotalBalance(val totalBalance: Double = 0.0)
 
 data class LargestCreditor(
-    val largestCreditor: ProfileDebtTuple
-        = ProfileDebtTuple(0,"placeholder",0.0)
+    val largestCreditor: Profile
+        = StaticDataSource.eProfiles[0]
 )
 data class LargestDebtor(
-    val largestDebtor: ProfileDebtTuple
-        = ProfileDebtTuple(0,"placeholder",0.0)
+    val largestDebtor: Profile
+        = StaticDataSource.eProfiles[0]
 )
 
 data class OldestDebt(
@@ -78,7 +79,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     var primaryCreditor: StateFlow<LargestCreditor>
             = spotMeRepository.getLargestCreditor()
         .map {
-            LargestCreditor(it?: ProfileDebtTuple(0,"Namerson",0.0))
+            LargestCreditor(it?: StaticDataSource.eProfiles[0])
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -88,7 +89,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     var primaryDebtor: StateFlow<LargestDebtor>
             = spotMeRepository.getLargestDebtor()
         .map {
-            LargestDebtor(it?: ProfileDebtTuple(0,"Namerson Jr.",0.0))
+            LargestDebtor(it?: StaticDataSource.eProfiles[0])
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),

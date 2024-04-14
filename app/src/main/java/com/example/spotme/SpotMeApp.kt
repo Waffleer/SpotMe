@@ -153,11 +153,13 @@ fun SpotMeApp(
                     },
                     onPlusPressed = {},
                     onPrimaryCreditorClicked = {
-                        detailsViewModel.setCurrentProfile(StaticDataSource.profiles[0])
+                        //detailsViewModel.setCurrentProfile(StaticDataSource.profiles[0])
+                        detailsViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                                                },
                     onPrimaryDebtorClicked = {
-                        detailsViewModel.setCurrentProfile(StaticDataSource.profiles[0])
+                        //detailsViewModel.setCurrentProfile(StaticDataSource.profiles[0])
+                        detailsViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                     }
                 ) //Update SummaryScreen() later
