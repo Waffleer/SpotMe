@@ -48,11 +48,11 @@ fun DetailsScreen(
             modifier = Modifier
                 .padding(12.dp)
         )
-        NavButton(
-            labelResourceId = R.string.filtertype,
-            onClick = { whatisfiltertype() },
-            modifier = Modifier
-                .padding(12.dp)
-        )
+//        NavButton(
+//            labelResourceId = R.string.filtertype,
+//            onClick = { whatisfiltertype() },
+//            modifier = Modifier
+//                .padding(12.dp)
+//        )
     }
 }
