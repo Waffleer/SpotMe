@@ -27,10 +27,19 @@ import java.util.Date
  *
  * @property profiles stores the list of profiles.
  */
+enum class FilterType() {
+    AMOUNT_HIGH,
+    AMOUNT_LOW,
+    SUBSTRING,
+    NONE,
+}
 data class DetailsUiState (
     // Put State Values Here:
-    val filter_profiles: List<Profile> = listOf(),
+    //val filter_profiles: List<Profile> = listOf(),
     val currentProfileId: Long? = 0,
+    val filterType: FilterType = FilterType.NONE,
+    val filterProfiles: List<Profile> = listOf(),
+    val subString: String = "",
     //val currentProfile: Profile = Profile(0,"","",0.0,listOf(),PaymentType.NONE, Date(0),false),
 )
 
@@ -38,9 +47,10 @@ data class DetailsCurrentProfile(
     val currentProfile: Profile = Profile(0,"","",0.0,listOf(),PaymentType.NONE, Date(0),false),
     )
 
-data class Details_Profiles(
+data class DetailsProfiles(
     val profiles: List<Profile> = listOf(),
 )
+
 
 
 //data class ProfileEntity (
@@ -51,38 +61,63 @@ data class Details_Profiles(
 class DetailsViewModel (
     repo: RepositoryInterface
     ) : ViewModel() {
-    private var profiles: List<Profile> = listOf()
     private val _uiState = MutableStateFlow(DetailsUiState())
 
     val uiState: StateFlow<DetailsUiState> = _uiState.asStateFlow()
-    //init {
-    //    initializeUIState()
-    //}
 
-    private fun initializeUIState() {
-        //Will get profiles from db with desired information
-        //For now im just taking from the StaticDataSource
-        //val eProfiles: List<com.example.spotme.database.Profile> = StaticDataSource.eProfiles
-        //val con: MutableList<Profile> = mutableListOf()
-        //ToDo Change to Database implementation
+    fun setFilterType(filter: FilterType?, pro: List<Profile>? = null){
+        println("setFilter = $filter")
+        if(filter != null){
+            _uiState.update {currentState ->
+                currentState.copy(
+                    filterType = filter
+                )
+            }
+        }
+
+        var con: List<Profile> = listOf() //Decides what datasource to use
+        if(pro == null){
+            con = profilesFlow.value.profiles
+        }
+        else{
+            con = pro
+        }
 
 
-//        eProfiles.forEach{
-//            con.add(
-//                eProfile_to_uProfile(it, null)
-//            )
-//        }
-//        profiles = con.toList()
+        println("filter = ${uiState.value.filterType}")
 
+        var ret: List<Profile> = listOf()
+        println("con = $con")
 
-        _uiState.value = DetailsUiState(
-            filter_profiles = profilesFlow.value.profiles,
-        )
+        if(uiState.value.filterType == FilterType.AMOUNT_HIGH){
+            ret = filter_profiles_debt_amount_high(con)
+        }
+        if(uiState.value.filterType == FilterType.AMOUNT_LOW){
+            ret = filter_profiles_debt_amount_low(con)
+        }
+        if(uiState.value.filterType == FilterType.SUBSTRING){
+            ret = filter_profiles_by_substring(con)
+        }
+        if(uiState.value.filterType == FilterType.NONE){
+            ret = con.toList()
+        }
+        println("ret = $ret")
+
+        _uiState.update {currentState ->
+            currentState.copy(
+                filterProfiles = ret
+            )
+        }
     }
 
-    public fun filter_profiles_debt_amount_high(){
+    fun whatisfiltertype(){
+        println("filter = ${uiState.value.filterType}")
+    }
+
+
+    private fun filter_profiles_debt_amount_high(con: List<Profile>): List<Profile>{
         val sorted : MutableList<Profile> = mutableListOf()
-        var profiles : MutableList<Profile> = profiles.toMutableList()
+        var profiles : MutableList<Profile> = con.toMutableList()
         while(!profiles.isEmpty()){
             var p: Profile? = null
             profiles.forEach {
@@ -96,17 +131,13 @@ class DetailsViewModel (
             p?.let { sorted.add(it) }
             profiles.remove(p)
         }
-        _uiState.update {currentState ->
-            currentState.copy(
-                filter_profiles = sorted
-            )
-        }
+        return sorted
     }
 
-    public fun filter_profiles_debt_amount_low(){
+    private fun filter_profiles_debt_amount_low(con: List<Profile>): List<Profile>{
         val sorted : MutableList<Profile> = mutableListOf()
-        var profiles : MutableList<Profile> = profiles.toMutableList()
-        println(profiles)
+        var profiles : MutableList<Profile> = con.toMutableList()
+        //println(profiles)
         while(!profiles.isEmpty()){
             var p: Profile? = null
             profiles.forEach {
@@ -123,16 +154,15 @@ class DetailsViewModel (
             }
             profiles.remove(p)
         }
-        _uiState.update {currentState ->
-            currentState.copy(
-                filter_profiles = sorted
-            )
-        }
+        return sorted
     }
 
-    public fun filter_profiles_by_substring(str: String){
+    private fun filter_profiles_by_substring(con: List<Profile>): List<Profile>{
         val sorted : MutableList<Profile> = mutableListOf()
-        var profiles : MutableList<Profile> = profiles.toMutableList()
+        var profiles : MutableList<Profile> = con.toMutableList()
+
+
+        return con
     }
 
     public fun setCurrentProfile(profile: Profile){
@@ -147,25 +177,22 @@ class DetailsViewModel (
 
 
 
-    var profilesFlow: StateFlow<Details_Profiles>
+    var profilesFlow: StateFlow<DetailsProfiles>
             = repo.getProfiles()
         .map{
             println("Filter Profiles Stateflow")
-            println(it)
+            println(uiState.value.filterType)
             var con: MutableList<Profile> = mutableListOf()
             it.forEach {p ->
                 con.add(eProfile_to_uProfile(p, null))
             }
-            //Sort con for filter
-
-
-
-
-            Details_Profiles(con)
+            println("ProfileFlow con = $con")
+            setFilterType( null, con)
+            DetailsProfiles(con)
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(DetailsViewModel.TIMEOUT_MILLIS),
-            initialValue = Details_Profiles(profiles = listOf())
+            initialValue = DetailsProfiles(profiles = listOf())
         )
 
 

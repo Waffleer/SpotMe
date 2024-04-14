@@ -30,7 +30,7 @@ object DebugData {
             "Carlos",
             "Indifferent to apples",
             PaymentType.PAYPAL.toString(),
-            0.0,
+            -10.0,
             Date()
         )
     )

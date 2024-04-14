@@ -27,5 +27,6 @@
 
     //picture labels
     <string name="logo1">logo</string>
+    <string name="filtertype">FilterType</string>
 
 </resources>
