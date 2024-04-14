@@ -86,7 +86,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
         )
 
     var primaryDebtor: StateFlow<LargestDebtor>
-            = spotMeRepository.getLargestCreditor()
+            = spotMeRepository.getLargestDebtor()
         .map {
             LargestDebtor(it?: ProfileDebtTuple(0,"Namerson Jr.",0.0))
         }.stateIn(
