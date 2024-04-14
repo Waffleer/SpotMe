@@ -17,6 +17,9 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Query("SELECT * FROM Profile")
     fun getEverything(): Flow<List<ProfileWithEverything>>
 
+    @Query("SELECT * FROM Profile")
+    fun getProfiles(): Flow<List<Profile>>
+
     @Query("SELECT * FROM Profile WHERE profileId = :profileId")
     fun getSpecificProfileWithEverything(profileId: Long?): Flow<ProfileWithEverything>
 

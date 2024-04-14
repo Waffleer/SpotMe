@@ -1,6 +1,5 @@
 package com.example.spotme
 
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,11 +16,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -37,9 +34,8 @@ import com.example.spotme.ui.DetailsScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
 import com.example.spotme.viewmodels.DetailsViewModel
+import com.example.spotme.viewmodels.FilterType
 import com.example.spotme.viewmodels.SpotMeViewModel
-import kotlinx.coroutines.launch
-import java.util.Date
 
 
 /**
@@ -102,9 +98,8 @@ fun SpotMeAppBar(
  */
 @Composable
 fun SpotMeApp(
-    detailsViewModel: DetailsViewModel = viewModel(),
     localViewModel: SpotMeViewModel = viewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     //get current backstack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -116,6 +111,7 @@ fun SpotMeApp(
     // Instantiate the database, repo, and database view model
     val localDatabase = LocalDatabase.getInstance(LocalContext.current)
     val spotMeRepository = Repository.getRepository(localDatabase)
+    val detailsViewModel: DetailsViewModel = DetailsViewModel(spotMeRepository)
     //val databaseViewModel = DatabaseViewModel(subRepository)
 
     Scaffold ( // Used to hold the app bar
@@ -133,6 +129,10 @@ fun SpotMeApp(
         // Local UI State from SpotMeViewModel/LocalUiState
         val localUiState by localViewModel.uiState.collectAsState()
         val detailsUiState by detailsViewModel.uiState.collectAsState()
+        val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
+        val detailsCurrentProfile = StaticDataSource.profiles[0]
+
+
         // DATABASE State Information Example:
         // val oldOrders by databaseViewModel.oldSubsUiModel.collectAsState()
         NavHost(
@@ -176,24 +176,27 @@ fun SpotMeApp(
                         navController.navigate(SpotMeScreen.AddDebtTransaction.name)
                     },
                     onFilterAmountHighPressed = {
-                        detailsViewModel.filter_profiles_debt_amount_high()
+                        detailsViewModel.setFilterType(FilterType.AMOUNT_HIGH)
                     },
                     onFilterAmountLowPressed = {
-                        detailsViewModel.filter_profiles_debt_amount_low()
+                        detailsViewModel.setFilterType(FilterType.AMOUNT_LOW)
                     }
-                )
+                ) {
+                    detailsViewModel.whatisfiltertype()
+                }
             }
 
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
-                    profile = detailsUiState.currentProfile,
-                    repository = spotMeRepository
+                    //profile = detailsUiState.currentProfile
+                    profile = detailsCurrentProfile
                 )
             }
 
             composable(route = SpotMeScreen.AddDebtTransaction.name) {
                 AddDebtTransactionScreen(
-                    profile = detailsUiState.currentProfile
+                    //profile = detailsUiState.currentProfile
+                    profile = detailsCurrentProfile
                 )
             }
 
