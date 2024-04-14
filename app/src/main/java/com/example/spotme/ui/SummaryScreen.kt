@@ -205,7 +205,7 @@ fun DebtorItem(
                 )
             }
             if (expanded) {
-                Text("Preferred Payment: " + profile.largestDebtor.paymentPreference,
+                Text("Preferred Payment Method: " + profile.largestDebtor.paymentPreference,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
                 )
@@ -293,7 +293,7 @@ fun CreditorItem(
             }
             if (expanded) {
                 Text(
-                    "Preferred Payment: " + profile.largestCreditor.paymentPreference,
+                    "Preferred Payment Method: " + profile.largestCreditor.paymentPreference,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
                 )
