@@ -1,5 +1,6 @@
 package com.example.spotme
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -34,6 +37,7 @@ import com.example.spotme.ui.DetailsScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
 import com.example.spotme.viewmodels.DetailsViewModel
+import com.example.spotme.viewmodels.ExpandedProfileViewModel
 import com.example.spotme.viewmodels.FilterType
 import com.example.spotme.viewmodels.SpotMeViewModel
 
@@ -112,8 +116,10 @@ fun SpotMeApp(
     val localDatabase = LocalDatabase.getInstance(LocalContext.current)
     val spotMeRepository = Repository.getRepository(localDatabase)
     val detailsViewModel: DetailsViewModel = DetailsViewModel(spotMeRepository)
-    //val databaseViewModel = DatabaseViewModel(subRepository)
+    val expandedProfileViewModel by remember { mutableStateOf(ExpandedProfileViewModel(spotMeRepository))}
+    val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
 
+    //val databaseViewModel = DatabaseViewModel(subRepository)
     Scaffold ( // Used to hold the app bar
         topBar = {
             SpotMeAppBar(
@@ -126,15 +132,15 @@ fun SpotMeApp(
             )
         }
     ){ innerPadding ->
+        var selectedProfile: Long = 2
+        val setProfile = { it: Long -> selectedProfile = it }
         // Local UI State from SpotMeViewModel/LocalUiState
-        val localUiState by localViewModel.uiState.collectAsState()
         val detailsUiState by detailsViewModel.uiState.collectAsState()
         val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
         val detailsCurrentProfile = StaticDataSource.profiles[0]
+        // ExpandedProfileScreen Stuff
+        //val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
 
-
-        // DATABASE State Information Example:
-        // val oldOrders by databaseViewModel.oldSubsUiModel.collectAsState()
         NavHost(
             navController = navController,
             startDestination = SpotMeScreen.Summary.name,
@@ -142,8 +148,6 @@ fun SpotMeApp(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
-
 
             composable(route = SpotMeScreen.Summary.name) {
                 SummaryScreen(
@@ -153,16 +157,16 @@ fun SpotMeApp(
                     },
                     onPlusPressed = {},
                     onPrimaryCreditorClicked = {
-                        //detailsViewModel.setCurrentProfile(StaticDataSource.profiles[0])
-                        detailsViewModel.setCurrentProfileId(it)
+                        expandedProfileViewModel.setCurrentProfileId(it)
+                        Log.d("x_primaryCreditorClicked","profileId: " + it.toString())
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                                                },
                     onPrimaryDebtorClicked = {
-                        //detailsViewModel.setCurrentProfile(StaticDataSource.profiles[0])
-                        detailsViewModel.setCurrentProfileId(it)
+                        expandedProfileViewModel.setCurrentProfileId(it)
+                        Log.d("x_primaryDebtorClicked","profileId: " + it.toString())
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                     }
-                ) //Update SummaryScreen() later
+                )
             }
 
             composable(route = SpotMeScreen.Details.name) {
@@ -191,7 +195,8 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
                     //profile = detailsUiState.currentProfile
-                    profile = detailsCurrentProfile
+                    profile = detailsCurrentProfile,
+                    expandedProfileViewModel = expandedProfileViewModel,
                 )
             }
 

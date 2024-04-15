@@ -174,15 +174,6 @@ class DetailsViewModel (
             )
         }
     }
-    public fun setCurrentProfileId(profileId: Long){
-        _uiState.update {currentState ->
-            currentState.copy(
-                currentProfileId = profileId
-            )
-        }
-    }
-
-
 
     var profilesFlow: StateFlow<DetailsProfiles>
             = repo.getProfiles()
