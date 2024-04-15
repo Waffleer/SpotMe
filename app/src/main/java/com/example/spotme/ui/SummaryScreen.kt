@@ -48,6 +48,7 @@ import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import com.example.spotme.viewmodels.ExpandedProfileViewModel
 
 
 @Composable
@@ -59,14 +60,11 @@ fun SummaryScreen(
     onPrimaryCreditorClicked: (Long) -> Unit,
     modifier: Modifier = Modifier
     ) {
-    val summaryViewModel = SummaryViewModel(repository)
-    val profilesWithDebts by summaryViewModel.profilesWithDebts.collectAsState()
+    val summaryViewModel by remember { mutableStateOf(SummaryViewModel(repository))}
     val totalBalance by summaryViewModel.totalBalance.collectAsState()
     val primaryDebtor by summaryViewModel.primaryDebtor.collectAsState()
     val primaryCreditor by summaryViewModel.primaryCreditor.collectAsState()
     val oldestDebt by summaryViewModel.oldestDebt.collectAsState()
-
-    val format = NumberFormat.getCurrencyInstance()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -87,11 +85,12 @@ fun SummaryScreen(
                     .padding(dimensionResource(R.dimen.padding_small))
             ) {
                 Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                    Text("Overall Balance: ",
+                    Text(
+                        stringResource(R.string.summary_balance),
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = modifier
                     )
-                    Text(format.format(totalBalance.totalBalance),
+                    Text(NumberFormat.getCurrencyInstance().format(totalBalance.totalBalance),
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = modifier
                     )
@@ -99,15 +98,15 @@ fun SummaryScreen(
             }
 
             DebtorItem(
-                label = "Primary Debtor: ",
+                label = stringResource(R.string.summary_debtor),
                 summaryViewModel = summaryViewModel,
-                visitProfile = { onPrimaryDebtorClicked(primaryCreditor.largestCreditor.profileId!!)}
+                visitProfile = { onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!)}
             )
 
             CreditorItem(
-                label = "Primary Creditor: ",
+                label = stringResource(R.string.summary_creditor),
                 summaryViewModel = summaryViewModel,
-                visitProfile = {onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!)}
+                visitProfile = {onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!)}
             )
 
             Card(
@@ -121,12 +120,12 @@ fun SummaryScreen(
             ) {
                 Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
                     Row(modifier) {
-                        Text("Oldest Debt: ", style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.summary_oldest_date), style = MaterialTheme.typography.titleMedium)
                         Text(oldestDebt.oldestDebt.name)
                     }
-                    Text("Amount: " + format.format(oldestDebt.oldestDebt.totalDebt),
+                    Text(stringResource(R.string.summary_amount) + NumberFormat.getCurrencyInstance().format(oldestDebt.oldestDebt.totalDebt),
                         style = MaterialTheme.typography.titleMedium)
-                    Text("Date: " + oldestDebt.oldestDebt.createdDate.toString(),
+                    Text(stringResource(R.string.summary_date) + oldestDebt.oldestDebt.createdDate.toString(),
                         style = MaterialTheme.typography.titleMedium )
                 }
             }
@@ -205,7 +204,7 @@ fun DebtorItem(
                 )
             }
             if (expanded) {
-                Text("Preferred Payment Method: " + profile.largestDebtor.paymentPreference,
+                Text(stringResource(R.string.summary_payment_method) + profile.largestDebtor.paymentPreference,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
                 )
@@ -226,7 +225,7 @@ fun DebtorItem(
             {
                 Row {
                     Text(
-                        "Owes You:",
+                        stringResource(R.string.summary_owes),
                         color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = modifier
                             .align(Alignment.CenterVertically)
@@ -293,7 +292,7 @@ fun CreditorItem(
             }
             if (expanded) {
                 Text(
-                    "Preferred Payment Method: " + profile.largestCreditor.paymentPreference,
+                    stringResource(R.string.summary_payment_method) + profile.largestCreditor.paymentPreference,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
                 )
@@ -314,7 +313,7 @@ fun CreditorItem(
             {
                 Row (){
                     Text(
-                        "You Owe:",
+                        stringResource(R.string.summary_owed),
                         color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = modifier
                             .align(Alignment.CenterVertically)

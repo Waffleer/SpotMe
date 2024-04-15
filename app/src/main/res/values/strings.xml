@@ -23,7 +23,16 @@
     <string name="memberSince">Member Since: </string>
     <string name="debtsTrans">Debts and Transactions</string>
 
-
+    //Summary Screen stuff
+    <string name="summary_balance">Overall Balance: </string>
+    <string name="summary_debtor">Primary Debtor: </string>
+    <string name="summary_creditor">Primary Creditor: </string>
+    <string name="summary_oldest_date">Oldest Debt: </string>
+    <string name="summary_amount">Amount: </string>
+    <string name="summary_date">Date: </string>
+    <string name="summary_payment_method">Preferred Payment Method: </string>
+    <string name="summary_owes">Owes You: </string>
+    <string name="summary_owed">You Owe: </string>
 
     //picture labels
     <string name="logo1">logo</string>
