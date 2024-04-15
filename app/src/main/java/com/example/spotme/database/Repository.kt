@@ -21,9 +21,9 @@ interface RepositoryInterface { //
     // Get the user's total balance
     fun getTotalBalance(): Flow<Double>
     // Get the id, name, and balance of the guy who owes you the most money
-    fun getLargestDebtor(): Flow<ProfileDebtTuple>
+    fun getLargestDebtor(): Flow<Profile>
     // Get the id, name, and balance of the guy who you owe the most money
-    fun getLargestCreditor(): Flow<ProfileDebtTuple>
+    fun getLargestCreditor(): Flow<Profile>
     // Get the oldest debt
     fun getOldestDebt(): Flow<Debt>
 
@@ -55,9 +55,9 @@ class Repository(val dao: DataAccessObject):
         = dao.getDebtWithTransactions(debtId)
     override fun getTotalBalance(): Flow<Double>
         = dao.getTotalBalance()
-    override fun getLargestDebtor(): Flow<ProfileDebtTuple>
+    override fun getLargestDebtor(): Flow<Profile>
         = dao.getLargestDebtor()
-    override fun getLargestCreditor(): Flow<ProfileDebtTuple>
+    override fun getLargestCreditor(): Flow<Profile>
         = dao.getLargestCreditor()
     override fun getOldestDebt(): Flow<Debt>
         = dao.getOldestDebt()
