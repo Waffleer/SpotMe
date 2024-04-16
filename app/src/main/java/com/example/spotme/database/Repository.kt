@@ -65,7 +65,7 @@ class Repository(val dao: DataAccessObject):
     override suspend fun insertProfile(profile: Profile): Long? {
         return dao.insertProfile(profile)
     }
-    override suspend fun insertDebt(debt: Debt) {
+    suspend fun insertDebt(debt: com.example.spotme.data.Debt) {
         dao.insertDebt(debt)
     }
     override suspend fun insertTransaction(transaction: Transaction) {
