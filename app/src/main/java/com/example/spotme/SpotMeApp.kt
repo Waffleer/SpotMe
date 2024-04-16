@@ -117,9 +117,7 @@ fun SpotMeApp(
     val spotMeRepository = Repository.getRepository(localDatabase)
     val detailsViewModel: DetailsViewModel = DetailsViewModel(spotMeRepository)
     val expandedProfileViewModel by remember { mutableStateOf(ExpandedProfileViewModel(spotMeRepository))}
-    val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
 
-    //val databaseViewModel = DatabaseViewModel(subRepository)
     Scaffold ( // Used to hold the app bar
         topBar = {
             SpotMeAppBar(
@@ -132,14 +130,11 @@ fun SpotMeApp(
             )
         }
     ){ innerPadding ->
-        var selectedProfile: Long = 2
-        val setProfile = { it: Long -> selectedProfile = it }
         // Local UI State from SpotMeViewModel/LocalUiState
         val detailsUiState by detailsViewModel.uiState.collectAsState()
         val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
         val detailsCurrentProfile = StaticDataSource.profiles[0]
         // ExpandedProfileScreen Stuff
-        //val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
 
         NavHost(
             navController = navController,
