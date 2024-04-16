@@ -59,7 +59,7 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
      * @param profile profile to be added
      */
     @Insert
-    fun insertProfile(
+    suspend fun insertProfile(
         profile: Profile
     ): Long?
 
@@ -68,7 +68,7 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
      * @param debt Debt to be added
      */
     @Insert
-    fun insertDebt(
+    suspend fun insertDebt(
         debt: Debt
     )
 
@@ -77,7 +77,7 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
      * @param transaction Transaction to be added
      */
     @Insert
-    fun insertTransaction(
+    suspend fun insertTransaction(
         transaction: com.example.spotme.database.Transaction
     )
 }

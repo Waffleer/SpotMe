@@ -97,6 +97,7 @@ object DebugData {
     fun resetInitialData(db: LocalDatabase) {
 
         // Run on a background thread
+        /*
         Executors.newSingleThreadExecutor().execute {
 
             // Get the database
@@ -109,9 +110,12 @@ object DebugData {
             db.clearAllTables()
 
             // Append debug data
+            for (val profile in profiles)
+                dao.insertProfile(profile)
             profiles.forEach { dao.insertProfile(it) }
             debts.forEach { dao.insertDebt(it) }
             transactions.forEach { dao.insertTransaction(it) }
         }
+        */
     }
 }

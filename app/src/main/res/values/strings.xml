@@ -37,5 +37,8 @@
     //picture labels
     <string name="logo1">logo</string>
     <string name="filtertype">FilterType</string>
+    <string name="add_profile">Add Profile</string>
+    <string name="remove_profile">Remove Profile</string>
+    <string name="TestingScreen">Testing Screen</string>
 
 </resources>

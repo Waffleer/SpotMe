@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -36,10 +37,13 @@ import com.example.spotme.ui.AddDebtTransactionScreen
 import com.example.spotme.ui.DetailsScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
+import com.example.spotme.ui.TestingScreen
+import com.example.spotme.viewmodels.DBProfileViewModel
 import com.example.spotme.viewmodels.DetailsViewModel
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
 import com.example.spotme.viewmodels.FilterType
 import com.example.spotme.viewmodels.SpotMeViewModel
+import kotlinx.coroutines.launch
 
 
 /**
@@ -52,6 +56,7 @@ enum class SpotMeScreen(@StringRes val title: Int) {
     Details(title = R.string.details_screen),
     ExpandedProfile(title = R.string.expanded_profile_screen),
     AddDebtTransaction(title = R.string.add_debt_transaction),
+    TestingScreen(title = R.string.TestingScreen)
     // TODO add other screens here
 }
 
@@ -118,6 +123,7 @@ fun SpotMeApp(
     val detailsViewModel: DetailsViewModel = DetailsViewModel(spotMeRepository)
     val expandedProfileViewModel by remember { mutableStateOf(ExpandedProfileViewModel(spotMeRepository))}
     val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
+    val dbProfileViewModel: DBProfileViewModel = DBProfileViewModel(spotMeRepository)
 
     //val databaseViewModel = DatabaseViewModel(subRepository)
     Scaffold ( // Used to hold the app bar
@@ -137,7 +143,10 @@ fun SpotMeApp(
         // Local UI State from SpotMeViewModel/LocalUiState
         val detailsUiState by detailsViewModel.uiState.collectAsState()
         val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
+        val profileState by dbProfileViewModel.uiState.collectAsState()
         val detailsCurrentProfile = StaticDataSource.profiles[0]
+        val coroutineScope = rememberCoroutineScope()
+
         // ExpandedProfileScreen Stuff
         //val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
 
@@ -165,6 +174,9 @@ fun SpotMeApp(
                         expandedProfileViewModel.setCurrentProfileId(it)
                         Log.d("x_primaryDebtorClicked","profileId: " + it.toString())
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
+                    },
+                    onTestPressed = {
+                        navController.navigate(SpotMeScreen.TestingScreen.name)
                     }
                 )
             }
@@ -204,6 +216,23 @@ fun SpotMeApp(
                 AddDebtTransactionScreen(
                     //profile = detailsUiState.currentProfile
                     profile = detailsCurrentProfile
+                )
+            }
+
+            composable(route = SpotMeScreen.TestingScreen.name) {
+
+                TestingScreen(
+                    //profile = detailsUiState.currentProfile
+                    uiState = profileState,
+                    onT1Pressed = { name, description, payment ->
+                        coroutineScope.launch {
+                            dbProfileViewModel.createProfile(name, description, payment)
+                        }
+
+                    },
+                    onT2Pressed = {id ->
+                        dbProfileViewModel.removeProfileById(id)
+                    }
                 )
             }
 
