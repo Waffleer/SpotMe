@@ -30,31 +30,33 @@ fun AddDebtTransactionScreen(
 
     Column {
 
-        val debtNameState = remember { mutableStateOf("") }
-        val debtDescriptionState = remember { mutableStateOf("") }
-        val debtAmountState = remember { mutableStateOf("") }
+        val transactionNameState = remember { mutableStateOf("") }
+        val transactionDescriptionState = remember { mutableStateOf("") }
+        val transactionAmountState = remember { mutableStateOf("") }
 
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Add Transaction to ${profile.name}")
 
             TextField(
-                value = debtNameState.value,
-                onValueChange = { debtNameState.value = it },
-                label = { Text("Debt Name") }
+                value = transactionNameState.value,
+                onValueChange = { transactionNameState.value = it },
+                label = { Text("Transaction Name") }
             )
 
             TextField(
-                value = debtDescriptionState.value,
-                onValueChange = { debtDescriptionState.value = it },
-                label = { Text("Debt Description") }
+                value = transactionDescriptionState.value,
+                onValueChange = { transactionDescriptionState.value = it },
+                label = { Text("Transaction Description") }
             )
 
             TextField(
-                value = debtAmountState.value,
+                value = transactionAmountState.value,
                 onValueChange = { newText ->
-                    val cleanString = newText.replace(Regex("[^\\d.]"), "")
-                    val number = cleanString.toDoubleOrNull() ?: 0.0
-                    debtAmountState.value = String.format("%.2f", number)
+                        val cleanString = newText.replace(Regex("[^\\d.]"), "")
+                        val numberRegex = Regex("^\\d*\\.?\\d{0,2}")
+                        if (cleanString.matches(numberRegex)) {
+                            transactionAmountState.value = cleanString
+                        }
                 },
                 label = { Text("Debt Amount") },
                 keyboardOptions = KeyboardOptions(
@@ -73,8 +75,8 @@ fun AddDebtTransactionScreen(
                 onClick = {
                     val newTransaction = Transaction(
                         id = null,
-                        description = debtDescriptionState.value,
-                        amount = debtAmountState.value.toDoubleOrNull() ?: 0.0,
+                        description = transactionDescriptionState.value,
+                        amount = transactionAmountState.value.toDoubleOrNull() ?: 0.0,
                         canceled = false,
                         createdDate = Date(),
                         debtId = null,
@@ -82,7 +84,7 @@ fun AddDebtTransactionScreen(
                     )
                 }
             ) {
-                Text("Add Debt")
+                Text("Add Transaction")
             }
         }
     }
