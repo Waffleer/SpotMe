@@ -64,7 +64,6 @@ fun SummaryScreen(
         Column(modifier = modifier
             .padding(dimensionResource(R.dimen.padding_medium))
             .weight(1f),
-            //verticalArrangement = Arrangement.Center
         ) {
             Card(
                 colors = CardDefaults.cardColors(
