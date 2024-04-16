@@ -2,6 +2,8 @@ package com.example.spotme.ui
 
 
 import android.icu.text.NumberFormat
+import android.icu.text.SimpleDateFormat
+import android.text.format.DateFormat
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -49,6 +51,7 @@ import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
+import java.time.format.DateTimeFormatter
 
 
 @Composable
@@ -118,6 +121,7 @@ fun SummaryScreen(
                     .padding(dimensionResource(R.dimen.padding_small))
                     .fillMaxWidth()
             ) {
+                val formatter = SimpleDateFormat("dd MMM yyyy HH:mma")
                 Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
                     Row(modifier) {
                         Text(stringResource(R.string.summary_oldest_date), style = MaterialTheme.typography.titleMedium)
@@ -125,8 +129,8 @@ fun SummaryScreen(
                     }
                     Text(stringResource(R.string.summary_amount) + NumberFormat.getCurrencyInstance().format(oldestDebt.oldestDebt.totalDebt),
                         style = MaterialTheme.typography.titleMedium)
-                    Text(stringResource(R.string.summary_date) + oldestDebt.oldestDebt.createdDate.toString(),
-                        style = MaterialTheme.typography.titleMedium )
+                    Text(stringResource(R.string.summary_date) + formatter.format(oldestDebt.oldestDebt.createdDate),
+                        style = MaterialTheme.typography.titleMedium)
                 }
             }
         }
