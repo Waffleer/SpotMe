@@ -61,7 +61,7 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Insert
     fun insertProfile(
         profile: Profile
-    )
+    ): Long?
 
     /**
      * Inserts a new Debt into the database.
