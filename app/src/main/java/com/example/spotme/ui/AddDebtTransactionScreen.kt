@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spotme.data.Debt
 import com.example.spotme.data.Profile
+import com.example.spotme.data.Transaction
 import java.util.Date
-import com.example.spotme.viewmodels.AddDebtViewModel
 
 
 @Composable
@@ -27,8 +27,6 @@ fun AddDebtTransactionScreen(
     profile: Profile?,
 
     ) { if(profile == null){ Text("Profile is null, please fix") } else {
-    val viewModel: AddDebtViewModel = viewModel()
-
 
     Column {
 
@@ -37,7 +35,7 @@ fun AddDebtTransactionScreen(
         val debtAmountState = remember { mutableStateOf("") }
 
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Add Debt to ${profile.name}")
+            Text(text = "Add Transaction to ${profile.name}")
 
             TextField(
                 value = debtNameState.value,
@@ -73,18 +71,14 @@ fun AddDebtTransactionScreen(
 
             Button(
                 onClick = {
-                    val newDebt = Debt(
+                    val newTransaction = Transaction(
                         id = null,
-                        userID = profile.id,
-                        name = debtNameState.value,
                         description = debtDescriptionState.value,
-                        transactions = null,
                         amount = debtAmountState.value.toDoubleOrNull() ?: 0.0,
                         canceled = false,
                         createdDate = Date(),
-                        hidden = false
+                        debtId = null,
 
-                                viewModel.addDebtToProfile(profile, debtNameState.value, debtDescriptionState.value, amount)
                     )
                 }
             ) {
