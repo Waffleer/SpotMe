@@ -39,6 +39,7 @@ import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
 import com.example.spotme.ui.TestingScreen
 import com.example.spotme.viewmodels.DBProfileViewModel
+import com.example.spotme.viewmodels.DBTransactionViewModel
 import com.example.spotme.viewmodels.DetailsViewModel
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
 import com.example.spotme.viewmodels.FilterType
@@ -118,12 +119,18 @@ fun SpotMeApp(
     )
 
     // Instantiate the database, repo, and database view model
+    val coroutineScope = rememberCoroutineScope()
     val localDatabase = LocalDatabase.getInstance(LocalContext.current)
     val spotMeRepository = Repository.getRepository(localDatabase)
     val detailsViewModel: DetailsViewModel = DetailsViewModel(spotMeRepository)
     val expandedProfileViewModel by remember { mutableStateOf(ExpandedProfileViewModel(spotMeRepository))}
     val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
     val dbProfileViewModel: DBProfileViewModel = DBProfileViewModel(spotMeRepository)
+    val dbTransactionViewModel: DBTransactionViewModel = DBTransactionViewModel(spotMeRepository) { pid, amount ->
+        coroutineScope.launch {//Passing though the edit amount from dbProfileViewModel
+            dbProfileViewModel.editProfileAmount(pid, amount)
+        }
+    }
 
     //val databaseViewModel = DatabaseViewModel(subRepository)
     Scaffold ( // Used to hold the app bar
@@ -145,7 +152,7 @@ fun SpotMeApp(
         val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
         val profileState by dbProfileViewModel.uiState.collectAsState()
         val detailsCurrentProfile = StaticDataSource.profiles[0]
-        val coroutineScope = rememberCoroutineScope()
+
 
         // ExpandedProfileScreen Stuff
         //val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
@@ -220,7 +227,6 @@ fun SpotMeApp(
             }
 
             composable(route = SpotMeScreen.TestingScreen.name) {
-
                 TestingScreen(
                     //profile = detailsUiState.currentProfile
                     uiState = profileState,
@@ -228,11 +234,22 @@ fun SpotMeApp(
                         coroutineScope.launch {
                             dbProfileViewModel.createProfile(name, description, payment)
                         }
-
                     },
                     onT2Pressed = {id ->
-                        dbProfileViewModel.removeProfileById(id)
-                    }
+                        coroutineScope.launch {
+                            dbProfileViewModel.removeProfileById(id)
+                        }
+                    },
+                    onT3Pressed = { profileID, amount, description ->
+                        coroutineScope.launch {
+                            dbTransactionViewModel.createTransaction(profileID, amount, description)
+                        }
+                    },
+                    onT4Pressed = {tid ->
+                        coroutineScope.launch {
+                            dbTransactionViewModel.removeTransactionById(tid)
+                        }
+                    },
                 )
             }
 

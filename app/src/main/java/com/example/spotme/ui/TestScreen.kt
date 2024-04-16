@@ -1,6 +1,7 @@
 package com.example.spotme.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,22 +25,63 @@ fun TestingScreen(
 
     onT1Pressed: (name: String, description: String, payment: PaymentType) -> Unit,
     onT2Pressed: (id: Long) -> Unit,
+    onT3Pressed: (profileID: Long, amount: Double, description: String) -> Unit,
+    onT4Pressed: (tid: Long) -> Unit,
 
 ) {
     Column {
         Text("I am supposed to be the Test screen")
-        NavButton(
-            labelResourceId = R.string.add_profile,
-            onClick = { onT1Pressed("Name Of Person", "This is your description", PaymentType.NONE) },
-            modifier = Modifier
-                .padding(12.dp)
-        )
-        NavButton(
-            labelResourceId = R.string.remove_profile,
-            onClick = { onT2Pressed(15) },
-            modifier = Modifier
-                .padding(12.dp)
-        )
+
+
+        Row {
+            NavButton(
+                labelResourceId = R.string.add_transaction,
+                onClick = {
+                    onT3Pressed(
+                        2,
+                        100.0,
+                        "Transaction description"
+                    )
+                },
+                modifier = Modifier
+                    .padding(12.dp)
+            )
+            NavButton(
+                labelResourceId = R.string.remove_transaction,
+                onClick = {
+                    onT4Pressed(
+                        89
+                    )
+                },
+                modifier = Modifier
+                    .padding(12.dp)
+            )
+        }
+
+        Row {
+            NavButton(
+                labelResourceId = R.string.add_profile,
+                onClick = {
+                    onT1Pressed(
+                        "Name Of Person3",
+                        "This is your description",
+                        PaymentType.NONE
+                    )
+                },
+                modifier = Modifier
+                    .padding(12.dp)
+            )
+            NavButton(
+                labelResourceId = R.string.remove_profile,
+                onClick = { onT2Pressed(3) },
+                modifier = Modifier
+                    .padding(12.dp)
+            )
+        }
+
+
+
+
 //        NavButton(
 //            labelResourceId = R.string.filtertype,
 //            onClick = { whatisfiltertype() },

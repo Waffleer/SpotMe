@@ -24,9 +24,18 @@ class DBProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     val uiState: StateFlow<ProfileState> = _uiState.asStateFlow()
 
 
-    fun removeProfileById(id: Long) {
-        //Remove from db based off of id
+    suspend fun removeProfileById(id: Long) {
+
     }
+
+    suspend fun editProfileAmount(pid: Long, amount: Double){
+
+    }
+
+    suspend fun editProfileCanceled(pid: Long, cancel: Boolean){
+
+    }
+
 
     suspend fun createProfile(name: String, description: String, paymentPreference: PaymentType) {
         val date = Date()

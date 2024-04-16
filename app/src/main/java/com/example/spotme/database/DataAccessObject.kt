@@ -70,7 +70,7 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Insert
     suspend fun insertDebt(
         debt: Debt
-    )
+    ): Long?
 
     /**
      * Inserts a new Transaction into the database.
@@ -79,5 +79,5 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Insert
     suspend fun insertTransaction(
         transaction: com.example.spotme.database.Transaction
-    )
+    ): Long?
 }

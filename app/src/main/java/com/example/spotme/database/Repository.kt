@@ -28,8 +28,8 @@ interface RepositoryInterface { //
     fun getOldestDebt(): Flow<Debt>
 
     suspend fun insertProfile(profile: Profile): Long?
-    suspend fun insertDebt(debt: Debt)
-    suspend fun insertTransaction(transaction: Transaction)
+    suspend fun insertDebt(debt: Debt): Long?
+    suspend fun insertTransaction(transaction: Transaction): Long?
 }
 
 /**
@@ -65,11 +65,11 @@ class Repository(val dao: DataAccessObject):
     override suspend fun insertProfile(profile: Profile): Long? {
         return dao.insertProfile(profile)
     }
-    override suspend fun insertDebt(debt: Debt) {
-        dao.insertDebt(debt)
+    override suspend fun insertDebt(debt: Debt): Long? {
+        return dao.insertDebt(debt)
     }
-    override suspend fun insertTransaction(transaction: Transaction) {
-        dao.insertTransaction(transaction)
+    override suspend fun insertTransaction(transaction: Transaction): Long? {
+        return dao.insertTransaction(transaction)
     }
     /**
      * Provides a SubRepository instance
