@@ -169,7 +169,8 @@ fun SpotMeApp(
                     uiState = detailsUiState,
                     onSummeryPressed = {},
                     onProfilePressed = {
-                        detailsViewModel.setCurrentProfile(it)
+                        //detailsViewModel.setCurrentProfile(it)
+                        expandedProfileViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                     },
                     onAddPressed = {
