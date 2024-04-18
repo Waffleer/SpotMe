@@ -41,6 +41,7 @@ import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import com.example.spotme.ui.elements.details.AddTransactionCard
 
 
 @Composable
@@ -127,7 +128,7 @@ fun SummaryScreen(
         val names = listOf("Alex", "Bob", "Charlie", "David", "Jill")
             AddTransactionCard(
                 names = names,
-            modifier = modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
 
