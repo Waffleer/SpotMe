@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.spotme.R
 import com.example.spotme.data.Debt
 import com.example.spotme.data.Profile
 import com.example.spotme.data.Transaction
@@ -35,18 +37,18 @@ fun AddDebtTransactionScreen(
         val transactionAmountState = remember { mutableStateOf("") }
 
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Add Transaction to ${profile.name}")
+            Text(text = stringResource(R.string.add_transaction_to)+"${profile.name}")
 
             TextField(
                 value = transactionNameState.value,
                 onValueChange = { transactionNameState.value = it },
-                label = { Text("Transaction Name") }
+                label = { Text(text = stringResource(R.string.transaction_name)) }
             )
 
             TextField(
                 value = transactionDescriptionState.value,
                 onValueChange = { transactionDescriptionState.value = it },
-                label = { Text("Transaction Description") }
+                label = { Text(text =  stringResource(R.string.transaction_description)) }
             )
 
             TextField(
@@ -84,7 +86,7 @@ fun AddDebtTransactionScreen(
                     )
                 }
             ) {
-                Text("Add Transaction")
+                Text(text = stringResource(R.string.add_transaction))
             }
         }
     }

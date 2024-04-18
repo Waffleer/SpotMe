@@ -17,6 +17,13 @@
     <string name="expanded_groups_screen">Expanded Group Screen</string>
     <string name="filter_amount_high">Filter Amount High</string>
     <string name="filter_amount_low">Filter Amount Low</string>
+    <string name="add_transaction">Add Transaction</string>
+
+    //Add Transaction string
+    <string name="add_transaction_to">Add Transaction to</string>
+    <string name="transaction_name">Transaction Name</string>
+    <string name="transaction_description">Transaction Description</string>
+
 
     //Expanded Profile Screen strings
     <string name="about">About</string>
