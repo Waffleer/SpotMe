@@ -41,6 +41,7 @@ import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import com.example.spotme.ui.elements.details.AddTransactionCard
 
 
 @Composable
@@ -64,6 +65,7 @@ fun SummaryScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Column(modifier = modifier
+            .verticalScroll(rememberScrollState())
             .padding(dimensionResource(R.dimen.padding_medium))
             .weight(1f),
         ) {
@@ -122,16 +124,15 @@ fun SummaryScreen(
                         style = MaterialTheme.typography.titleMedium)
                 }
             }
-        }
-
-        val names = listOf("Alex", "Bob", "Charlie", "David", "Jill")
+            val names = listOf("Alex", "Bob", "Charlie", "David", "Jill")
             AddTransactionCard(
                 names = names,
-            modifier = modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
 
             )
+        }
 
         //Basic Nav Buttons
         Row( //NavButtons
