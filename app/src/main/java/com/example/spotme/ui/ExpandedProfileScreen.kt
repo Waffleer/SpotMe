@@ -51,6 +51,9 @@ fun ExpandedProfileScreen(
     val eProfile = profileEntity.profileWithEverything.profile
     val eDebts = profileEntity.profileWithEverything.debtsWithTransactions
 
+    // ALL OF THE OLD CODE IS COMMENTED BELOW | Nothing is deleted
+    // All I did was replace the profile stuff with eProfile and eDebt
+
     Column(
         modifier = Modifier
             .fillMaxSize()

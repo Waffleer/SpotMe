@@ -137,7 +137,6 @@ fun SpotMeApp(
     }
     )
 
-    //val databaseViewModel = DatabaseViewModel(subRepository)
     Scaffold ( // Used to hold the app bar
         topBar = {
             SpotMeAppBar(
@@ -150,8 +149,6 @@ fun SpotMeApp(
             )
         }
     ){ innerPadding ->
-        var selectedProfile: Long = 2
-        val setProfile = { it: Long -> selectedProfile = it }
         // Local UI State from SpotMeViewModel/LocalUiState
         val detailsUiState by detailsViewModel.uiState.collectAsState()
         val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
@@ -160,7 +157,6 @@ fun SpotMeApp(
 
 
         // ExpandedProfileScreen Stuff
-        //val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
 
         NavHost(
             navController = navController,
@@ -198,7 +194,8 @@ fun SpotMeApp(
                     uiState = detailsUiState,
                     onSummeryPressed = {},
                     onProfilePressed = {
-                        detailsViewModel.setCurrentProfile(it)
+                        //detailsViewModel.setCurrentProfile(it)
+                        expandedProfileViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                     },
                     onAddPressed = {

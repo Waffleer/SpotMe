@@ -17,6 +17,13 @@
     <string name="expanded_groups_screen">Expanded Group Screen</string>
     <string name="filter_amount_high">Filter Amount High</string>
     <string name="filter_amount_low">Filter Amount Low</string>
+    <string name="add_transaction">Add Transaction</string>
+
+    //Add Transaction string
+    <string name="add_transaction_to">Add Transaction to</string>
+    <string name="transaction_name">Transaction Name</string>
+    <string name="transaction_description">Transaction Description</string>
+
 
     //Expanded Profile Screen strings
     <string name="about">About</string>
@@ -24,15 +31,16 @@
     <string name="debtsTrans">Debts and Transactions</string>
 
     //Summary Screen stuff
-    <string name="summary_balance">Overall Balance: </string>
-    <string name="summary_debtor">Primary Debtor: </string>
-    <string name="summary_creditor">Primary Creditor: </string>
-    <string name="summary_oldest_date">Oldest Debt: </string>
-    <string name="summary_amount">Amount: </string>
-    <string name="summary_date">Date: </string>
-    <string name="summary_payment_method">Preferred Payment Method: </string>
-    <string name="summary_owes">Owes You: </string>
-    <string name="summary_owed">You Owe: </string>
+    <string name="summary_balance">Overall Balance:</string>
+    <string name="summary_debtor">Primary Debtor:\u0020</string>
+    <string name="summary_creditor">Primary Creditor:\u0020</string>
+    <string name="summary_oldest_date">Oldest Debt:\u0020</string>
+    <string name="summary_amount">Amount:\u0020</string>
+    <string name="summary_date">Date:\u0020</string>
+    <string name="summary_payment_method">Preferred Payment Method:\u0020</string>
+    <string name="summary_owes">Owes You:\u0020</string>
+    <string name="summary_owed">You Owe:\u0020</string>
+    <string name="add_profile">Add Profile</string>
 
     //picture labels
     <string name="logo1">logo</string>
