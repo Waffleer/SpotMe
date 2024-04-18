@@ -39,7 +39,7 @@ fun TestingScreen(
                 labelResourceId = R.string.add_transaction,
                 onClick = {
                     onT3Pressed(
-                        2,
+                        4,
                         100.0,
                         "Transaction description"
                     )

@@ -33,6 +33,7 @@
     <string name="edit_profile">Edit Profile</string>
 
     //Summary Screen stuff
+
     <string name="summary_balance">Overall Balance: </string>
     <string name="summary_debtor">Primary Debtor: </string>
     <string name="summary_creditor">Primary Creditor: </string>
@@ -43,6 +44,7 @@
     <string name="summary_owes">Owes You: </string>
     <string name="summary_owed">You Owe: </string>
     <string name="add_transaction">Add Transaction </string>
+
 
 
     //picture labels

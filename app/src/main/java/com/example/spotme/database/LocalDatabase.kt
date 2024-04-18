@@ -40,7 +40,7 @@ abstract class LocalDatabase : RoomDatabase() {
                     .build()
 
                 // Uncomment to reset DB to default data
-                instance?.resetInitialData()
+                //instance?.resetInitialData()
             }
             return instance as LocalDatabase
         }
