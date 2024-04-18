@@ -150,13 +150,14 @@ fun SummaryScreen(
                 modifier = Modifier
                     //.padding(8.dp)
             )
-            NavButton(
-                labelResourceId = R.string.TestingScreen,
-                onClick = { onTestPressed() },
-                modifier = Modifier
-                    .padding(12.dp)
-            )
         }
+        NavButton(
+            labelResourceId = R.string.TestingScreen,
+            onClick = { onTestPressed() },
+            modifier = Modifier
+                .padding(4.dp)
+                .fillMaxWidth()
+        )
     }
 }
 
