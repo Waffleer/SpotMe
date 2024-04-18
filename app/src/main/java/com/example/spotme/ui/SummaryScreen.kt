@@ -124,6 +124,15 @@ fun SummaryScreen(
             }
         }
 
+        val names = listOf("Alex", "Bob", "Charlie", "David", "Jill")
+            AddTransactionCard(
+                names = names,
+            modifier = modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+
+            )
+
         //Basic Nav Buttons
         Row( //NavButtons
             verticalAlignment = Alignment.CenterVertically,
