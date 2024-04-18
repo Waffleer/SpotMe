@@ -1,8 +1,7 @@
 package com.example.spotme.ui
 
-
 import android.icu.text.NumberFormat
-import androidx.compose.animation.animateColorAsState
+import android.icu.text.SimpleDateFormat
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -10,14 +9,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -34,21 +32,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.spotme.R
-import com.example.spotme.database.Profile
-import com.example.spotme.database.Repository
 import com.example.spotme.database.RepositoryInterface
 import com.example.spotme.ui.elements.NavButton
-import com.example.spotme.viewmodels.LargestDebtor
-import com.example.spotme.viewmodels.LocalUiState
 import com.example.spotme.viewmodels.SummaryViewModel
 import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import com.example.spotme.viewmodels.ExpandedProfileViewModel
 
 
 @Composable
@@ -56,6 +48,7 @@ fun SummaryScreen(
     repository: RepositoryInterface,
     onDetailsPressed: () -> Unit,
     onPlusPressed: () -> Unit,
+    onTestPressed: () -> Unit,
     onPrimaryDebtorClicked: (Long) -> Unit,
     onPrimaryCreditorClicked: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -73,7 +66,6 @@ fun SummaryScreen(
         Column(modifier = modifier
             .padding(dimensionResource(R.dimen.padding_medium))
             .weight(1f),
-            //verticalArrangement = Arrangement.Center
         ) {
             Card(
                 colors = CardDefaults.cardColors(
@@ -111,13 +103,14 @@ fun SummaryScreen(
 
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
                 ),
                 modifier = modifier
                     .wrapContentHeight()
                     .padding(dimensionResource(R.dimen.padding_small))
                     .fillMaxWidth()
             ) {
+                val formatter = SimpleDateFormat("dd MMM yyyy HH:mma")
                 Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
                     Row(modifier) {
                         Text(stringResource(R.string.summary_oldest_date), style = MaterialTheme.typography.titleMedium)
@@ -125,8 +118,8 @@ fun SummaryScreen(
                     }
                     Text(stringResource(R.string.summary_amount) + NumberFormat.getCurrencyInstance().format(oldestDebt.oldestDebt.totalDebt),
                         style = MaterialTheme.typography.titleMedium)
-                    Text(stringResource(R.string.summary_date) + oldestDebt.oldestDebt.createdDate.toString(),
-                        style = MaterialTheme.typography.titleMedium )
+                    Text(stringResource(R.string.summary_date) + formatter.format(oldestDebt.oldestDebt.createdDate),
+                        style = MaterialTheme.typography.titleMedium)
                 }
             }
         }
@@ -152,15 +145,28 @@ fun SummaryScreen(
                 labelResourceId = R.string.details,
                 onClick = { onDetailsPressed() },
                 modifier = Modifier
-                    .padding(12.dp)
+                    //.padding(8.dp)
+            )
+            NavButton(
+                labelResourceId = R.string.add_profile,
+                onClick = {},
+                modifier = Modifier.width(140.dp)
+                    //.padding(4.dp)
             )
             NavButton(
                 labelResourceId = R.string.plus_button,
                 onClick = { onPlusPressed() },
                 modifier = Modifier
-                    .padding(12.dp)
+                    //.padding(8.dp)
             )
         }
+        NavButton(
+            labelResourceId = R.string.TestingScreen,
+            onClick = { onTestPressed() },
+            modifier = Modifier
+                .padding(4.dp)
+                .fillMaxWidth()
+        )
     }
 }
 
@@ -183,7 +189,6 @@ fun DebtorItem(
             .fillMaxWidth()
             .clickable { visitProfile() }
     ) {
-
         Column(
             modifier = modifier
                 .padding(dimensionResource(R.dimen.padding_small))
@@ -194,7 +199,7 @@ fun DebtorItem(
                     )
                 )
         ) {
-            Row (){
+            Row {
                 Text(
                     label + profile.largestDebtor.name,
                     style = MaterialTheme.typography.titleMedium,
@@ -320,7 +325,7 @@ fun CreditorItem(
                     .fillMaxWidth()
             )
             {
-                Row (){
+                Row {
                     Text(
                         stringResource(R.string.summary_owed),
                         color = MaterialTheme.colorScheme.primaryContainer,
@@ -352,7 +357,7 @@ private fun ProfileExpansionButton(
         modifier = modifier
     ){
         Icon(
-            imageVector = if (expanded) Icons.Filled.KeyboardArrowDown else Icons.Filled.KeyboardArrowUp,
+            imageVector = if (expanded) Filled.KeyboardArrowDown else Filled.KeyboardArrowUp,
             contentDescription = "Expansion Button",
             tint = MaterialTheme.colorScheme.secondary
         )

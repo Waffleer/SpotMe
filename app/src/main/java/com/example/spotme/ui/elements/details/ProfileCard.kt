@@ -32,7 +32,7 @@ import com.example.spotme.ui.elements.DetailsNavButton
 @Composable
 fun ProfileCard(
     profile: Profile,
-    onClicked: (Profile) -> Unit,
+    onClicked: (Long) -> Unit,
     onPlusClicked: (Profile) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -61,7 +61,7 @@ fun ProfileCard(
         ) {
             Row {
                 Card(
-                    onClick = { onClicked(profile) }
+                    onClick = { onClicked(profile.id!!) }
                 ) {
                     Column(
                         modifier = Modifier
