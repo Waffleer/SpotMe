@@ -48,6 +48,7 @@ fun SummaryScreen(
     repository: RepositoryInterface,
     onDetailsPressed: () -> Unit,
     onPlusPressed: () -> Unit,
+    onTestPressed: () -> Unit,
     onPrimaryDebtorClicked: (Long) -> Unit,
     onPrimaryCreditorClicked: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -148,6 +149,12 @@ fun SummaryScreen(
                 onClick = { onPlusPressed() },
                 modifier = Modifier
                     //.padding(8.dp)
+            )
+            NavButton(
+                labelResourceId = R.string.TestingScreen,
+                onClick = { onTestPressed() },
+                modifier = Modifier
+                    .padding(12.dp)
             )
         }
     }
