@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -134,13 +135,19 @@ fun SummaryScreen(
                 labelResourceId = R.string.details,
                 onClick = { onDetailsPressed() },
                 modifier = Modifier
-                    .padding(12.dp)
+                    //.padding(8.dp)
+            )
+            NavButton(
+                labelResourceId = R.string.add_profile,
+                onClick = {},
+                modifier = Modifier.width(140.dp)
+                    //.padding(4.dp)
             )
             NavButton(
                 labelResourceId = R.string.plus_button,
                 onClick = { onPlusPressed() },
                 modifier = Modifier
-                    .padding(12.dp)
+                    //.padding(8.dp)
             )
         }
     }
