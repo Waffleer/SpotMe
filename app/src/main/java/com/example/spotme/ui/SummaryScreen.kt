@@ -65,6 +65,7 @@ fun SummaryScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Column(modifier = modifier
+            .verticalScroll(rememberScrollState())
             .padding(dimensionResource(R.dimen.padding_medium))
             .weight(1f),
         ) {
@@ -123,9 +124,7 @@ fun SummaryScreen(
                         style = MaterialTheme.typography.titleMedium)
                 }
             }
-        }
-
-        val names = listOf("Alex", "Bob", "Charlie", "David", "Jill")
+            val names = listOf("Alex", "Bob", "Charlie", "David", "Jill")
             AddTransactionCard(
                 names = names,
                 modifier = modifier
@@ -133,6 +132,7 @@ fun SummaryScreen(
                     .wrapContentHeight()
 
             )
+        }
 
         //Basic Nav Buttons
         Row( //NavButtons
