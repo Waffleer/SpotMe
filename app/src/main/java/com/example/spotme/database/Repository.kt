@@ -14,6 +14,11 @@ interface RepositoryInterface { //
     fun getProfiles(): Flow<List<Profile>>
     //Gets list of all profiles without debts
     fun getSpecificProfileWithEverything(profileId: Long?): Flow<ProfileWithEverything>
+
+
+    suspend fun getSpecificProfileWithEverythingNonFlow(profileId: Long): ProfileWithEverything
+
+
     //Get ALL profiles with ALL debts
     fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
     // Gets A SPECIFIC debt with all of it's transactions
@@ -30,7 +35,9 @@ interface RepositoryInterface { //
     fun getProfileById(id: Long): Flow<Profile>
     fun getDebtById(id: Long): Flow<Debt>
     fun getTransactionById(id: Long): Flow<Transaction>
-    fun getProfileByIdNonFlow(id: Long): Profile
+    suspend fun getProfileByIdNonFlow(id: Long): Profile
+
+    suspend fun getDebtByIdNonFlow(id: Long): Debt
 
     suspend fun insertProfile(profile: Profile): Long?
     suspend fun insertDebt(debt: Debt): Long?
@@ -87,11 +94,18 @@ class Repository(val dao: DataAccessObject):
         return dao.getSpecificTransaction(id)
     }
 
-    override fun getProfileByIdNonFlow(id: Long): Profile {
+    override suspend fun getProfileByIdNonFlow(id: Long): Profile {
         return dao.getSpecificProfileNonFlow(id)
     }
 
+    override suspend fun getDebtByIdNonFlow(id: Long): Debt {
+        return dao .getSpecificDebtNonFlow(id)
+    }
 
+
+    override suspend fun getSpecificProfileWithEverythingNonFlow(profileId: Long): ProfileWithEverything {
+        return dao.getSpecificProfileWithEverythingNonFlow(profileId)
+    }
 
     override suspend fun insertProfile(profile: Profile): Long? {
         return dao.insertProfile(profile)

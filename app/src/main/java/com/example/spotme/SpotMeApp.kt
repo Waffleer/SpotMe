@@ -208,9 +208,7 @@ fun SpotMeApp(
                     onFilterAmountLowPressed = {
                         detailsViewModel.setFilterType(FilterType.AMOUNT_LOW)
                     }
-                ) {
-                    detailsViewModel.whatisfiltertype()
-                }
+                )
             }
 
             composable(route = SpotMeScreen.ExpandedProfile.name) {

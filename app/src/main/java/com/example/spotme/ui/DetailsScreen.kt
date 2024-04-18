@@ -35,7 +35,6 @@ fun DetailsScreen(
     onAddPressed: (Profile) -> Unit,
     onFilterAmountHighPressed: () -> Unit,
     onFilterAmountLowPressed: () -> Unit,
-    whatisfiltertype: () -> Unit,
     ) {
     Column {
         Row(

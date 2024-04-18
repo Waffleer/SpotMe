@@ -32,17 +32,13 @@ class DBProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     }
 
     suspend fun editProfileAmount(pid: Long, amount: Double){
-        var prof: Profile? = null
-        var profile = repo.getProfileById(pid)
-        profile.collect { prof = it.copy(totalDebt = amount) }
-        prof?.let { repo.updateProfile(it) }
+        var prof: Profile = repo.getProfileByIdNonFlow(pid)
+        repo.updateProfile(prof.copy(totalDebt = amount))
     }
 
     suspend fun editDebtAmount(did: Long, amount: Double){
-        var debt: Debt? = null
-        val debt_ = repo.getDebtById(did)
-        debt_.collect { debt = it.copy(totalDebt = amount)}
-        debt?.let { repo.updateDebt(it) }
+        var debt: Debt = repo.getDebtByIdNonFlow(did)
+        repo.updateDebt(debt.copy(totalDebt = amount))
     }
 
     suspend fun editProfileCanceled(pid: Long, cancel: Boolean){
