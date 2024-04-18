@@ -25,6 +25,9 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Query("SELECT * FROM Profile WHERE profileId = :profileId")
     fun getSpecificProfileWithEverything(profileId: Long?): Flow<ProfileWithEverything>
 
+    @Query("SELECT * FROM Profile WHERE profileId = :profileId")
+    suspend fun getSpecificProfileWithEverythingNonFlow(profileId: Long?): ProfileWithEverything
+
     @Query("SELECT SUM(totalDebt) FROM Profile")
     fun getTotalBalance(): Flow<Double>
 
@@ -42,10 +45,15 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     fun getSpecificProfile(profileId: Long?): Flow<Profile>
 
     @Query("SELECT * FROM Profile WHERE profileId = :profileId")
-    fun getSpecificProfileNonFlow(profileId: Long?): Profile
+    suspend fun getSpecificProfileNonFlow(profileId: Long?): Profile
 
     @Query("SELECT * FROM Debt WHERE debtId = :debtId")
     fun getSpecificDebt(debtId: Long?): Flow<Debt>
+
+
+
+    @Query("SELECT * FROM Debt WHERE debtId = :debtId")
+    suspend fun getSpecificDebtNonFlow(debtId: Long?): Debt
 
     @Query("SELECT * FROM 'Transaction' WHERE transactionId = :transactionId")
     fun getSpecificTransaction(transactionId: Long?): Flow<com.example.spotme.database.Transaction>

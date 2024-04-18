@@ -2,6 +2,7 @@ package com.example.spotme.viewmodels
 
 
 
+import androidx.compose.runtime.collectAsState
 import com.example.spotme.database.RepositoryInterface
 import androidx.lifecycle.ViewModel
 import com.example.spotme.data.PaymentType
@@ -9,6 +10,7 @@ import com.example.spotme.database.Debt
 import com.example.spotme.database.Profile
 import com.example.spotme.database.ProfileWithEverything
 import com.example.spotme.database.Transaction
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,32 +44,31 @@ class DBTransactionViewModel(
     }
 
     suspend fun createTransaction(profileID: Long, amount: Double, description: String) {
+        println("Creating Transaction")
 
+        var pwe: ProfileWithEverything = repo.getSpecificProfileWithEverythingNonFlow(profileID)
 
-        var pwe: ProfileWithEverything? = null
-        val profileWithEvery = repo.getSpecificProfileWithEverything(profileID)
-        profileWithEvery.collect { pwe = it.copy()}
-        if(pwe == null){
-            println("ERROR = on function createTransaction profile did not properly return with given id $profileID")
-            exitProcess(-1)
-        }
+        println("3")
+
+        println("Profileid = ${pwe.profile.profileId}")
+
 
         val debtid = pwe!!.debtsWithTransactions[0].debt.debtId
-
+        println("Debtid = ${debtid}")
         // profileId to debt id, will need to search db
 
         val date = Date()
         val trans = Transaction(null, debtid, date, amount, description, false)
         val transId = repo.insertTransaction(trans)
-
+        println("Transactionid = ${transId}")
 
         if (debtid != null) {
-            updateDebt(debtid, amount + pwe!!.debtsWithTransactions[0].debt.totalDebt)
+            updateDebt(debtid, amount + pwe.debtsWithTransactions[0].debt.totalDebt)
         }
 
         println("transID = $transId")
 
-        updateProfile(profileID, amount + pwe!!.profile.totalDebt)
+        updateProfile(profileID, amount + pwe.profile.totalDebt)
 
         //TODO re-compile debt and amount
 
