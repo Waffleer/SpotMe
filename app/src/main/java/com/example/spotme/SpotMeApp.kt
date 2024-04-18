@@ -126,11 +126,16 @@ fun SpotMeApp(
     val expandedProfileViewModel by remember { mutableStateOf(ExpandedProfileViewModel(spotMeRepository))}
     val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
     val dbProfileViewModel: DBProfileViewModel = DBProfileViewModel(spotMeRepository)
-    val dbTransactionViewModel: DBTransactionViewModel = DBTransactionViewModel(spotMeRepository) { pid, amount ->
+    val dbTransactionViewModel: DBTransactionViewModel = DBTransactionViewModel(spotMeRepository, updateProfile_ = { pid: Long, amount: Double ->
         coroutineScope.launch {//Passing though the edit amount from dbProfileViewModel
             dbProfileViewModel.editProfileAmount(pid, amount)
         }
+    }, updateDebt_ = {did: Long, amount: Double ->
+        coroutineScope.launch {//Passing though the edit amount from dbProfileViewModel
+            dbProfileViewModel.editDebtAmount(did, amount)
+        }
     }
+    )
 
     //val databaseViewModel = DatabaseViewModel(subRepository)
     Scaffold ( // Used to hold the app bar

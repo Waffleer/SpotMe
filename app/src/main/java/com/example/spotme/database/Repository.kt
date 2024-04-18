@@ -27,9 +27,24 @@ interface RepositoryInterface { //
     // Get the oldest debt
     fun getOldestDebt(): Flow<Debt>
 
+    fun getProfileById(id: Long): Flow<Profile>
+    fun getDebtById(id: Long): Flow<Debt>
+    fun getTransactionById(id: Long): Flow<Transaction>
+    fun getProfileByIdNonFlow(id: Long): Profile
+
     suspend fun insertProfile(profile: Profile): Long?
     suspend fun insertDebt(debt: Debt): Long?
     suspend fun insertTransaction(transaction: Transaction): Long?
+
+    suspend fun updateProfile(profile: Profile)
+    suspend fun updateDebt(debt: Debt)
+    suspend fun updateTransaction(transaction: Transaction)
+
+    suspend fun deleteProfile(profile: Profile)
+    suspend fun deleteDebt(debt: Debt)
+    suspend fun deleteTransaction(transaction: Transaction)
+
+
 }
 
 /**
@@ -62,6 +77,22 @@ class Repository(val dao: DataAccessObject):
     override fun getOldestDebt(): Flow<Debt>
         = dao.getOldestDebt()
 
+    override fun getProfileById(id: Long): Flow<Profile> {
+        return dao.getSpecificProfile(id)
+    }
+    override fun getDebtById(id: Long): Flow<Debt> {
+        return dao.getSpecificDebt(id)
+    }
+    override fun getTransactionById(id: Long): Flow<Transaction> {
+        return dao.getSpecificTransaction(id)
+    }
+
+    override fun getProfileByIdNonFlow(id: Long): Profile {
+        return dao.getSpecificProfileNonFlow(id)
+    }
+
+
+
     override suspend fun insertProfile(profile: Profile): Long? {
         return dao.insertProfile(profile)
     }
@@ -71,6 +102,30 @@ class Repository(val dao: DataAccessObject):
     override suspend fun insertTransaction(transaction: Transaction): Long? {
         return dao.insertTransaction(transaction)
     }
+
+    override suspend fun updateProfile(profile: Profile) {
+        return dao.updateProfile(profile)
+    }
+    override suspend fun updateDebt(debt: Debt) {
+        return dao.updateDebt(debt)
+    }
+    override suspend fun updateTransaction(transaction: Transaction) {
+        return dao.updateTransaction(transaction)
+    }
+
+    override suspend fun deleteProfile(profile: Profile) {
+        return dao.deleteProfile(profile)
+    }
+    override suspend fun deleteDebt(debt: Debt) {
+        return dao.deleteDebt(debt)
+    }
+    override suspend fun deleteTransaction(transaction: Transaction) {
+        return dao.deleteTransaction(transaction)
+    }
+
+
+
+
     /**
      * Provides a SubRepository instance
      * @return the singular instance of SubRepository

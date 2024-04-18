@@ -1,9 +1,11 @@
 package com.example.spotme.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 
@@ -39,6 +41,9 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Query("SELECT * FROM Profile WHERE profileId = :profileId")
     fun getSpecificProfile(profileId: Long?): Flow<Profile>
 
+    @Query("SELECT * FROM Profile WHERE profileId = :profileId")
+    fun getSpecificProfileNonFlow(profileId: Long?): Profile
+
     @Query("SELECT * FROM Debt WHERE debtId = :debtId")
     fun getSpecificDebt(debtId: Long?): Flow<Debt>
 
@@ -63,6 +68,18 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
         profile: Profile
     ): Long?
 
+    @Update
+    suspend fun updateProfile(
+        profile: Profile,
+    )
+
+    @Delete
+    suspend fun deleteProfile(
+        profile: Profile,
+    )
+
+
+
     /**
      * Inserts a new Debt into the database.
      * @param debt Debt to be added
@@ -72,6 +89,16 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
         debt: Debt
     ): Long?
 
+    @Update
+    suspend fun updateDebt(
+        debt: Debt
+    )
+
+    @Delete
+    suspend fun deleteDebt(
+        debt: Debt
+    )
+
     /**
      * Inserts a new Transaction into the database.
      * @param transaction Transaction to be added
@@ -80,4 +107,18 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     suspend fun insertTransaction(
         transaction: com.example.spotme.database.Transaction
     ): Long?
+
+
+
+    @Update
+    suspend fun updateTransaction(
+        transaction: com.example.spotme.database.Transaction
+    )
+
+    @Delete
+    suspend fun deleteTransaction(
+        transaction: com.example.spotme.database.Transaction
+    )
+
+
 }

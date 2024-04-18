@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.spotme.data.PaymentType
 import com.example.spotme.database.Debt
 import com.example.spotme.database.Profile
+import com.example.spotme.database.ProfileWithEverything
 import com.example.spotme.database.Transaction
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,10 +22,13 @@ import kotlin.system.exitProcess
 
 class DBTransactionViewModel(
     spotMeRepository: RepositoryInterface,
-    editProfile_: (pid: Long, add_amount: Double) -> Unit,
+    updateProfile_: (pid: Long, amount: Double) -> Unit,
+    updateDebt_: (did: Long, amount: Double) -> Unit,
+
 ): ViewModel() {
     val repo = spotMeRepository
-    val editProfileAmount = editProfile_
+    val updateProfile = updateProfile_
+    val updateDebt = updateDebt_
     //private val _uiState = MutableStateFlow(TransactionState())
     //val uiState: StateFlow<TransactionState> = _uiState.asStateFlow()
 
@@ -39,14 +43,31 @@ class DBTransactionViewModel(
 
     suspend fun createTransaction(profileID: Long, amount: Double, description: String) {
 
+
+        var pwe: ProfileWithEverything? = null
+        val profileWithEvery = repo.getSpecificProfileWithEverything(profileID)
+        profileWithEvery.collect { pwe = it.copy()}
+        if(pwe == null){
+            println("ERROR = on function createTransaction profile did not properly return with given id $profileID")
+            exitProcess(-1)
+        }
+
+        val debtid = pwe!!.debtsWithTransactions[0].debt.debtId
+
         // profileId to debt id, will need to search db
-        val debtId: Long = 0
+
         val date = Date()
-        val trans = Transaction(null, 0, date, amount, description, false)
+        val trans = Transaction(null, debtid, date, amount, description, false)
         val transId = repo.insertTransaction(trans)
+
+
+        if (debtid != null) {
+            updateDebt(debtid, amount + pwe!!.debtsWithTransactions[0].debt.totalDebt)
+        }
+
         println("transID = $transId")
 
-        editProfileAmount(profileID, amount)
+        updateProfile(profileID, amount + pwe!!.profile.totalDebt)
 
         //TODO re-compile debt and amount
 
@@ -56,8 +77,6 @@ class DBTransactionViewModel(
         //    )
         //}
     }
-
-
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L

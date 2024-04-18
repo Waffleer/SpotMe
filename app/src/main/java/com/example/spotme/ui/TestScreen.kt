@@ -23,6 +23,7 @@ import com.example.spotme.viewmodels.ProfileState
 fun TestingScreen(
     uiState: ProfileState,
 
+
     onT1Pressed: (name: String, description: String, payment: PaymentType) -> Unit,
     onT2Pressed: (id: Long) -> Unit,
     onT3Pressed: (profileID: Long, amount: Double, description: String) -> Unit,
@@ -77,6 +78,10 @@ fun TestingScreen(
                 modifier = Modifier
                     .padding(12.dp)
             )
+        }
+
+        Column {
+
         }
 
 
