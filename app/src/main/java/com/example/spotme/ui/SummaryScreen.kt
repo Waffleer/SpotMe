@@ -124,6 +124,15 @@ fun SummaryScreen(
             }
         }
 
+        val names = listOf("Alex", "Bob", "Charlie", "David", "Jill")
+            AddTransactionCard(
+                names = names,
+            modifier = modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+
+            )
+
         //Basic Nav Buttons
         Row( //NavButtons
             verticalAlignment = Alignment.CenterVertically,
@@ -150,13 +159,14 @@ fun SummaryScreen(
                 modifier = Modifier
                     //.padding(8.dp)
             )
-            NavButton(
-                labelResourceId = R.string.TestingScreen,
-                onClick = { onTestPressed() },
-                modifier = Modifier
-                    .padding(12.dp)
-            )
         }
+        NavButton(
+            labelResourceId = R.string.TestingScreen,
+            onClick = { onTestPressed() },
+            modifier = Modifier
+                .padding(4.dp)
+                .fillMaxWidth()
+        )
     }
 }
 
