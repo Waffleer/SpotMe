@@ -6,6 +6,8 @@
 
     //Button Labels
     <string name="back_button">Back</string>
+    <string name="add_button">Add</string>
+    <string name="create_button">Create</string>
     <string name="details_screen">Details Screen</string>
     <string name="expanded_profile_screen">Expanded Profile Screen</string>
     <string name="details">Details</string>
@@ -33,6 +35,7 @@
     <string name="summary_payment_method">Preferred Payment Method: </string>
     <string name="summary_owes">Owes You: </string>
     <string name="summary_owed">You Owe: </string>
+    <string name="add_transaction">Add Transaction </string>
 
     //picture labels
     <string name="logo1">logo</string>
