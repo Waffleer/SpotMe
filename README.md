@@ -1,2 +1,2 @@
 # SpotMe
-For Android Development Class Semester Project
+A Debt Tracking App For Android Development Class Semester Project
