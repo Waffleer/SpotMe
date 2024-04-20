@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.Debt
 import com.example.spotme.database.Profile
+import com.example.spotme.database.ProfileWithEverything
 import com.example.spotme.database.RepositoryInterface
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -32,6 +33,10 @@ data class OldestDebt(
             canceled = false,
             createdDate = java.util.Date()
         )
+)
+
+data class Everything(
+    val profilesWithEverything: List<ProfileWithEverything> = listOf()
 )
 
 class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
@@ -66,8 +71,6 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             initialValue = LargestDebtor()
         )
 
-
-
     var oldestDebt: StateFlow<OldestDebt>
         = spotMeRepository.getOldestDebt()
         .map{
@@ -83,6 +86,16 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = OldestDebt()
+        )
+
+    var everything: StateFlow<Everything>
+        = spotMeRepository.getEverything()
+        .map {
+            Everything(it)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = Everything()
         )
 
     companion object {

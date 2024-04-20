@@ -2,6 +2,7 @@ package com.example.spotme.viewmodels
 
 
 
+import android.util.Log
 import androidx.compose.runtime.collectAsState
 import com.example.spotme.database.RepositoryInterface
 import androidx.lifecycle.ViewModel
@@ -45,6 +46,8 @@ class DBTransactionViewModel(
 
     suspend fun createTransaction(profileID: Long, amount: Double, description: String) {
         println("Creating Transaction")
+
+        Log.d("j_transaction_viewmodel", "ProfileID: " + profileID.toString())
 
         var pwe: ProfileWithEverything = repo.getSpecificProfileWithEverythingNonFlow(profileID)
 
