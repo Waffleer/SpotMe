@@ -73,7 +73,7 @@ fun SummaryScreen(
         ) {
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
                 ),
                 modifier = modifier
                     .fillMaxWidth()
@@ -104,7 +104,7 @@ fun SummaryScreen(
                 summaryViewModel = summaryViewModel,
                 visitProfile = {onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!)}
             )
-
+            /* REMOVED BECAUSE WE MADE DEBTS USELESS
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer
@@ -125,7 +125,7 @@ fun SummaryScreen(
                     Text(stringResource(R.string.summary_date) + formatter.format(oldestDebt.oldestDebt.createdDate),
                         style = MaterialTheme.typography.titleMedium)
                 }
-            }
+            }*/
             val names = everything.profilesWithEverything.map { Pair(it.profile.name, it.profile.profileId) }
             AddTransactionCard(
                 names = names,
@@ -185,7 +185,7 @@ fun DebtorItem(
     val profile by summaryViewModel.primaryDebtor.collectAsState()
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         modifier = modifier
             .wrapContentHeight()
@@ -272,7 +272,7 @@ fun CreditorItem(
     val profile by summaryViewModel.primaryCreditor.collectAsState()
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         modifier = modifier
             .wrapContentHeight()
