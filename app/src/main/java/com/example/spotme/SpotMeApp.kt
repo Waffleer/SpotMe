@@ -1,6 +1,7 @@
 package com.example.spotme
 
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -122,6 +123,7 @@ fun SpotMeApp(
     val coroutineScope = rememberCoroutineScope()
     val localDatabase = LocalDatabase.getInstance(LocalContext.current)
     val spotMeRepository = Repository.getRepository(localDatabase)
+    // <--------------------------------------------------------->
     val detailsViewModel: DetailsViewModel = DetailsViewModel(spotMeRepository)
     val expandedProfileViewModel by remember { mutableStateOf(ExpandedProfileViewModel(spotMeRepository))}
     val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
@@ -134,8 +136,7 @@ fun SpotMeApp(
         coroutineScope.launch {//Passing though the edit amount from dbProfileViewModel
             dbProfileViewModel.editDebtAmount(did, amount)
         }
-    }
-    )
+    })
 
     Scaffold ( // Used to hold the app bar
         topBar = {
@@ -167,6 +168,13 @@ fun SpotMeApp(
         ) {
 
             composable(route = SpotMeScreen.Summary.name) {
+                val context = LocalContext.current
+                // Submits transaction to database
+                val submitTransactionToDatabase: (Long, Double, String) -> Unit = { userId, amount, description ->
+                    coroutineScope.launch {
+                        dbTransactionViewModel.createTransaction(userId, amount, description)
+                    }
+                }
                 SummaryScreen(
                     repository = spotMeRepository,
                     onDetailsPressed = {
@@ -185,7 +193,8 @@ fun SpotMeApp(
                     },
                     onTestPressed = {
                         navController.navigate(SpotMeScreen.TestingScreen.name)
-                    }
+                    },
+                    submitTransaction = submitTransactionToDatabase
                 )
             }
 
