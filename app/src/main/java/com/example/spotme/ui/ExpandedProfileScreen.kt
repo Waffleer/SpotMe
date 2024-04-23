@@ -1,9 +1,7 @@
 package com.example.spotme.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.example.spotme.data.Profile
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,13 +25,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spotme.R
-import com.example.spotme.database.RepositoryInterface
 import com.example.spotme.ui.elements.NavButton
-import com.example.spotme.ui.elements.debug.ExpandedProfileScreenDebug
-import com.example.spotme.viewmodels.DetailsViewModel
-import com.example.spotme.viewmodels.ExpandedProfileUIState
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
-import com.example.spotme.viewmodels.ProfileEntity
 
 /**
  * Composable function to display an expanded profile screen.
@@ -128,13 +120,13 @@ fun ExpandedProfileScreen(
                 // Display each debt and its transactions
                 eDebts.forEach { debt ->
                     Text(
-                        text = "${debt.debt.name}",
+                        text = debt.debt.name,
                         modifier = Modifier.padding(bottom = 8.dp),
                         fontSize = 17.sp,
                         textDecoration = TextDecoration.Underline
                     )
                     Text(text = "${debt.debt.description}\n")
-                    debt.transactions?.forEach { trans ->
+                    debt.transactions.forEach { trans ->
                         Text(
                             text = "$${trans.amount}",
                             modifier = Modifier,
