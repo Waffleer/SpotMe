@@ -38,18 +38,16 @@ fun DetailsNavButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Button(
+    IconButton(
         onClick = onClick,
         modifier = modifier
-            .sizeIn(maxWidth = 200.dp)
-            .padding(top = 10.dp),
-        shape = CircleShape,
+            .padding(top = 11.dp),
     ) {
-        Image(
-            painter = painterResource(R.drawable.plus),
-            contentDescription = "Button Image",
-            modifier = Modifier
-                .size(10.dp)
+
+        Icon(
+            imageVector = Icons.Filled.Add,
+            contentDescription = stringResource(R.string.add_button),
+
         )
     }
 }
