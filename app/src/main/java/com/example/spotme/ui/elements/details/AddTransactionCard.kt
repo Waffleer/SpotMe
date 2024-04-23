@@ -91,13 +91,17 @@ fun AddTransactionCard(
 
                     )
 Column {
-
-
     IconButton(
         onClick = {
-            submitTransaction(userId,amount.toDouble(),description)
-            amount = ""
-            description = ""
+            if (amount != "" && description != "") {
+                submitTransaction(userId, amount.toDouble(), description)
+                amount = ""
+                description = ""
+            } else if (amount == ""){
+                Toast.makeText(context, context.resources.getString(R.string.enter_amount), Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, context.resources.getString(R.string.enter_description), Toast.LENGTH_SHORT).show()
+            }
                   }, //TODO make submit/create button work
         modifier = Modifier
             .align(Alignment.End)
