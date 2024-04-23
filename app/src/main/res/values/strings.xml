@@ -24,6 +24,8 @@
     <string name="add_transaction_to">Add Transaction to</string>
     <string name="transaction_name">Transaction Name</string>
     <string name="transaction_description">Transaction Description</string>
+    <string name="enter_amount">Enter an Amount Please!</string>
+    <string name="enter_description">Enter a Description Please!</string>
 
     //Expanded Profile Screen strings
     <string name="about">About</string>
