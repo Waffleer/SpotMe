@@ -34,7 +34,7 @@ fun DetailsScreen(
     //detailsProfiles: DetailsProfiles,
     onSummeryPressed: () -> Unit,
     onProfilePressed: (Long) -> Unit,
-    onAddPressed: (Profile) -> Unit,
+    onAddPressed: (Long) -> Unit,
     onFilterAmountHighPressed: () -> Unit,
     onFilterAmountLowPressed: () -> Unit,
     ) {

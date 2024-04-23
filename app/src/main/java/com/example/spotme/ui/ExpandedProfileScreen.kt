@@ -39,12 +39,10 @@ import com.example.spotme.viewmodels.ProfileEntity
 /**
  * Composable function to display an expanded profile screen.
  *
- * @param profile The profile to be displayed.
  * @param modifier [Modifier] to be applied to the layout.
  */
 @Composable
 fun ExpandedProfileScreen(
-    profile: Profile?,
     expandedProfileViewModel: ExpandedProfileViewModel,
     modifier: Modifier = Modifier,
 ) {
