@@ -1,7 +1,6 @@
 package com.example.spotme.ui
 
 import android.icu.text.NumberFormat
-import android.icu.text.SimpleDateFormat
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring

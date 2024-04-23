@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
@@ -36,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,6 +64,27 @@ fun AddTransactionCard(
         selectedText = names[0].first
         userId = names[0].second!!
     } else { selectedText = "placeholder" }
+
+    val submitButtonLogic = {
+        if (amount != "" && description != "") {
+            submitTransaction(userId, amount.toDoubleOrNull() ?: 0.0, description)
+            amount = ""
+            description = ""
+            Toast.makeText(context, context.getText(R.string.transaction_submitted), Toast.LENGTH_SHORT).show()
+        } else if (amount == "") {
+            Toast.makeText(
+                context,
+                context.resources.getString(R.string.enter_amount),
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Toast.makeText(
+                context,
+                context.resources.getString(R.string.enter_description),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -93,15 +116,7 @@ fun AddTransactionCard(
 Column {
     IconButton(
         onClick = {
-            if (amount != "" && description != "") {
-                submitTransaction(userId, amount.toDouble(), description)
-                amount = ""
-                description = ""
-            } else if (amount == ""){
-                Toast.makeText(context, context.resources.getString(R.string.enter_amount), Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(context, context.resources.getString(R.string.enter_description), Toast.LENGTH_SHORT).show()
-            }
+            submitButtonLogic()
                   }, //TODO make submit/create button work
         modifier = Modifier
             .align(Alignment.End)
@@ -121,7 +136,10 @@ Column {
                     value = amount,
                     onValueChange = { amount = it },
                     label = { Text("Amount") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(dimensionResource(R.dimen.padding_very_small))
@@ -132,6 +150,12 @@ Column {
                     value = description,
                     onValueChange = { description = it },
                     label = { Text("Description") },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {submitButtonLogic()}
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(dimensionResource(R.dimen.padding_very_small))
