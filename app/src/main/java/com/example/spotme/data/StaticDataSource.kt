@@ -1,5 +1,10 @@
 package com.example.spotme.data
 
+import com.example.spotme.database.ProfileWithEverything
+import com.example.spotme.database.DebtWithTransactions
+import java.util.Date
+
+
 object StaticDataSource {
     // TODO: Move to `DebugData` class
     val transactions: List<Transaction> = listOf(
@@ -40,4 +45,29 @@ object StaticDataSource {
         ),
     )
 
+    val profileWithEverything: ProfileWithEverything = ProfileWithEverything(
+        profile = com.example.spotme.database.Profile(1, "placeholder", "Placeholder","venmo",0.0,java.util.Date()),
+        debtsWithTransactions = listOf()
+    )
+
+    val eProfiles: List<com.example.spotme.database.Profile> = listOf(
+        com.example.spotme.database.Profile(1,"Nameason","Biography1","", 100.0, Date(1000)),
+        com.example.spotme.database.Profile(2,"Namason jr","Biography2","paypal", 200.0, Date(0)),
+        com.example.spotme.database.Profile(3,"Jason2","Jasons Bio","venmo",-100.0, Date(100000)),
+    )
+
+    //Only implemented profilesWithEverything for first profile (id = 1)
+    val eDebts: List<com.example.spotme.database.Debt> = listOf(
+        com.example.spotme.database.Debt(1,1,"Main",100.0,"Debt Des",false,Date(0))
+    )
+    val eTransactions: List<com.example.spotme.database.Transaction> = listOf(
+        com.example.spotme.database.Transaction(1,1,Date(0),30.0,"", false),
+        com.example.spotme.database.Transaction(2,1,Date(0),70.0, "",false)
+    )
+    val debtsWithTransactions_s: List<DebtWithTransactions> = listOf(
+        DebtWithTransactions(this.eDebts[0], this.eTransactions)
+    )
+    val profilesWithEverything: List<ProfileWithEverything> = listOf(
+        ProfileWithEverything(this.eProfiles[0],this.debtsWithTransactions_s)
+    )
 }

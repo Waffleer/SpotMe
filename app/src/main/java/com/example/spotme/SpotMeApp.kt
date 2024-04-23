@@ -1,5 +1,6 @@
 package com.example.spotme
 
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,11 +18,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -36,10 +38,14 @@ import com.example.spotme.ui.AddDebtTransactionScreen
 import com.example.spotme.ui.DetailsScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
+import com.example.spotme.ui.TestingScreen
+import com.example.spotme.viewmodels.DBProfileViewModel
+import com.example.spotme.viewmodels.DBTransactionViewModel
 import com.example.spotme.viewmodels.DetailsViewModel
+import com.example.spotme.viewmodels.ExpandedProfileViewModel
+import com.example.spotme.viewmodels.FilterType
 import com.example.spotme.viewmodels.SpotMeViewModel
 import kotlinx.coroutines.launch
-import java.util.Date
 
 
 /**
@@ -52,6 +58,7 @@ enum class SpotMeScreen(@StringRes val title: Int) {
     Details(title = R.string.details_screen),
     ExpandedProfile(title = R.string.expanded_profile_screen),
     AddDebtTransaction(title = R.string.add_debt_transaction),
+    TestingScreen(title = R.string.TestingScreen)
     // TODO add other screens here
 }
 
@@ -102,9 +109,8 @@ fun SpotMeAppBar(
  */
 @Composable
 fun SpotMeApp(
-    detailsViewModel: DetailsViewModel = viewModel(),
     localViewModel: SpotMeViewModel = viewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     //get current backstack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -114,9 +120,23 @@ fun SpotMeApp(
     )
 
     // Instantiate the database, repo, and database view model
+    val coroutineScope = rememberCoroutineScope()
     val localDatabase = LocalDatabase.getInstance(LocalContext.current)
     val spotMeRepository = Repository.getRepository(localDatabase)
-    //val databaseViewModel = DatabaseViewModel(subRepository)
+    // <--------------------------------------------------------->
+    val detailsViewModel: DetailsViewModel = DetailsViewModel(spotMeRepository)
+    val expandedProfileViewModel by remember { mutableStateOf(ExpandedProfileViewModel(spotMeRepository))}
+    val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
+    val dbProfileViewModel: DBProfileViewModel = DBProfileViewModel(spotMeRepository)
+    val dbTransactionViewModel: DBTransactionViewModel = DBTransactionViewModel(spotMeRepository, updateProfile_ = { pid: Long, amount: Double ->
+        coroutineScope.launch {//Passing though the edit amount from dbProfileViewModel
+            dbProfileViewModel.editProfileAmount(pid, amount)
+        }
+    }, updateDebt_ = {did: Long, amount: Double ->
+        coroutineScope.launch {//Passing though the edit amount from dbProfileViewModel
+            dbProfileViewModel.editDebtAmount(did, amount)
+        }
+    })
 
     Scaffold ( // Used to hold the app bar
         topBar = {
@@ -131,10 +151,14 @@ fun SpotMeApp(
         }
     ){ innerPadding ->
         // Local UI State from SpotMeViewModel/LocalUiState
-        val localUiState by localViewModel.uiState.collectAsState()
         val detailsUiState by detailsViewModel.uiState.collectAsState()
-        // DATABASE State Information Example:
-        // val oldOrders by databaseViewModel.oldSubsUiModel.collectAsState()
+        val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
+        val profileState by dbProfileViewModel.uiState.collectAsState()
+        val detailsCurrentProfile = StaticDataSource.profiles[0]
+
+
+        // ExpandedProfileScreen Stuff
+
         NavHost(
             navController = navController,
             startDestination = SpotMeScreen.Summary.name,
@@ -143,9 +167,14 @@ fun SpotMeApp(
                 .padding(innerPadding)
         ) {
 
-
-
             composable(route = SpotMeScreen.Summary.name) {
+                val context = LocalContext.current
+                // Submits transaction to database
+                val submitTransactionToDatabase: (Long, Double, String) -> Unit = { userId, amount, description ->
+                    coroutineScope.launch {
+                        dbTransactionViewModel.createTransaction(userId, amount, description)
+                    }
+                }
                 SummaryScreen(
                     repository = spotMeRepository,
                     onDetailsPressed = {
@@ -153,14 +182,20 @@ fun SpotMeApp(
                     },
                     onPlusPressed = {},
                     onPrimaryCreditorClicked = {
-                        detailsViewModel.setCurrentProfile(StaticDataSource.profiles[0])
+                        expandedProfileViewModel.setCurrentProfileId(it)
+                        Log.d("x_primaryCreditorClicked","profileId: " + it.toString())
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                                                },
                     onPrimaryDebtorClicked = {
-                        detailsViewModel.setCurrentProfile(StaticDataSource.profiles[0])
+                        expandedProfileViewModel.setCurrentProfileId(it)
+                        Log.d("x_primaryDebtorClicked","profileId: " + it.toString())
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
-                    }
-                ) //Update SummaryScreen() later
+                    },
+                    onTestPressed = {
+                        navController.navigate(SpotMeScreen.TestingScreen.name)
+                    },
+                    submitTransaction = submitTransactionToDatabase
+                )
             }
 
             composable(route = SpotMeScreen.Details.name) {
@@ -168,7 +203,8 @@ fun SpotMeApp(
                     uiState = detailsUiState,
                     onSummeryPressed = {},
                     onProfilePressed = {
-                        detailsViewModel.setCurrentProfile(it)
+                        //detailsViewModel.setCurrentProfile(it)
+                        expandedProfileViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                     },
                     onAddPressed = {
@@ -176,23 +212,53 @@ fun SpotMeApp(
                         navController.navigate(SpotMeScreen.AddDebtTransaction.name)
                     },
                     onFilterAmountHighPressed = {
-                        detailsViewModel.filter_profiles_debt_amount_high()
+                        detailsViewModel.setFilterType(FilterType.AMOUNT_HIGH)
                     },
                     onFilterAmountLowPressed = {
-                        detailsViewModel.filter_profiles_debt_amount_low()
+                        detailsViewModel.setFilterType(FilterType.AMOUNT_LOW)
                     }
                 )
             }
 
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
-                    profile = detailsUiState.currentProfile,
+                    //profile = detailsUiState.currentProfile
+                    profile = detailsCurrentProfile,
+                    expandedProfileViewModel = expandedProfileViewModel,
                 )
             }
 
             composable(route = SpotMeScreen.AddDebtTransaction.name) {
                 AddDebtTransactionScreen(
-                    profile = detailsUiState.currentProfile
+                    //profile = detailsUiState.currentProfile
+                    profile = detailsCurrentProfile
+                )
+            }
+
+            composable(route = SpotMeScreen.TestingScreen.name) {
+                TestingScreen(
+                    //profile = detailsUiState.currentProfile
+                    uiState = profileState,
+                    onT1Pressed = { name, description, payment ->
+                        coroutineScope.launch {
+                            dbProfileViewModel.createProfile(name, description, payment)
+                        }
+                    },
+                    onT2Pressed = {id ->
+                        coroutineScope.launch {
+                            dbProfileViewModel.removeProfileById(id)
+                        }
+                    },
+                    onT3Pressed = { profileID, amount, description ->
+                        coroutineScope.launch {
+                            dbTransactionViewModel.createTransaction(profileID, amount, description)
+                        }
+                    },
+                    onT4Pressed = {tid ->
+                        coroutineScope.launch {
+                            dbTransactionViewModel.removeTransactionById(tid)
+                        }
+                    },
                 )
             }
 

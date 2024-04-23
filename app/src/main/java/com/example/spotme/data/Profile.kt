@@ -8,7 +8,7 @@ data class Profile(
     val description: String,
     val amount: Double,
     //val profileImage: String = "No idea what type this should be",
-    val debts: List<Debt> = listOf(),
+    val debts: List<Debt>?,
     val paymentPreference: PaymentType,
     val createdDate: Date = Date(0),
     val hidden: Boolean = false,

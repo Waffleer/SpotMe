@@ -7,7 +7,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,18 +42,16 @@ fun DetailsNavButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Button(
+    IconButton(
         onClick = onClick,
         modifier = modifier
-            .sizeIn(maxWidth = 200.dp)
-            .padding(top = 10.dp),
-        shape = CircleShape,
+            .padding(top = 11.dp),
     ) {
-        Image(
-            painter = painterResource(R.drawable.plus),
-            contentDescription = "Button Image",
-            modifier = Modifier
-                .size(10.dp)
+
+        Icon(
+            imageVector = Icons.Filled.Add,
+            contentDescription = stringResource(R.string.add_button),
+
         )
     }
 }

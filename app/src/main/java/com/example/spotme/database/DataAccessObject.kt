@@ -1,9 +1,11 @@
 package com.example.spotme.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 
@@ -17,17 +19,23 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Query("SELECT * FROM Profile")
     fun getEverything(): Flow<List<ProfileWithEverything>>
 
+    @Query("SELECT * FROM Profile")
+    fun getProfiles(): Flow<List<Profile>>
+
     @Query("SELECT * FROM Profile WHERE profileId = :profileId")
     fun getSpecificProfileWithEverything(profileId: Long?): Flow<ProfileWithEverything>
+
+    @Query("SELECT * FROM Profile WHERE profileId = :profileId")
+    suspend fun getSpecificProfileWithEverythingNonFlow(profileId: Long?): ProfileWithEverything
 
     @Query("SELECT SUM(totalDebt) FROM Profile")
     fun getTotalBalance(): Flow<Double>
 
-    @Query("SELECT profileId, name, totalDebt FROM Profile ORDER BY totalDebt DESC LIMIT 1")
-    fun getLargestDebtor(): Flow<ProfileDebtTuple>
+    @Query("SELECT * FROM Profile ORDER BY totalDebt DESC LIMIT 1")
+    fun getLargestDebtor(): Flow<Profile>
 
-    @Query("SELECT profileId, name, totalDebt FROM Profile ORDER BY totalDebt LIMIT 1")
-    fun getLargestCreditor(): Flow<ProfileDebtTuple>
+    @Query("SELECT * FROM Profile ORDER BY totalDebt LIMIT 1")
+    fun getLargestCreditor(): Flow<Profile>
 
     @Query("SELECT * FROM Debt ORDER BY createdDate LIMIT 1")
     fun getOldestDebt(): Flow<Debt>
@@ -36,8 +44,16 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Query("SELECT * FROM Profile WHERE profileId = :profileId")
     fun getSpecificProfile(profileId: Long?): Flow<Profile>
 
+    @Query("SELECT * FROM Profile WHERE profileId = :profileId")
+    suspend fun getSpecificProfileNonFlow(profileId: Long?): Profile
+
     @Query("SELECT * FROM Debt WHERE debtId = :debtId")
     fun getSpecificDebt(debtId: Long?): Flow<Debt>
+
+
+
+    @Query("SELECT * FROM Debt WHERE debtId = :debtId")
+    suspend fun getSpecificDebtNonFlow(debtId: Long?): Debt
 
     @Query("SELECT * FROM 'Transaction' WHERE transactionId = :transactionId")
     fun getSpecificTransaction(transactionId: Long?): Flow<com.example.spotme.database.Transaction>
@@ -56,16 +72,38 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
      * @param profile profile to be added
      */
     @Insert
-    fun insertProfile(
+    suspend fun insertProfile(
         profile: Profile
+    ): Long?
+
+    @Update
+    suspend fun updateProfile(
+        profile: Profile,
     )
+
+    @Delete
+    suspend fun deleteProfile(
+        profile: Profile,
+    )
+
+
 
     /**
      * Inserts a new Debt into the database.
      * @param debt Debt to be added
      */
     @Insert
-    fun insertDebt(
+    suspend fun insertDebt(
+        debt: Debt
+    ): Long?
+
+    @Update
+    suspend fun updateDebt(
+        debt: Debt
+    )
+
+    @Delete
+    suspend fun deleteDebt(
         debt: Debt
     )
 
@@ -74,7 +112,21 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
      * @param transaction Transaction to be added
      */
     @Insert
-    fun insertTransaction(
+    suspend fun insertTransaction(
+        transaction: com.example.spotme.database.Transaction
+    ): Long?
+
+
+
+    @Update
+    suspend fun updateTransaction(
         transaction: com.example.spotme.database.Transaction
     )
+
+    @Delete
+    suspend fun deleteTransaction(
+        transaction: com.example.spotme.database.Transaction
+    )
+
+
 }

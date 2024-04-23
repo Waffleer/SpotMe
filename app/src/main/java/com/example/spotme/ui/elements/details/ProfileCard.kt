@@ -32,19 +32,10 @@ import com.example.spotme.ui.elements.DetailsNavButton
 @Composable
 fun ProfileCard(
     profile: Profile,
-    onClicked: (Profile) -> Unit,
+    onClicked: (Long) -> Unit,
     onPlusClicked: (Profile) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var total: Double = 0.0
-
-    profile.debts.forEach { debt -> //Totals all of the transactions for every debt
-        debt.transactions.forEach { trans ->
-            if (trans.canceled == false) {
-                total += trans.amount
-            }
-        }
-    }
 
     @Composable
     fun Modifier.totalColor(total: Double): Modifier {
@@ -58,23 +49,23 @@ fun ProfileCard(
     }
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 5.dp, end = 5.dp),
+            .fillMaxWidth(),
+            //.padding(start = 5.dp, end = 5.dp),
         contentAlignment = Alignment.Center
     ) {
         Card(
             modifier = modifier
-                .padding(12.dp)
+                .padding(top = 6.dp, bottom = 6.dp)
                 .clip(RoundedCornerShape(15.dp))
 
         ) {
             Row {
                 Card(
-                    onClick = { onClicked(profile) }
+                    onClick = { onClicked(profile.id!!) }
                 ) {
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth(0.6f) //DO NOT TOUCH OR IT WILL BREAK FOR THE LOVE OF GOD
+                            .fillMaxWidth(0.7f) //DO NOT TOUCH OR IT WILL BREAK FOR THE LOVE OF GOD
                             .height(100.dp)
                     )
                     {
@@ -91,14 +82,14 @@ fun ProfileCard(
                             color = Color.Black,
                             thickness = 2.dp,
                             modifier = Modifier
-                                .padding(start = 12.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
+                                .padding(start = 12.dp, end = 1.dp, top = 4.dp, bottom = 4.dp)
                         )
                         Text(
                             textAlign = TextAlign.Start,
-                            text = "$$total",
+                            text = "$${profile.amount}",
                             modifier = Modifier
                                 .padding(start = 12.dp, bottom = 4.dp)
-                                .totalColor(total),
+                                .totalColor(profile.amount),
                         )
                     }
                 }

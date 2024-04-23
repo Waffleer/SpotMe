@@ -14,7 +14,7 @@ object DebugData {
             "Apple",
             "Love apples",
             PaymentType.NONE.toString(),
-            40.0,
+            20.0,
             Date()
         ),
         Profile(
@@ -22,7 +22,7 @@ object DebugData {
             "Bob",
             "Hates apples",
             PaymentType.VENMO.toString(),
-            0.0,
+            -10.0,
             Date()
         ),
         Profile(
@@ -30,7 +30,7 @@ object DebugData {
             "Carlos",
             "Indifferent to apples",
             PaymentType.PAYPAL.toString(),
-            0.0,
+            20.0,
             Date()
         )
     )
@@ -40,20 +40,30 @@ object DebugData {
             1,
             1,
             "Walmart Trip",
-            30.0,
-            "Went to Walmart to buy junk",
+            20.0,
+            "Went to Walmart to buy junk for Apple",
             false,
             Date()
         ),
         Debt(
             2,
-            1,
+            2,
             "Target Trip",
-            10.0,
-            "Went to Target to buy junk",
+            -10.0,
+            "Bob bought me junk from target",
             false,
             Date()
         ),
+        Debt(
+            3,
+            3,
+            "Gas Station Trip",
+            20.0,
+            "Bought gas for carlos",
+            false,
+            Date()
+
+        )
     )
 
     val transactions = listOf(
@@ -69,16 +79,16 @@ object DebugData {
             2,
             1,
             Date(),
-            20.0,
-            "Box of oranges",
+            10.0,
+            "Container of apple sauce",
             false
         ),
         Transaction(
             3,
-            1,
+            2,
             Date(),
-            30.0,
-            "Box of chocolates",
+            -20.0,
+            "Box of oranges",
             false
         ),
         Transaction(
@@ -86,7 +96,15 @@ object DebugData {
             2,
             Date(),
             10.0,
-            "Box of mangoes",
+            "Pack of orange juice",
+            false
+        ),
+        Transaction(
+            5,
+            3,
+            Date(),
+            20.0,
+            "Gasoline",
             false
         )
     )
@@ -97,6 +115,7 @@ object DebugData {
     fun resetInitialData(db: LocalDatabase) {
 
         // Run on a background thread
+        /*
         Executors.newSingleThreadExecutor().execute {
 
             // Get the database
@@ -109,9 +128,12 @@ object DebugData {
             db.clearAllTables()
 
             // Append debug data
+            for (val profile in profiles)
+                dao.insertProfile(profile)
             profiles.forEach { dao.insertProfile(it) }
             debts.forEach { dao.insertDebt(it) }
             transactions.forEach { dao.insertTransaction(it) }
         }
+        */
     }
 }

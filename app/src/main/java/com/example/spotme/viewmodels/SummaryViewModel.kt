@@ -2,35 +2,25 @@ package com.example.spotme.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.PrimaryKey
+import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.Debt
 import com.example.spotme.database.Profile
-import com.example.spotme.database.ProfileDebtTuple
-import com.example.spotme.database.ProfileWithDebts
+import com.example.spotme.database.ProfileWithEverything
 import com.example.spotme.database.RepositoryInterface
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import java.util.Date
 
-/**
- * Data class that stores Database State Information.
- *
- * @param placeholder grug
- */
-data class ProfilesWithDebtsState(
-    val profilesWithDebts: List<ProfileWithDebts> = listOf(),
-)
 data class TotalBalance(val totalBalance: Double = 0.0)
 
 data class LargestCreditor(
-    val largestCreditor: ProfileDebtTuple
-        = ProfileDebtTuple(0,"placeholder",0.0)
+    val largestCreditor: Profile
+        = StaticDataSource.eProfiles[0]
 )
 data class LargestDebtor(
-    val largestDebtor: ProfileDebtTuple
-        = ProfileDebtTuple(0,"placeholder",0.0)
+    val largestDebtor: Profile
+        = StaticDataSource.eProfiles[0]
 )
 
 data class OldestDebt(
@@ -45,26 +35,11 @@ data class OldestDebt(
         )
 )
 
+data class Everything(
+    val profilesWithEverything: List<ProfileWithEverything> = listOf()
+)
 
-/**
- * Creates a stateflow that is updated whenever
- * a change to the database is made.
- *
- * @param spotMeRepository a repository that implements RepositoryInterface.
- * @property databaseUiModel database stateflow.
- */
 class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
-
-    var profilesWithDebts: StateFlow<ProfilesWithDebtsState> //Stores State collected from database
-            = spotMeRepository.getProfilesWithDebts() //TODO REPLACE getSandwich() with real repo DAO method
-        .map { // convert to a flow of DatabaseUiState
-            ProfilesWithDebtsState(it)
-        }.stateIn(
-            // Convert Flow to StateFlow
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = ProfilesWithDebtsState()
-        )
 
     var totalBalance: StateFlow<TotalBalance>
             = spotMeRepository.getTotalBalance()
@@ -79,7 +54,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     var primaryCreditor: StateFlow<LargestCreditor>
             = spotMeRepository.getLargestCreditor()
         .map {
-            LargestCreditor(it?: ProfileDebtTuple(0,"Namerson",0.0))
+            LargestCreditor(it?: StaticDataSource.eProfiles[0])
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -87,9 +62,9 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
         )
 
     var primaryDebtor: StateFlow<LargestDebtor>
-            = spotMeRepository.getLargestCreditor()
+            = spotMeRepository.getLargestDebtor()
         .map {
-            LargestDebtor(it?: ProfileDebtTuple(0,"Namerson Jr.",0.0))
+            LargestDebtor(it?: StaticDataSource.eProfiles[0])
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -111,6 +86,16 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = OldestDebt()
+        )
+
+    var everything: StateFlow<Everything>
+        = spotMeRepository.getEverything()
+        .map {
+            Everything(it)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = Everything()
         )
 
     companion object {

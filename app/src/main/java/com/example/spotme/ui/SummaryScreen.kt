@@ -1,63 +1,75 @@
 package com.example.spotme.ui
 
-import android.util.Log
+import android.icu.text.NumberFormat
+import android.icu.text.SimpleDateFormat
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.spotme.R
-import com.example.spotme.database.Repository
 import com.example.spotme.database.RepositoryInterface
 import com.example.spotme.ui.elements.NavButton
-import com.example.spotme.viewmodels.LocalUiState
 import com.example.spotme.viewmodels.SummaryViewModel
 import kotlin.math.absoluteValue
+import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import com.example.spotme.ui.elements.details.AddTransactionCard
+
 
 @Composable
 fun SummaryScreen(
     repository: RepositoryInterface,
     onDetailsPressed: () -> Unit,
     onPlusPressed: () -> Unit,
+    onTestPressed: () -> Unit,
     onPrimaryDebtorClicked: (Long) -> Unit,
     onPrimaryCreditorClicked: (Long) -> Unit,
+    submitTransaction: (Long, Double, String) -> Unit,
     modifier: Modifier = Modifier
     ) {
-    val summaryViewModel = SummaryViewModel(repository)
-    val profilesWithDebts by summaryViewModel.profilesWithDebts.collectAsState()
+    val summaryViewModel by remember { mutableStateOf(SummaryViewModel(repository))}
     val totalBalance by summaryViewModel.totalBalance.collectAsState()
     val primaryDebtor by summaryViewModel.primaryDebtor.collectAsState()
     val primaryCreditor by summaryViewModel.primaryCreditor.collectAsState()
     val oldestDebt by summaryViewModel.oldestDebt.collectAsState()
+    val everything by summaryViewModel.everything.collectAsState()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center
     ) {
         Column(modifier = modifier
+            .verticalScroll(rememberScrollState())
             .padding(dimensionResource(R.dimen.padding_medium))
             .weight(1f),
-            //verticalArrangement = Arrangement.Center
         ) {
             Card(
                 colors = CardDefaults.cardColors(
@@ -69,72 +81,60 @@ fun SummaryScreen(
                     .padding(dimensionResource(R.dimen.padding_small))
             ) {
                 Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                    Text("Overall Balance: ",
+                    Text(
+                        stringResource(R.string.summary_balance),
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = modifier
                     )
-                    Text("$" + totalBalance.totalBalance.toString(),
+                    Text(NumberFormat.getCurrencyInstance().format(totalBalance.totalBalance),
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = modifier
                     )
                 }
             }
-            Row(){
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                    ),
-                    modifier = modifier
-                        .wrapContentHeight()
-                        .padding(dimensionResource(R.dimen.padding_small))
-                        .weight(1f)
-                        .clickable { onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!) }
-                ) {
-                    Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                        Text("Primary Debtor:", style = MaterialTheme.typography.titleMedium)
-                        Text(primaryDebtor.largestDebtor.name)
-                        Text("Owes You: ")
-                        Text("$" + primaryDebtor.largestDebtor.totalDebt.absoluteValue)
-                    }
-                }
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                    ),
-                    modifier = modifier
-                        .wrapContentHeight()
-                        .padding(dimensionResource(R.dimen.padding_small))
-                        .weight(1f)
-                        .clickable { onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!) }
-                ) {
-                    Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
-                        Text("Primary Creditor:", style = MaterialTheme.typography.titleMedium)
-                        Text(primaryCreditor.largestCreditor.name)
-                        Text("You Owe: ")
-                        Text("$" + primaryCreditor.largestCreditor.totalDebt.absoluteValue)
-                    }
-                }
-            }
+
+            DebtorItem(
+                label = stringResource(R.string.summary_debtor),
+                summaryViewModel = summaryViewModel,
+                visitProfile = { onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!)}
+            )
+
+            CreditorItem(
+                label = stringResource(R.string.summary_creditor),
+                summaryViewModel = summaryViewModel,
+                visitProfile = {onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!)}
+            )
+            /* REMOVED BECAUSE WE MADE DEBTS USELESS
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
                 ),
                 modifier = modifier
                     .wrapContentHeight()
                     .padding(dimensionResource(R.dimen.padding_small))
                     .fillMaxWidth()
             ) {
+                val formatter = SimpleDateFormat("dd MMM yyyy HH:mma")
                 Column(modifier.padding(dimensionResource(R.dimen.padding_small))) {
                     Row(modifier) {
-                        Text("Oldest Debt: ", style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.summary_oldest_date), style = MaterialTheme.typography.titleMedium)
                         Text(oldestDebt.oldestDebt.name)
                     }
-                    Text("Amount: $" + oldestDebt.oldestDebt.totalDebt.toString(),
+                    Text(stringResource(R.string.summary_amount) + NumberFormat.getCurrencyInstance().format(oldestDebt.oldestDebt.totalDebt),
                         style = MaterialTheme.typography.titleMedium)
-                    Text("Date: " + oldestDebt.oldestDebt.createdDate.toString(),
-                        style = MaterialTheme.typography.titleMedium )
+                    Text(stringResource(R.string.summary_date) + formatter.format(oldestDebt.oldestDebt.createdDate),
+                        style = MaterialTheme.typography.titleMedium)
                 }
-            }
+            }*/
+            val names = everything.profilesWithEverything.map { Pair(it.profile.name, it.profile.profileId) }
+            AddTransactionCard(
+                names = names,
+                submitTransaction = submitTransaction,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+
+            )
         }
 
         //Basic Nav Buttons
@@ -149,14 +149,221 @@ fun SummaryScreen(
                 labelResourceId = R.string.details,
                 onClick = { onDetailsPressed() },
                 modifier = Modifier
-                    .padding(12.dp)
+                    //.padding(8.dp)
+            )
+            NavButton(
+                labelResourceId = R.string.add_profile,
+                onClick = {},
+                modifier = Modifier.width(140.dp)
+                    //.padding(4.dp)
             )
             NavButton(
                 labelResourceId = R.string.plus_button,
                 onClick = { onPlusPressed() },
                 modifier = Modifier
-                    .padding(12.dp)
+                    //.padding(8.dp)
             )
         }
+        NavButton(
+            labelResourceId = R.string.TestingScreen,
+            onClick = { onTestPressed() },
+            modifier = Modifier
+                .padding(4.dp)
+                .fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+fun DebtorItem(
+    label: String,
+    summaryViewModel: SummaryViewModel,
+    modifier: Modifier = Modifier,
+    visitProfile: () -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) } // state of dropdown
+    val profile by summaryViewModel.primaryDebtor.collectAsState()
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        ),
+        modifier = modifier
+            .wrapContentHeight()
+            .padding(dimensionResource(R.dimen.padding_small))
+            .fillMaxWidth()
+            .clickable { visitProfile() }
+    ) {
+        Column(
+            modifier = modifier
+                .padding(dimensionResource(R.dimen.padding_small))
+                .animateContentSize( // This smooths out the expansion animation.
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioNoBouncy,
+                        stiffness = Spring.StiffnessMedium
+                    )
+                )
+        ) {
+            Row {
+                Text(
+                    label + profile.largestDebtor.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = modifier
+                        .weight(1F)
+                        .padding(
+                            dimensionResource(id = R.dimen.padding_very_small)
+                        )
+                )
+                ProfileExpansionButton(
+                    expanded = expanded,
+                    onClick = { expanded = !expanded },
+                    modifier = modifier
+                        .size(25.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
+            if (expanded) {
+                Text(stringResource(R.string.summary_payment_method) + profile.largestDebtor.paymentPreference,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
+                )
+                Text(
+                    profile.largestDebtor.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
+                )
+            }
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer
+                ),
+                modifier = modifier
+                    .padding(dimensionResource(id = R.dimen.padding_very_small))
+                    .fillMaxWidth()
+            )
+            {
+                Row {
+                    Text(
+                        stringResource(R.string.summary_owes),
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        modifier = modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(dimensionResource(id = R.dimen.padding_small))
+                    )
+                    Text(
+                        text = NumberFormat.getCurrencyInstance().format(profile.largestDebtor.totalDebt),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        modifier = modifier.align(Alignment.CenterVertically)
+                    )
+                }
+            }
+        }
+
+    }
+}
+@Composable
+fun CreditorItem(
+    label: String,
+    summaryViewModel: SummaryViewModel,
+    modifier: Modifier = Modifier,
+    visitProfile: () -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) } // state of dropdown
+    val profile by summaryViewModel.primaryCreditor.collectAsState()
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        ),
+        modifier = modifier
+            .wrapContentHeight()
+            .padding(dimensionResource(R.dimen.padding_small))
+            .fillMaxWidth()
+            .clickable { visitProfile() }
+    ) {
+        Column(
+            modifier = modifier
+                .padding(dimensionResource(R.dimen.padding_small))
+                .animateContentSize( // This smooths out the expansion animation.
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioNoBouncy,
+                        stiffness = Spring.StiffnessMedium
+                    )
+                )
+        ) {
+            Row {
+                Text(
+                    label + profile.largestCreditor.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = modifier
+                        .weight(1F)
+                        .padding(
+                            dimensionResource(id = R.dimen.padding_very_small)
+                        )
+                )
+                ProfileExpansionButton(
+                    expanded = expanded,
+                    onClick = { expanded = !expanded },
+                    modifier = modifier
+                        .size(25.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
+            if (expanded) {
+                Text(
+                    stringResource(R.string.summary_payment_method) + profile.largestCreditor.paymentPreference,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
+                )
+                Text(
+                    profile.largestCreditor.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = modifier.padding(horizontal = dimensionResource(R.dimen.padding_small))
+                )
+            }
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer
+                ),
+                modifier = modifier
+                    .padding(dimensionResource(id = R.dimen.padding_very_small))
+                    .fillMaxWidth()
+            )
+            {
+                Row {
+                    Text(
+                        stringResource(R.string.summary_owed),
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        modifier = modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(dimensionResource(id = R.dimen.padding_small))
+                    )
+                    Text(
+                        NumberFormat.getCurrencyInstance().format(profile.largestCreditor.totalDebt.absoluteValue),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        modifier = modifier.align(Alignment.CenterVertically)
+                    )
+                }
+            }
+        }
+
+    }
+}
+
+@Composable
+private fun ProfileExpansionButton(
+    expanded: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+){
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+    ){
+        Icon(
+            imageVector = if (expanded) Filled.KeyboardArrowDown else Filled.KeyboardArrowUp,
+            contentDescription = "Expansion Button",
+            tint = MaterialTheme.colorScheme.secondary
+        )
     }
 }

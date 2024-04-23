@@ -6,6 +6,8 @@
 
     //Button Labels
     <string name="back_button">Back</string>
+    <string name="add_button">Add</string>
+    <string name="create_button">Create</string>
     <string name="details_screen">Details Screen</string>
     <string name="expanded_profile_screen">Expanded Profile Screen</string>
     <string name="details">Details</string>
@@ -18,14 +20,37 @@
     <string name="filter_amount_high">Filter Amount High</string>
     <string name="filter_amount_low">Filter Amount Low</string>
 
+    //Add Transaction string
+    <string name="add_transaction_to">Add Transaction to</string>
+    <string name="transaction_name">Transaction Name</string>
+    <string name="transaction_description">Transaction Description</string>
+    <string name="enter_amount">Enter an Amount Please!</string>
+    <string name="enter_description">Enter a Description Please!</string>
+
     //Expanded Profile Screen strings
     <string name="about">About</string>
     <string name="memberSince">Member Since: </string>
     <string name="debtsTrans">Debts and Transactions</string>
+    <string name="edit_profile">Edit Profile</string>
 
-
+    //Summary Screen stuff
+    <string name="summary_balance">Overall Balance:\u0020</string>
+    <string name="summary_debtor">Primary Debtor:\u0020</string>
+    <string name="summary_creditor">Primary Creditor:\u0020</string>
+    <string name="summary_oldest_date">Oldest Debt:\u0020</string>
+    <string name="summary_amount">Amount:\u0020</string>
+    <string name="summary_date">Date:\u0020</string>
+    <string name="summary_payment_method">Preferred Payment Method:\u0020</string>
+    <string name="summary_owes">Owes You:\u0020</string>
+    <string name="summary_owed">You Owe:\u0020</string>
 
     //picture labels
     <string name="logo1">logo</string>
+    <string name="filtertype">FilterType</string>
+    <string name="add_profile">Add Profile</string>
+    <string name="remove_profile">Remove Profile</string>
+    <string name="TestingScreen">Testing Screen</string>
+    <string name="add_transaction">Add Transaction</string>
+    <string name="remove_transaction">Remove Transaction</string>
 
 </resources>

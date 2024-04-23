@@ -25,12 +25,12 @@ fun ExpandedProfileScreenDebug(
         Text(text = "createDate: ${profile.createdDate}")
         Text(text = "paymentPreferences: ${profile.paymentPreference}")
         Text(text = "Debts: ")
-        profile.debts.forEach { debt ->
+        profile.debts?.forEach { debt ->
             Text(text = "   id: ${debt.id}")
             Text(text = "   name: ${debt.name}")
             Text(text = "   description: ${debt.description}")
             Text(text = "   userID: ${debt.userID}")
-            debt.transactions.forEach { trans ->
+            debt.transactions?.forEach { trans ->
                 Text(text = "       id: ${trans.id}")
                 Text(text = "       amount: ${trans.amount}")
                 Text(text = "       description: ${trans.description}")
