@@ -41,8 +41,8 @@ fun DetailsScreen(
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center // Center align items horizontally
-
+            horizontalArrangement = Arrangement.Center, // Center align items horizontally
+            
         ) {
             IconButton(
                 onClick = { onFilterAmountHighPressed() },
