@@ -25,7 +25,7 @@ interface RepositoryInterface { //
     fun getDebtWithTransactions(debtId: Long?): Flow<DebtWithTransactions>
     // Get the user's total balance
     fun getTotalBalance(): Flow<Double>
-    //TODO Implement this functionality
+
 
     // Get the id, name, and balance of the guy who owes you the most money
     fun getLargestDebtor(): Flow<Profile>
