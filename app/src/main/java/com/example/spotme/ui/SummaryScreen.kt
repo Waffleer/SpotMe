@@ -40,6 +40,7 @@ import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.ui.graphics.Color
 import com.example.spotme.ui.elements.details.AddTransactionCard
 
 
@@ -85,8 +86,11 @@ fun SummaryScreen(
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = modifier
                     )
+                    var color = MaterialTheme.colorScheme.onTertiaryContainer
+                    if (totalBalance.totalBalance < 0) { color = Color.Red }
                     Text(NumberFormat.getCurrencyInstance().format(totalBalance.totalBalance),
                         style = MaterialTheme.typography.headlineMedium,
+                        color = color,
                         modifier = modifier
                     )
                 }
@@ -248,10 +252,12 @@ fun DebtorItem(
                             .align(Alignment.CenterVertically)
                             .padding(dimensionResource(id = R.dimen.padding_small))
                     )
+                    var color = MaterialTheme.colorScheme.primaryContainer
+                    //if (profile.largestDebtor.totalDebt > 0) { color = Color.Black }
                     Text(
                         text = NumberFormat.getCurrencyInstance().format(profile.largestDebtor.totalDebt),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primaryContainer,
+                        color = color,
                         modifier = modifier.align(Alignment.CenterVertically)
                     )
                 }
@@ -336,10 +342,12 @@ fun CreditorItem(
                             .align(Alignment.CenterVertically)
                             .padding(dimensionResource(id = R.dimen.padding_small))
                     )
+                    var color = MaterialTheme.colorScheme.primaryContainer
+                    if (profile.largestCreditor.totalDebt < 0) { color = Color.Red }
                     Text(
                         NumberFormat.getCurrencyInstance().format(profile.largestCreditor.totalDebt.absoluteValue),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primaryContainer,
+                        color = color,
                         modifier = modifier.align(Alignment.CenterVertically)
                     )
                 }
