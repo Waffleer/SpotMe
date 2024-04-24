@@ -54,6 +54,8 @@ object StaticDataSource {
         com.example.spotme.database.Profile(1,"Nameason","Biography1","", 100.0, Date(1000)),
         com.example.spotme.database.Profile(2,"Namason jr","Biography2","paypal", 200.0, Date(0)),
         com.example.spotme.database.Profile(3,"Jason2","Jasons Bio","venmo",-100.0, Date(100000)),
+        com.example.spotme.database.Profile(11,"No Debtors","There are no profiles that owe you money","NONE",0.0, Date()),
+        com.example.spotme.database.Profile(12,"No Creditors","You don't owe money to any creditors","NONE",0.0, Date()),
     )
 
     //Only implemented profilesWithEverything for first profile (id = 1)

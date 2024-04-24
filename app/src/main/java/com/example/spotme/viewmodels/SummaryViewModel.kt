@@ -16,11 +16,11 @@ data class TotalBalance(val totalBalance: Double = 0.0)
 
 data class LargestCreditor(
     val largestCreditor: Profile
-        = StaticDataSource.eProfiles[0]
+        = StaticDataSource.eProfiles[4]
 )
 data class LargestDebtor(
     val largestDebtor: Profile
-        = StaticDataSource.eProfiles[0]
+        = StaticDataSource.eProfiles[3]
 )
 
 data class OldestDebt(
@@ -54,7 +54,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     var primaryCreditor: StateFlow<LargestCreditor>
             = spotMeRepository.getLargestCreditor()
         .map {
-            LargestCreditor(it?: StaticDataSource.eProfiles[0])
+            LargestCreditor(it?: StaticDataSource.eProfiles[4])
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -64,7 +64,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     var primaryDebtor: StateFlow<LargestDebtor>
             = spotMeRepository.getLargestDebtor()
         .map {
-            LargestDebtor(it?: StaticDataSource.eProfiles[0])
+            LargestDebtor(it?: StaticDataSource.eProfiles[3])
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
