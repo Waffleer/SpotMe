@@ -33,7 +33,7 @@ import com.example.spotme.ui.elements.DetailsNavButton
 fun ProfileCard(
     profile: Profile,
     onClicked: (Long) -> Unit,
-    onPlusClicked: (Profile) -> Unit,
+    onPlusClicked: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -101,7 +101,7 @@ fun ProfileCard(
                 ) {
                     DetailsNavButton(
                         labelResourceId = R.string.plus_button,
-                        onClick = { onPlusClicked(profile) }
+                        onClick = { onPlusClicked(profile.id!!) }
                     )
                 }
             }

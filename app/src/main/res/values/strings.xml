@@ -14,7 +14,7 @@
     <string name="expanded_profile_screen">Expanded Profile Screen</string>
     <string name="details">Details</string>
     <string name="plus_button">+</string>
-    <string name="add_debt_transaction">Add Debt</string>
+    <string name="add_debt_transaction">Add Transaction</string>
     <string name="groups">Group</string>
     <string name="add_group_transaction">Add Group</string>
     <string name="filter">Filter</string>
@@ -28,6 +28,7 @@
     <string name="transaction_description">Transaction Description</string>
     <string name="enter_amount">Enter an Amount Please!</string>
     <string name="enter_description">Enter a Description Please!</string>
+    <string name="transaction_submitted">Transaction Submitted!</string>
 
     //Expanded Profile Screen strings
     <string name="about">About</string>

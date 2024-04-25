@@ -156,9 +156,17 @@ fun SpotMeApp(
         val profileState by dbProfileViewModel.uiState.collectAsState()
         val detailsCurrentProfile = StaticDataSource.profiles[0]
 
+        // <----- Submit Transaction to Database lambda ----->
+        val context = LocalContext.current
+        // Submits transaction to database
+        val submitTransactionToDatabase: (Long, Double, String) -> Unit = { userId, amount, description ->
+            coroutineScope.launch {
+                dbTransactionViewModel.createTransaction(userId, amount, description)
+            }
+        }
+        // <------------------------------------------------->
 
         // ExpandedProfileScreen Stuff
-
         NavHost(
             navController = navController,
             startDestination = SpotMeScreen.Summary.name,
@@ -166,15 +174,7 @@ fun SpotMeApp(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
             composable(route = SpotMeScreen.Summary.name) {
-                val context = LocalContext.current
-                // Submits transaction to database
-                val submitTransactionToDatabase: (Long, Double, String) -> Unit = { userId, amount, description ->
-                    coroutineScope.launch {
-                        dbTransactionViewModel.createTransaction(userId, amount, description)
-                    }
-                }
                 SummaryScreen(
                     repository = spotMeRepository,
                     onDetailsPressed = {
@@ -203,12 +203,11 @@ fun SpotMeApp(
                     uiState = detailsUiState,
                     onSummeryPressed = {},
                     onProfilePressed = {
-                        //detailsViewModel.setCurrentProfile(it)
                         expandedProfileViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                     },
                     onAddPressed = {
-                        detailsViewModel.setCurrentProfile(it)
+                        expandedProfileViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.AddDebtTransaction.name)
                     },
                     onFilterAmountHighPressed = {
@@ -222,16 +221,14 @@ fun SpotMeApp(
 
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
-                    //profile = detailsUiState.currentProfile
-                    profile = detailsCurrentProfile,
                     expandedProfileViewModel = expandedProfileViewModel,
                 )
             }
 
             composable(route = SpotMeScreen.AddDebtTransaction.name) {
                 AddDebtTransactionScreen(
-                    //profile = detailsUiState.currentProfile
-                    profile = detailsCurrentProfile
+                    expandedProfileViewModel = expandedProfileViewModel,
+                    submitTransaction = submitTransactionToDatabase
                 )
             }
 

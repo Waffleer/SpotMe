@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +17,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.example.spotme.data.Profile
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,11 +31,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spotme.R
-import com.example.spotme.database.RepositoryInterface
 import com.example.spotme.ui.elements.NavButton
-import com.example.spotme.ui.elements.debug.ExpandedProfileScreenDebug
-import com.example.spotme.viewmodels.DetailsViewModel
-import com.example.spotme.viewmodels.ExpandedProfileUIState
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
 import com.example.spotme.viewmodels.ProfileEntity
 import java.text.SimpleDateFormat
@@ -45,13 +39,11 @@ import java.text.SimpleDateFormat
 /**
  * Composable function to display an expanded profile screen.
  *
- * @param profile The profile to be displayed.
  * @param modifier [Modifier] to be applied to the layout.
  */
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun ExpandedProfileScreen(
-    profile: Profile?,
     expandedProfileViewModel: ExpandedProfileViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -183,6 +175,7 @@ fun ExpandedProfileScreen(
                                 }
                             }
                         }
+
                     }
             }
         }

@@ -31,10 +31,10 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     @Query("SELECT SUM(totalDebt) FROM Profile")
     fun getTotalBalance(): Flow<Double>
 
-    @Query("SELECT * FROM Profile ORDER BY totalDebt DESC LIMIT 1")
+    @Query("SELECT * FROM Profile WHERE totalDebt > 0 ORDER BY totalDebt DESC LIMIT 1")
     fun getLargestDebtor(): Flow<Profile>
 
-    @Query("SELECT * FROM Profile ORDER BY totalDebt LIMIT 1")
+    @Query("SELECT * FROM Profile WHERE totalDebt < 0 ORDER BY totalDebt LIMIT 1")
     fun getLargestCreditor(): Flow<Profile>
 
     @Query("SELECT * FROM Debt ORDER BY createdDate LIMIT 1")
