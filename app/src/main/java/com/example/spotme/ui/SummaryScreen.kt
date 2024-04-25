@@ -139,7 +139,6 @@ fun SummaryScreen(
                 modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-
             )
         }
 
