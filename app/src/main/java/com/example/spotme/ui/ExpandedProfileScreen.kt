@@ -1,5 +1,6 @@
 package com.example.spotme.ui
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,6 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.example.spotme.data.Profile
@@ -20,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -35,6 +40,7 @@ import com.example.spotme.viewmodels.DetailsViewModel
 import com.example.spotme.viewmodels.ExpandedProfileUIState
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
 import com.example.spotme.viewmodels.ProfileEntity
+import java.text.SimpleDateFormat
 
 /**
  * Composable function to display an expanded profile screen.
@@ -42,6 +48,7 @@ import com.example.spotme.viewmodels.ProfileEntity
  * @param profile The profile to be displayed.
  * @param modifier [Modifier] to be applied to the layout.
  */
+@SuppressLint("SimpleDateFormat")
 @Composable
 fun ExpandedProfileScreen(
     profile: Profile?,
@@ -70,13 +77,14 @@ fun ExpandedProfileScreen(
             fontSize = 35.sp,
             fontWeight = FontWeight.Bold
         )
+        val formatter2 = SimpleDateFormat("MMM dd yyyy")
         Text(
-            text = stringResource(id = R.string.memberSince),
+            text = stringResource(id = R.string.profileCreated) + " ${formatter2.format(eProfile.createdDate)}",
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .align(Alignment.CenterHorizontally),
-            fontSize = 10.sp,
-            color = Color.LightGray,
+            fontSize = 16.sp,
+            color = Color.Gray,
         )
 
         // Display about information
@@ -127,26 +135,55 @@ fun ExpandedProfileScreen(
                     fontSize = 20.sp,
                 )
 
-                // Display each debt and its transactions
-                eDebts.forEach { debt ->
-                    Text(
-                        text = "${debt.debt.name}",
-                        modifier = Modifier.padding(bottom = 8.dp),
-                        fontSize = 17.sp,
-                        textDecoration = TextDecoration.Underline
-                    )
-                    Text(text = "${debt.debt.description}\n")
-                    debt.transactions?.forEach { trans ->
-                        Text(
-                            text = "$${trans.amount}",
-                            modifier = Modifier,
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Text(text = trans.description)
-                        Text(text = "Canceled - ${trans.canceled}")
-                        Text(text = "Transaction Made - ${trans.createdDate}\n")
+                    // Display each debt and its transactions
+                    eDebts.forEach { debt ->
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp)
+                                .clip(RoundedCornerShape(16.dp)),
+                            ) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                            ) {
+                                Text(
+                                    text = "${debt.debt.name}",
+                                    modifier = Modifier.padding(bottom = 8.dp),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp,
+                                    textDecoration = TextDecoration.Underline
+                                )
+                                Text(text = "${debt.debt.description}\n")
+                                debt.transactions?.forEach { trans ->
+                                    val statusText = if (trans.canceled) {
+                                        "Canceled"
+                                    } else {
+                                        "Ongoing"
+                                    }
+
+                                    Text(
+                                        text = "$${trans.amount}",
+                                        modifier = Modifier,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                    Text(text = trans.description)
+                                    Text(text = "Status: $statusText")
+                                    val formatter1 = SimpleDateFormat("MMM dd yyyy HH:mma")
+                                    Text(text = "${formatter1.format(trans.createdDate)}")
+
+                                    Divider(
+                                        color = Color.Gray,
+                                        thickness = 1.dp,
+                                        modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+                                    )
+                                }
+                            }
+                        }
                     }
-                }
             }
         }
         NavButton(

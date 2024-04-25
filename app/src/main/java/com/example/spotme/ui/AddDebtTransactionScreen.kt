@@ -1,6 +1,7 @@
 package com.example.spotme.ui
 
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,11 +32,13 @@ import com.example.spotme.data.Transaction
 import java.util.Date
 
 
+
 @Composable
 fun AddDebtTransactionScreen(
     profile: Profile?,
 
     ) {
+    
     if (profile == null) {
         Text("Profile is null, please fix")
     } else {
@@ -115,6 +119,7 @@ fun AddDebtTransactionScreen(
                             debtId = null,
 
                             )
+
                     }
 
                 ) {

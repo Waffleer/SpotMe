@@ -7,6 +7,8 @@
     //Button Labels
     <string name="back_button">Back</string>
     <string name="add_button">Add</string>
+    <string name="list_button">List</string>
+    <string name="testing_button">Testing</string>
     <string name="create_button">Create</string>
     <string name="details_screen">Details Screen</string>
     <string name="expanded_profile_screen">Expanded Profile Screen</string>
@@ -29,7 +31,7 @@
 
     //Expanded Profile Screen strings
     <string name="about">About</string>
-    <string name="memberSince">Member Since: </string>
+    <string name="profileCreated">Profile Created: </string>
     <string name="debtsTrans">Debts and Transactions</string>
     <string name="edit_profile">Edit Profile</string>
 

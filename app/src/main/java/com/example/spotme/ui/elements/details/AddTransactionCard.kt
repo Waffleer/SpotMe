@@ -1,5 +1,6 @@
 package com.example.spotme.ui.elements.details
 
+import android.media.MediaPlayer
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -57,6 +59,10 @@ fun AddTransactionCard(
     var userId by remember {mutableStateOf(h)}
     val context = LocalContext.current
 
+    //for the sounds
+    val audioContext = LocalContext.current
+    val audioPlayer = MediaPlayer.create(audioContext, R.raw.applepay)
+
     // Need to check because names is empty on initial compose
     if(!names.isEmpty()) {
         selectedText = names[0].first
@@ -70,7 +76,7 @@ fun AddTransactionCard(
         contentAlignment = Alignment.Center
     ) {
         Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
             modifier = Modifier
                 //.fillMaxWidth()
                 .clip(RoundedCornerShape(15.dp))
@@ -90,26 +96,30 @@ fun AddTransactionCard(
                             .weight(1F)
 
                     )
+
+                    //TOP RIGHT BUTTON IMPLEMENTATION
 Column {
     IconButton(
         onClick = {
             if (amount != "" && description != "") {
                 submitTransaction(userId, amount.toDouble(), description)
                 amount = ""
+                //TODO add sound here
+                audioPlayer.start()
                 description = ""
             } else if (amount == ""){
                 Toast.makeText(context, context.resources.getString(R.string.enter_amount), Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(context, context.resources.getString(R.string.enter_description), Toast.LENGTH_SHORT).show()
             }
-                  }, //TODO make submit/create button work
+                  },
         modifier = Modifier
             .align(Alignment.End)
             .size(25.dp)
 
     ) {
         Icon(
-            imageVector = Icons.Filled.Create,
+            imageVector = Icons.Filled.Done,
             contentDescription = stringResource(R.string.create_button),
             tint = MaterialTheme.colorScheme.secondary
 
@@ -117,27 +127,6 @@ Column {
     }
 }
                 }
-                OutlinedTextField(
-                    value = amount,
-                    onValueChange = { amount = it },
-                    label = { Text("Amount") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(dimensionResource(R.dimen.padding_very_small))
-                        //.height(16.dp)
-                )
-
-                OutlinedTextField(
-                    value = description,
-                    onValueChange = { description = it },
-                    label = { Text("Description") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(dimensionResource(R.dimen.padding_very_small))
-                        //.height(20.dp)
-
-                )
 
                 //DROP DOWN MENU
                 Box(
@@ -152,7 +141,7 @@ Column {
                             expanded = !expanded
                         },
 
-                    ) {
+                        ) {
                         TextField(
                             value = selectedText,
                             onValueChange = {
@@ -183,6 +172,60 @@ Column {
                         }
                     }
                 }
+
+                OutlinedTextField(
+                    value = amount,
+                    onValueChange = { amount = it },
+                    label = { Text("Amount") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(dimensionResource(R.dimen.padding_very_small))
+                        //.height(16.dp)
+                )
+
+                OutlinedTextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text("Description") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(dimensionResource(R.dimen.padding_very_small))
+                        //.height(20.dp)
+
+                )
+// BOTTOM BUTTON IMPLEMENTATION
+//                Column(
+//                    modifier = Modifier
+//                        .align(Alignment.CenterHorizontally)
+//                        .padding(dimensionResource(R.dimen.padding_small))
+//                ) {
+//                    IconButton(
+//                        onClick = {
+//                            if (amount != "" && description != "") {
+//                                submitTransaction(userId, amount.toDouble(), description)
+//                                amount = ""
+//                                description = ""
+//                            } else if (amount == ""){
+//                                Toast.makeText(context, context.resources.getString(R.string.enter_amount), Toast.LENGTH_SHORT).show()
+//                            } else {
+//                                Toast.makeText(context, context.resources.getString(R.string.enter_description), Toast.LENGTH_SHORT).show()
+//                            }
+//                        },
+//                        modifier = Modifier
+//                            //.align(Alignment.End)
+//                            .size(25.dp)
+//
+//                    ) {
+//                        Icon(
+//                            imageVector = Icons.Filled.Done,
+//                            contentDescription = stringResource(R.string.create_button),
+//                            tint = MaterialTheme.colorScheme.secondary
+//
+//                        )
+//                    }
+//                }
+
             }
         }
     }

@@ -41,6 +41,9 @@ import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import com.example.spotme.ui.elements.AddProfileNavButton
+import com.example.spotme.ui.elements.TestingNavButton
+import com.example.spotme.ui.elements.ToDetailsNavButton
 import com.example.spotme.ui.elements.details.AddTransactionCard
 
 
@@ -145,32 +148,32 @@ fun SummaryScreen(
                 .fillMaxWidth()
         )
         {
-            NavButton(
+            ToDetailsNavButton(
                 labelResourceId = R.string.details,
                 onClick = { onDetailsPressed() },
                 modifier = Modifier
-                    //.padding(8.dp)
+                    .padding(4.dp)
             )
-            NavButton(
+            AddProfileNavButton(
                 labelResourceId = R.string.add_profile,
                 onClick = {},
-                modifier = Modifier.width(140.dp)
-                    //.padding(4.dp)
-            )
-            NavButton(
-                labelResourceId = R.string.plus_button,
-                onClick = { onPlusPressed() },
                 modifier = Modifier
-                    //.padding(8.dp)
+                    //.width(140.dp)
+                    .padding(4.dp)
+            )
+//            NavButton( //NOT SURE WHAT THIS EVEN IS SUPPOSED TO BE
+//                labelResourceId = R.string.plus_button,
+//                onClick = { onPlusPressed() },
+//                modifier = Modifier
+//                    //.padding(8.dp)
+//            )
+            TestingNavButton(
+                labelResourceId = R.string.TestingScreen,
+                onClick = { onTestPressed() },
+                modifier = Modifier
+                    .padding(4.dp)
             )
         }
-        NavButton(
-            labelResourceId = R.string.TestingScreen,
-            onClick = { onTestPressed() },
-            modifier = Modifier
-                .padding(4.dp)
-                .fillMaxWidth()
-        )
     }
 }
 
