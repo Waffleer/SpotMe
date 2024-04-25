@@ -175,9 +175,10 @@ Column {
                                     text = { Text(text = item.first) },
                                     onClick = {
                                         selectedText = item.first
+                                        userId = item.second!!
                                         expanded = false
                                         Toast.makeText(context, item.first, Toast.LENGTH_SHORT).show()
-                                        userId = names.find { it.first.equals(item.first)}?.second!!
+                                        //userId = names.find { it.first.equals(item.first)}?.second!!
                                         Log.d("j_selectedText_changed", "userId: " + userId)
                                     }
                                 )
