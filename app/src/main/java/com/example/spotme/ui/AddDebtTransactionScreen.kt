@@ -1,6 +1,6 @@
 package com.example.spotme.ui
 
-
+import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,11 +28,13 @@ import androidx.compose.ui.unit.dp
 import com.example.spotme.R
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
 
+
 @Composable
 fun AddDebtTransactionScreen(
     expandedProfileViewModel: ExpandedProfileViewModel,
     submitTransaction: (Long, Double, String) -> Unit
     ) {
+
         // ViewModel stuff
         val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
         val eProfile = profileEntity.profileWithEverything.profile

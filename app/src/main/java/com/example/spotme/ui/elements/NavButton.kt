@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,11 +50,63 @@ fun DetailsNavButton(
         modifier = modifier
             .padding(top = 11.dp),
     ) {
-
         Icon(
             imageVector = Icons.Filled.Add,
             contentDescription = stringResource(R.string.add_button),
-
         )
+    }
+}
+
+@Composable
+fun ToDetailsNavButton(
+    @StringRes labelResourceId: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .padding(top = 11.dp),
+    ) {
+        Icon(
+            imageVector = Icons.Filled.List,
+            contentDescription = stringResource(R.string.list_button),
+            )
+    }
+}
+
+@Composable
+fun AddProfileNavButton(
+    @StringRes labelResourceId: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .padding(top = 11.dp),
+    ) {
+        Icon(
+            imageVector = Icons.Filled.AddCircle,
+            contentDescription = stringResource(R.string.add_button),
+            )
+    }
+}
+
+@Composable
+fun TestingNavButton(
+    @StringRes labelResourceId: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .padding(top = 11.dp),
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Build,
+            contentDescription = stringResource(R.string.testing_button),
+            )
     }
 }
