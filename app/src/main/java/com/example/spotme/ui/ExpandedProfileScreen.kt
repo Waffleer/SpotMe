@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat
 /**
  * Composable function to display an expanded profile screen.
  *
+ * @param expandedProfileViewModel the view model for the expanded profile screen.
  * @param modifier [Modifier] to be applied to the layout.
  */
 @SuppressLint("SimpleDateFormat")
