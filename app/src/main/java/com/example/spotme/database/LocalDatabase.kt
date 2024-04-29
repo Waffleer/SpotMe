@@ -9,10 +9,10 @@ import com.example.spotme.data.DebugData
 
 
 /**
- * A database singleton for storing previously ordered subs.
- * Uses the Sandwich entity/table.
+ * A database singleton for storing all of the app's persistent information.
+ * Uses the Profile, Debt, and Transaction entities
  * Uses the DateConverter class to convert dates into a storable format.
- *
+
  * @property DataAccessObject DAO object used to provide access to stored data.
  */
 @Database(
@@ -24,8 +24,8 @@ abstract class LocalDatabase : RoomDatabase() {
     abstract fun getDao(): DataAccessObject
 
     /**
-     * Provides a SubDatabase instance.
-     * @returns instance as a SubDatabase.
+     * Provides a LocalDatabase instance.
+     * @returns instance as a LocalDatabase.
      */
     companion object {
         private var instance: LocalDatabase? = null
