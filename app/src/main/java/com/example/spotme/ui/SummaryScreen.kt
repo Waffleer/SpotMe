@@ -1,7 +1,6 @@
 package com.example.spotme.ui
 
 import android.icu.text.NumberFormat
-import android.icu.text.SimpleDateFormat
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -40,15 +40,22 @@ import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import com.example.spotme.ui.elements.AddProfileNavButton
+import com.example.spotme.ui.elements.TestingNavButton
+import com.example.spotme.ui.elements.ToDetailsNavButton
+import androidx.compose.ui.graphics.Color
+import com.example.spotme.ui.elements.details.AddTransactionCard
 
 
 @Composable
 fun SummaryScreen(
     repository: RepositoryInterface,
     onDetailsPressed: () -> Unit,
-    onAddProfilePressed: () -> Unit,
+    onPlusPressed: () -> Unit,
+    onTestPressed: () -> Unit,
     onPrimaryDebtorClicked: (Long) -> Unit,
     onPrimaryCreditorClicked: (Long) -> Unit,
+    submitTransaction: (Long, Double, String) -> Unit,
     modifier: Modifier = Modifier
     ) {
     val summaryViewModel by remember { mutableStateOf(SummaryViewModel(repository))}
@@ -56,18 +63,20 @@ fun SummaryScreen(
     val primaryDebtor by summaryViewModel.primaryDebtor.collectAsState()
     val primaryCreditor by summaryViewModel.primaryCreditor.collectAsState()
     val oldestDebt by summaryViewModel.oldestDebt.collectAsState()
+    val everything by summaryViewModel.everything.collectAsState()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center
     ) {
         Column(modifier = modifier
+            .verticalScroll(rememberScrollState())
             .padding(dimensionResource(R.dimen.padding_medium))
             .weight(1f),
         ) {
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
                 ),
                 modifier = modifier
                     .fillMaxWidth()
@@ -80,8 +89,11 @@ fun SummaryScreen(
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = modifier
                     )
+                    var color = MaterialTheme.colorScheme.onTertiaryContainer
+                    if (totalBalance.totalBalance < 0) { color = Color.Red }
                     Text(NumberFormat.getCurrencyInstance().format(totalBalance.totalBalance),
                         style = MaterialTheme.typography.headlineMedium,
+                        color = color,
                         modifier = modifier
                     )
                 }
@@ -98,7 +110,7 @@ fun SummaryScreen(
                 summaryViewModel = summaryViewModel,
                 visitProfile = {onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!)}
             )
-
+            /* REMOVED BECAUSE WE MADE DEBTS USELESS
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer
@@ -119,7 +131,15 @@ fun SummaryScreen(
                     Text(stringResource(R.string.summary_date) + formatter.format(oldestDebt.oldestDebt.createdDate),
                         style = MaterialTheme.typography.titleMedium)
                 }
-            }
+            }*/
+            val names = everything.profilesWithEverything.map { Pair(it.profile.name, it.profile.profileId) }
+            AddTransactionCard(
+                names = names,
+                submitTransaction = submitTransaction,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            )
         }
 
         //Basic Nav Buttons
@@ -130,17 +150,30 @@ fun SummaryScreen(
                 .fillMaxWidth()
         )
         {
-            NavButton(
+            ToDetailsNavButton(
                 labelResourceId = R.string.details,
                 onClick = { onDetailsPressed() },
                 modifier = Modifier
-                    .padding(12.dp)
+                    .padding(4.dp)
             )
-            NavButton(
+            AddProfileNavButton(
                 labelResourceId = R.string.add_profile,
-                onClick = { onAddProfilePressed() },
+                onClick = {},
                 modifier = Modifier
-                    .padding(12.dp)
+                    //.width(140.dp)
+                    .padding(4.dp)
+            )
+//            NavButton( //NOT SURE WHAT THIS EVEN IS SUPPOSED TO BE
+//                labelResourceId = R.string.plus_button,
+//                onClick = { onPlusPressed() },
+//                modifier = Modifier
+//                    //.padding(8.dp)
+//            )
+            TestingNavButton(
+                labelResourceId = R.string.TestingScreen,
+                onClick = { onTestPressed() },
+                modifier = Modifier
+                    .padding(4.dp)
             )
         }
     }
@@ -157,7 +190,7 @@ fun DebtorItem(
     val profile by summaryViewModel.primaryDebtor.collectAsState()
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         modifier = modifier
             .wrapContentHeight()
@@ -221,10 +254,12 @@ fun DebtorItem(
                             .align(Alignment.CenterVertically)
                             .padding(dimensionResource(id = R.dimen.padding_small))
                     )
+                    var color = MaterialTheme.colorScheme.primaryContainer
+                    //if (profile.largestDebtor.totalDebt > 0) { color = Color.Black }
                     Text(
                         text = NumberFormat.getCurrencyInstance().format(profile.largestDebtor.totalDebt),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primaryContainer,
+                        color = color,
                         modifier = modifier.align(Alignment.CenterVertically)
                     )
                 }
@@ -244,7 +279,7 @@ fun CreditorItem(
     val profile by summaryViewModel.primaryCreditor.collectAsState()
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         modifier = modifier
             .wrapContentHeight()
@@ -309,10 +344,12 @@ fun CreditorItem(
                             .align(Alignment.CenterVertically)
                             .padding(dimensionResource(id = R.dimen.padding_small))
                     )
+                    var color = MaterialTheme.colorScheme.primaryContainer
+                    if (profile.largestCreditor.totalDebt < 0) { color = Color.Red }
                     Text(
                         NumberFormat.getCurrencyInstance().format(profile.largestCreditor.totalDebt.absoluteValue),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primaryContainer,
+                        color = color,
                         modifier = modifier.align(Alignment.CenterVertically)
                     )
                 }

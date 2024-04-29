@@ -66,7 +66,7 @@ class DetailsViewModel (
     val uiState: StateFlow<DetailsUiState> = _uiState.asStateFlow()
 
     fun setFilterType(filter: FilterType?, pro: List<Profile>? = null){
-        println("setFilter = $filter")
+        //println("setFilter = $filter")
         if(filter != null){
             _uiState.update {currentState ->
                 currentState.copy(
@@ -84,10 +84,10 @@ class DetailsViewModel (
         }
 
 
-        println("filter = ${uiState.value.filterType}")
+        //println("filter = ${uiState.value.filterType}")
 
         var ret: List<Profile> = listOf()
-        println("con = $con")
+        //println("con = $con")
 
         if(uiState.value.filterType == FilterType.AMOUNT_HIGH){
             ret = filter_profiles_debt_amount_high(con)
@@ -101,7 +101,7 @@ class DetailsViewModel (
         if(uiState.value.filterType == FilterType.NONE){
             ret = con.toList()
         }
-        println("ret = $ret")
+        //println("ret = $ret")
 
         _uiState.update {currentState ->
             currentState.copy(
@@ -110,9 +110,9 @@ class DetailsViewModel (
         }
     }
 
-    fun whatisfiltertype(){
-        println("filter = ${uiState.value.filterType}")
-    }
+//    fun whatisfiltertype(){
+//        println("filter = ${uiState.value.filterType}")
+//    }
 
 
     private fun filter_profiles_debt_amount_high(con: List<Profile>): List<Profile>{
@@ -178,13 +178,13 @@ class DetailsViewModel (
     var profilesFlow: StateFlow<DetailsProfiles>
             = repo.getProfiles()
         .map{
-            println("Filter Profiles Stateflow")
+            //println("Filter Profiles Stateflow")
             println(uiState.value.filterType)
             var con: MutableList<Profile> = mutableListOf()
             it.forEach {p ->
                 con.add(eProfile_to_uProfile(p, null))
             }
-            println("ProfileFlow con = $con")
+            //println("ProfileFlow con = $con")
             setFilterType( null, con)
             DetailsProfiles(con)
         }.stateIn(

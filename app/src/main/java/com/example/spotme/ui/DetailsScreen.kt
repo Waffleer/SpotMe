@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -32,16 +34,15 @@ fun DetailsScreen(
     //detailsProfiles: DetailsProfiles,
     onSummeryPressed: () -> Unit,
     onProfilePressed: (Long) -> Unit,
-    onAddPressed: (Profile) -> Unit,
+    onAddPressed: (Long) -> Unit,
     onFilterAmountHighPressed: () -> Unit,
     onFilterAmountLowPressed: () -> Unit,
-    whatisfiltertype: () -> Unit,
     ) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center // Center align items horizontally
-
+            horizontalArrangement = Arrangement.Center, // Center align items horizontally
+            
         ) {
             IconButton(
                 onClick = { onFilterAmountHighPressed() },
@@ -67,7 +68,7 @@ fun DetailsScreen(
                     )
             }
         }
-        Column {
+        Column (modifier = Modifier.verticalScroll(rememberScrollState())){
             uiState.filterProfiles.forEach {
                 ProfileCard(profile = it, onProfilePressed, onAddPressed)
                 //TODO update ProfileCard Function to make it look nice

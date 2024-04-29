@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.Debt
 import com.example.spotme.database.Profile
+import com.example.spotme.database.ProfileWithEverything
 import com.example.spotme.database.RepositoryInterface
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,11 +16,11 @@ data class TotalBalance(val totalBalance: Double = 0.0)
 
 data class LargestCreditor(
     val largestCreditor: Profile
-        = StaticDataSource.eProfiles[0]
+        = StaticDataSource.eProfiles[4]
 )
 data class LargestDebtor(
     val largestDebtor: Profile
-        = StaticDataSource.eProfiles[0]
+        = StaticDataSource.eProfiles[3]
 )
 
 data class OldestDebt(
@@ -32,6 +33,10 @@ data class OldestDebt(
             canceled = false,
             createdDate = java.util.Date()
         )
+)
+
+data class Everything(
+    val profilesWithEverything: List<ProfileWithEverything> = listOf()
 )
 
 class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
@@ -49,7 +54,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     var primaryCreditor: StateFlow<LargestCreditor>
             = spotMeRepository.getLargestCreditor()
         .map {
-            LargestCreditor(it?: StaticDataSource.eProfiles[0])
+            LargestCreditor(it?: StaticDataSource.eProfiles[4])
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -59,14 +64,12 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     var primaryDebtor: StateFlow<LargestDebtor>
             = spotMeRepository.getLargestDebtor()
         .map {
-            LargestDebtor(it?: StaticDataSource.eProfiles[0])
+            LargestDebtor(it?: StaticDataSource.eProfiles[3])
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = LargestDebtor()
         )
-
-
 
     var oldestDebt: StateFlow<OldestDebt>
         = spotMeRepository.getOldestDebt()
@@ -83,6 +86,16 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = OldestDebt()
+        )
+
+    var everything: StateFlow<Everything>
+        = spotMeRepository.getEverything()
+        .map {
+            Everything(it)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = Everything()
         )
 
     companion object {

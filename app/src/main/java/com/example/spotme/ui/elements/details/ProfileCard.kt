@@ -33,7 +33,7 @@ import com.example.spotme.ui.elements.DetailsNavButton
 fun ProfileCard(
     profile: Profile,
     onClicked: (Long) -> Unit,
-    onPlusClicked: (Profile) -> Unit,
+    onPlusClicked: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -49,13 +49,13 @@ fun ProfileCard(
     }
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 5.dp, end = 5.dp),
+            .fillMaxWidth(),
+            //.padding(start = 5.dp, end = 5.dp),
         contentAlignment = Alignment.Center
     ) {
         Card(
             modifier = modifier
-                .padding(12.dp)
+                .padding(top = 6.dp, bottom = 6.dp)
                 .clip(RoundedCornerShape(15.dp))
 
         ) {
@@ -65,7 +65,7 @@ fun ProfileCard(
                 ) {
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth(0.6f) //DO NOT TOUCH OR IT WILL BREAK FOR THE LOVE OF GOD
+                            .fillMaxWidth(0.7f) //DO NOT TOUCH OR IT WILL BREAK FOR THE LOVE OF GOD
                             .height(100.dp)
                     )
                     {
@@ -82,7 +82,7 @@ fun ProfileCard(
                             color = Color.Black,
                             thickness = 2.dp,
                             modifier = Modifier
-                                .padding(start = 12.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
+                                .padding(start = 12.dp, end = 1.dp, top = 4.dp, bottom = 4.dp)
                         )
                         Text(
                             textAlign = TextAlign.Start,
@@ -101,7 +101,7 @@ fun ProfileCard(
                 ) {
                     DetailsNavButton(
                         labelResourceId = R.string.plus_button,
-                        onClick = { onPlusClicked(profile) }
+                        onClick = { onPlusClicked(profile.id!!) }
                     )
                 }
             }
