@@ -66,7 +66,7 @@ fun ProfileCard(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth(0.7f) //DO NOT TOUCH OR IT WILL BREAK FOR THE LOVE OF GOD
-                            .height(100.dp)
+                            .height(100.dp) //100.dp
                     )
                     {
                         Text(

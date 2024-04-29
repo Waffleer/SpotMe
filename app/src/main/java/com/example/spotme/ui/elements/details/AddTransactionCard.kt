@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -102,7 +103,6 @@ fun AddTransactionCard(
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
             modifier = Modifier
-                //.fillMaxWidth()
                 .clip(RoundedCornerShape(15.dp))
         ) {
             Column(
@@ -126,10 +126,11 @@ Column {
     IconButton(
         onClick = {
             submitButtonLogic()
-                  }, //TODO make submit/create button work
+                  },
         modifier = Modifier
             .align(Alignment.End)
-            .size(25.dp)
+            .size(dimensionResource(R.dimen.submit_icon))
+
     ) {
         Icon(
             imageVector = Icons.Filled.Done,
@@ -185,7 +186,7 @@ Column {
                             }
                         }
                     }
-                }
+                }//end of drop down menu
 
                 OutlinedTextField(
                     value = amount,
@@ -198,7 +199,6 @@ Column {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(dimensionResource(R.dimen.padding_very_small))
-                        //.height(16.dp)
                 )
 
                 OutlinedTextField(
@@ -215,8 +215,6 @@ Column {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(dimensionResource(R.dimen.padding_very_small))
-                        //.height(20.dp)
-
                 )
 // BOTTOM BUTTON IMPLEMENTATION
 //                Column(

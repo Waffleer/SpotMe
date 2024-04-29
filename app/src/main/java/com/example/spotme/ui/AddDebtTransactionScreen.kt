@@ -68,7 +68,6 @@ fun AddDebtTransactionScreen(
         }
 
         Column {
-
         Column(modifier = Modifier.padding(16.dp)) {
 
             Row(

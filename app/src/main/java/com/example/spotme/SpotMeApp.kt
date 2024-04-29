@@ -36,6 +36,7 @@ import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Repository
 import com.example.spotme.ui.AddDebtTransactionScreen
 import com.example.spotme.ui.DetailsScreen
+import com.example.spotme.ui.EditProfileScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
 import com.example.spotme.ui.TestingScreen
@@ -58,7 +59,8 @@ enum class SpotMeScreen(@StringRes val title: Int) {
     Details(title = R.string.details_screen),
     ExpandedProfile(title = R.string.expanded_profile_screen),
     AddDebtTransaction(title = R.string.add_debt_transaction),
-    TestingScreen(title = R.string.TestingScreen)
+    TestingScreen(title = R.string.TestingScreen),
+    EditProfileScreen(title = R.string.EditProfileScreen)
     // TODO add other screens here
 }
 
@@ -201,7 +203,6 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.Details.name) {
                 DetailsScreen(
                     uiState = detailsUiState,
-                    onSummeryPressed = {},
                     onProfilePressed = {
                         expandedProfileViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
@@ -215,14 +216,31 @@ fun SpotMeApp(
                     },
                     onFilterAmountLowPressed = {
                         detailsViewModel.setFilterType(FilterType.AMOUNT_LOW)
-                    }
+                    },
+                    onTestPressed = {
+                        navController.navigate(SpotMeScreen.TestingScreen.name)
+                    },
+                    onSummaryPressed = {
+                        navController.navigate(SpotMeScreen.Summary.name)
+                    },
                 )
             }
 
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
                     expandedProfileViewModel = expandedProfileViewModel,
+                    onEditProfilePressed = {
+                        navController.navigate(SpotMeScreen.EditProfileScreen.name)
+                    },
                 )
+
+            }
+
+            composable(route = SpotMeScreen.EditProfileScreen.name) {
+                EditProfileScreen(
+
+                )
+
             }
 
             composable(route = SpotMeScreen.AddDebtTransaction.name) {
