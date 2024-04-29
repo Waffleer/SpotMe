@@ -46,7 +46,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 fun SummaryScreen(
     repository: RepositoryInterface,
     onDetailsPressed: () -> Unit,
-    onPlusPressed: () -> Unit,
+    onAddProfilePressed: () -> Unit,
     onPrimaryDebtorClicked: (Long) -> Unit,
     onPrimaryCreditorClicked: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -137,8 +137,8 @@ fun SummaryScreen(
                     .padding(12.dp)
             )
             NavButton(
-                labelResourceId = R.string.plus_button,
-                onClick = { onPlusPressed() },
+                labelResourceId = R.string.add_profile,
+                onClick = { onAddProfilePressed() },
                 modifier = Modifier
                     .padding(12.dp)
             )

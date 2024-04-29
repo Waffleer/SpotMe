@@ -27,7 +27,7 @@ interface RepositoryInterface { //
     // Get the oldest debt
     fun getOldestDebt(): Flow<Debt>
 
-    suspend fun insertProfile(profile: Profile)
+    suspend fun insertProfile(profile: com.example.spotme.data.Profile)
     suspend fun insertDebt(debt: Debt)
     suspend fun insertTransaction(transaction: Transaction)
 }
@@ -62,7 +62,7 @@ class Repository(val dao: DataAccessObject):
     override fun getOldestDebt(): Flow<Debt>
         = dao.getOldestDebt()
 
-    override suspend fun insertProfile(profile: Profile) {
+    override suspend fun insertProfile(profile: com.example.spotme.data.Profile) {
         dao.insertProfile(profile)
     }
     override suspend fun insertDebt(debt: Debt) {

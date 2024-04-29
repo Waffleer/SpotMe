@@ -33,6 +33,7 @@ import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Repository
 import com.example.spotme.ui.AddDebtTransactionScreen
+import com.example.spotme.ui.AddProfileScreen
 import com.example.spotme.ui.DetailsScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
@@ -150,7 +151,9 @@ fun SpotMeApp(
                     onDetailsPressed = {
                         navController.navigate(SpotMeScreen.Details.name)
                     },
-                    onPlusPressed = {},
+                    onAddProfilePressed = {expandedProfileViewModel.setCurrentProfileId(it)
+                        Log.d("x_primaryCreditorClicked","profileId: " + it.toString())
+                        navController.navigate(SpotMeScreen.AddProfileScreen.name)},
                     onPrimaryCreditorClicked = {
                         expandedProfileViewModel.setCurrentProfileId(it)
                         Log.d("x_primaryCreditorClicked","profileId: " + it.toString())
@@ -202,7 +205,9 @@ fun SpotMeApp(
                     profile = detailsCurrentProfile
                 )
             }
+            composable(route = SpotMeScreen.AddProfileScreen.name) {
 
+            }
 
             /* Add Navigation to other screens here like so:
             composable(route = SubShopScreen.Order.name) {
