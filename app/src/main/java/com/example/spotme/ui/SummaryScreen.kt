@@ -1,6 +1,7 @@
 package com.example.spotme.ui
 
 import android.icu.text.NumberFormat
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -34,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.spotme.R
 import com.example.spotme.database.RepositoryInterface
-import com.example.spotme.ui.elements.NavButton
 import com.example.spotme.viewmodels.SummaryViewModel
 import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
@@ -51,13 +50,13 @@ import com.example.spotme.ui.elements.details.AddTransactionCard
 fun SummaryScreen(
     repository: RepositoryInterface,
     onDetailsPressed: () -> Unit,
-    onPlusPressed: () -> Unit,
     onTestPressed: () -> Unit,
     onPrimaryDebtorClicked: (Long) -> Unit,
     onPrimaryCreditorClicked: (Long) -> Unit,
     submitTransaction: (Long, Double, String) -> Unit,
-    modifier: Modifier = Modifier
-    ) {
+    modifier: Modifier = Modifier,
+    onAddProfilePressed: () -> Unit,
+) {
     val summaryViewModel by remember { mutableStateOf(SummaryViewModel(repository))}
     val totalBalance by summaryViewModel.totalBalance.collectAsState()
     val primaryDebtor by summaryViewModel.primaryDebtor.collectAsState()
@@ -158,7 +157,7 @@ fun SummaryScreen(
             )
             AddProfileNavButton(
                 labelResourceId = R.string.add_profile,
-                onClick = {},
+                onClick = {onAddProfilePressed()},
                 modifier = Modifier
                     //.width(140.dp)
                     .padding(4.dp)

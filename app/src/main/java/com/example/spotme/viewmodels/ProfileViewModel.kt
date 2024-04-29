@@ -5,7 +5,10 @@ import com.example.spotme.data.Profile
 import com.example.spotme.database.Repository
 
 class ProfileViewModel(private val repository: Repository) : ViewModel() {
-    fun insertProfile(profile: Profile) {
-        //repository.insertProfile(profile)
+
+    companion object {
+        fun insertProfile(profile: Profile) {
+            //repository.insertProfile(profile)
+        }
     }
 }
