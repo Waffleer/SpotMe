@@ -7,6 +7,8 @@
     //Button Labels
     <string name="back_button">Back</string>
     <string name="add_button">Add</string>
+    <string name="home_button">Home</string>
+    <string name="edit_button">Edit</string>
     <string name="list_button">List</string>
     <string name="testing_button">Testing</string>
     <string name="create_button">Create</string>
@@ -53,6 +55,7 @@
     <string name="add_profile">Add Profile</string>
     <string name="remove_profile">Remove Profile</string>
     <string name="TestingScreen">Testing Screen</string>
+    <string name="EditProfileScreen">Edit Profile</string>
     <string name="add_transaction">Add Transaction</string>
     <string name="remove_transaction">Remove Transaction</string>
 

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -40,9 +41,14 @@ import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardElevation
+import androidx.compose.material3.NavigationBar
+import androidx.compose.ui.draw.shadow
 import com.example.spotme.ui.elements.AddProfileNavButton
 import com.example.spotme.ui.elements.TestingNavButton
 import com.example.spotme.ui.elements.ToDetailsNavButton
+import com.example.spotme.ui.elements.ToSummaryNavButton
 import androidx.compose.ui.graphics.Color
 import com.example.spotme.ui.elements.details.AddTransactionCard
 
@@ -65,8 +71,8 @@ import com.example.spotme.ui.elements.details.AddTransactionCard
 @Composable
 fun SummaryScreen(
     repository: RepositoryInterface,
-    onDetailsPressed: () -> Unit,
     onPlusPressed: () -> Unit,
+    onDetailsPressed: () -> Unit,
     onTestPressed: () -> Unit,
     onPrimaryDebtorClicked: (Long) -> Unit,
     onPrimaryCreditorClicked: (Long) -> Unit,
@@ -84,14 +90,15 @@ fun SummaryScreen(
         modifier = modifier.verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center
     ) {
-        Column(modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .padding(dimensionResource(R.dimen.padding_medium))
-            .weight(1f),
+        Column(
+            modifier = modifier
+                .verticalScroll(rememberScrollState())
+                .padding(dimensionResource(R.dimen.padding_medium))
+                .weight(1f),
         ) {
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    //containerColor = MaterialTheme.colorScheme.tertiaryContainer //could be used later if we figure out color schemes
                 ),
                 modifier = modifier
                     .fillMaxWidth()
@@ -105,8 +112,11 @@ fun SummaryScreen(
                         modifier = modifier
                     )
                     var color = MaterialTheme.colorScheme.onTertiaryContainer
-                    if (totalBalance.totalBalance < 0) { color = Color.Red }
-                    Text(NumberFormat.getCurrencyInstance().format(totalBalance.totalBalance),
+                    if (totalBalance.totalBalance < 0) {
+                        color = Color.Red
+                    }
+                    Text(
+                        NumberFormat.getCurrencyInstance().format(totalBalance.totalBalance),
                         style = MaterialTheme.typography.headlineMedium,
                         color = color,
                         modifier = modifier
@@ -117,13 +127,13 @@ fun SummaryScreen(
             DebtorItem( // Primary Debtor Card
                 label = stringResource(R.string.summary_debtor),
                 summaryViewModel = summaryViewModel,
-                visitProfile = { onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!)}
+                visitProfile = { onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!) }
             )
 
             CreditorItem( // Primary Creditor Card
                 label = stringResource(R.string.summary_creditor),
                 summaryViewModel = summaryViewModel,
-                visitProfile = {onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!)}
+                visitProfile = { onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!) }
             )
             /* REMOVED BECAUSE WE MADE DEBTS USELESS
             Card(
@@ -147,7 +157,12 @@ fun SummaryScreen(
                         style = MaterialTheme.typography.titleMedium)
                 }
             }*/
-            val names = everything.profilesWithEverything.map { Pair(it.profile.name, it.profile.profileId) }
+            val names = everything.profilesWithEverything.map {
+                Pair(
+                    it.profile.name,
+                    it.profile.profileId
+                )
+            }
             AddTransactionCard(
                 names = names,
                 submitTransaction = submitTransaction,
@@ -157,40 +172,49 @@ fun SummaryScreen(
             )
         }
 
-        //Basic Nav Buttons
-        Row( //NavButtons
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+        //jank navbar
+        Card(
+            shape = RoundedCornerShape(16.dp), // Adjust the radius as needed
             modifier = Modifier
-                .fillMaxWidth()
-        )
-        {
-            ToDetailsNavButton(
-                labelResourceId = R.string.details,
-                onClick = { onDetailsPressed() },
-                modifier = Modifier
-                    .padding(4.dp)
-            )
-            AddProfileNavButton(
-                labelResourceId = R.string.add_profile,
-                onClick = {},
-                modifier = Modifier
-                    //.width(140.dp)
-                    .padding(4.dp)
-            )
-//            NavButton( //NOT SURE WHAT THIS EVEN IS SUPPOSED TO BE
-//                labelResourceId = R.string.plus_button,
-//                onClick = { onPlusPressed() },
-//                modifier = Modifier
-//                    //.padding(8.dp)
-//            )
-            TestingNavButton(
-                labelResourceId = R.string.TestingScreen,
-                onClick = { onTestPressed() },
-                modifier = Modifier
-                    .padding(4.dp)
-            )
-        }
+                .padding(10.dp)
+                .fillMaxWidth(),
+        ) {
+        NavigationBar(
+            content = {
+                Row( //NavButtons
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                {
+                    ToSummaryNavButton(
+                        labelResourceId = R.string.home_button,
+                        onClick = {  },
+                        modifier = Modifier
+                            .padding(4.dp)
+                    )
+                    AddProfileNavButton(
+                        labelResourceId = R.string.add_profile,
+                        onClick = {},
+                        modifier = Modifier
+                            .padding(4.dp)
+                    )
+                    ToDetailsNavButton(
+                        labelResourceId = R.string.details,
+                        onClick = { onDetailsPressed() },
+                        modifier = Modifier
+                            .padding(4.dp)
+                    )
+                    TestingNavButton(
+                        labelResourceId = R.string.TestingScreen,
+                        onClick = { onTestPressed() },
+                        modifier = Modifier
+                            .padding(4.dp)
+                    )
+                }
+            })//end of navbar
+    }
     }
 }
 
