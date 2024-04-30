@@ -23,7 +23,9 @@ interface DataAccessObject { // TODO currently setup for sandwiches. Change that
     /** Get all profiles. */
     @Query("SELECT * FROM Profile")
     fun getProfiles(): Flow<List<Profile>>
-
+    /** Gets the newest profile with ALL debts and ALL transactions */
+    @Query("SELECT * FROM Profile ORDER BY createdDate DESC LIMIT 1")
+    fun getNewestProfile(): Flow<ProfileWithEverything>
     /** Get a specific profile with all debts and transactions.
      * @param profileId the id of the profile you want to get */
     @Query("SELECT * FROM Profile WHERE profileId = :profileId")

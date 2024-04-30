@@ -10,6 +10,9 @@ interface RepositoryInterface { //
 
      /** Gets ALL profiles with ALL of their debts and transactions */
     fun getEverything(): Flow<List<ProfileWithEverything>>
+    /** Get newest profile ID */
+    /** Gets the newest profile along with ALL debts and ALL transactions */
+    fun getNewestProfile(): Flow<ProfileWithEverything>
     /** Gets SPECIFIC profile with ALL debts and transactions */
     fun getProfiles(): Flow<List<Profile>>
     /** Gets list of all profiles without debts */
@@ -100,6 +103,8 @@ class Repository(val dao: DataAccessObject):
 
     override fun getEverything(): Flow<List<ProfileWithEverything>>
         = dao.getEverything()
+    override fun getNewestProfile(): Flow<ProfileWithEverything>
+        = dao.getNewestProfile()
     override fun getProfiles(): Flow<List<Profile>>
             = dao.getProfiles()
     override fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
