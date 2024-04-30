@@ -1,7 +1,6 @@
 package com.example.spotme
 
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -35,16 +34,19 @@ import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Repository
 import com.example.spotme.ui.AddDebtTransactionScreen
+import com.example.spotme.ui.AddProfileScreen
 import com.example.spotme.ui.DetailsScreen
 import com.example.spotme.ui.EditProfileScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
 import com.example.spotme.ui.TestingScreen
+import com.example.spotme.viewmodels.AddProfileViewModel
 import com.example.spotme.viewmodels.DBProfileViewModel
 import com.example.spotme.viewmodels.DBTransactionViewModel
 import com.example.spotme.viewmodels.DetailsViewModel
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
 import com.example.spotme.viewmodels.FilterType
+import com.example.spotme.viewmodels.ProfileViewModel
 import com.example.spotme.viewmodels.SpotMeViewModel
 import kotlinx.coroutines.launch
 
@@ -57,7 +59,8 @@ import kotlinx.coroutines.launch
 enum class SpotMeScreen(@StringRes val title: Int) {
     Summary(title = R.string.summary_header),
     Details(title = R.string.details_screen),
-    ExpandedProfile(title = R.string.expanded_profile_screen),
+    ExpandedProfile(title = R   .string.expanded_profile_screen),
+    AddProfile(title = R.string.add_profile),
     AddDebtTransaction(title = R.string.add_debt_transaction),
     TestingScreen(title = R.string.TestingScreen),
     EditProfileScreen(title = R.string.EditProfileScreen)
@@ -148,7 +151,7 @@ fun SpotMeApp(
                 navigateUp = {
                     navController.popBackStack() //This sends you to the last screen
                     //navController.navigate(SpotMeScreen.Summary.name) - what it was before
-                }
+                },
             )
         }
     ){ innerPadding ->
@@ -182,7 +185,10 @@ fun SpotMeApp(
                     onDetailsPressed = {
                         navController.navigate(SpotMeScreen.Details.name)
                     },
-                    onPlusPressed = {},
+                    onAddProfilePressed = {
+                        AddProfileViewModel.setCurrentProfileId(it)
+                        Log.d("x_addProfileClicked","profileId: " + it.toString())
+                        navController.navigate(SpotMeScreen.AddProfile.name)},
                     onPrimaryCreditorClicked = {
                         expandedProfileViewModel.setCurrentProfileId(it)
                         Log.d("x_primaryCreditorClicked","profileId: " + it.toString())
@@ -276,7 +282,11 @@ fun SpotMeApp(
                     },
                 )
             }
-
+            composable(route = SpotMeScreen.AddProfile.name) {
+                AddProfileScreen(
+                    profileViewModel = ProfileViewModel
+                )
+            }
 
             /* Add Navigation to other screens here like so:
             composable(route = SubShopScreen.Order.name) {
