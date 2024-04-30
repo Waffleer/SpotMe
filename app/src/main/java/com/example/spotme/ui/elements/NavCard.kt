@@ -15,12 +15,32 @@ import androidx.navigation.NavController
 import com.example.spotme.R
 import com.example.spotme.SpotMeScreen
 
+/**
+ * Provides a consistent navigation interface
+ *
+ * @param navController the naviation controller
+ * @param toSummaryScreen Lambda navigating to the summary screen
+ * @param toDetailsScreen Lambda navigating to the details screen
+ * @param toAddProfileScreen Lambda navigating to the add profile screen
+ */
 @Composable
 fun NavCard(
     navController: NavController,
-    toSummaryScreen: () -> Unit = { navController.navigate(SpotMeScreen.Summary.name)},
-    toDetailsScreen: () -> Unit = { navController.navigate(SpotMeScreen.Details.name)},
-    toAddProfileScreen: () -> Unit = { navController.navigate(SpotMeScreen.AddProfile.name)},
+    toSummaryScreen: () -> Unit = {
+        if (navController.currentBackStackEntry?.destination?.route != SpotMeScreen.Summary.name) {
+            navController.navigate(SpotMeScreen.Summary.name)
+        }
+                                  },
+    toDetailsScreen: () -> Unit = {
+        if (navController.currentBackStackEntry?.destination?.route != SpotMeScreen.Details.name) {
+            navController.navigate(SpotMeScreen.Details.name)
+        }
+                                  },
+    toAddProfileScreen: () -> Unit = {
+        if (navController.currentBackStackEntry?.destination?.route != SpotMeScreen.AddProfile.name) {
+            navController.navigate(SpotMeScreen.AddProfile.name)
+        }
+                                     },
 ) {
     Card(
         shape = RoundedCornerShape(16.dp), // Adjust the radius as needed
