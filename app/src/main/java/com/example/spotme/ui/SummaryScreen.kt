@@ -45,7 +45,22 @@ import com.example.spotme.ui.elements.ToDetailsNavButton
 import androidx.compose.ui.graphics.Color
 import com.example.spotme.ui.elements.details.AddTransactionCard
 
-
+/**
+ * Displays a summary of account information including:
+ *  Overall Balance
+ *  Who owes you the most money (Primary Debtor)
+ *  Who you owe the most money to (Primary Creditor)
+ *
+ * And also allows you to submit transactions via a transaction card.
+ *
+ * @param repository the project's repository
+ * @param onDetailsPressed lambda that navigates to the details screen.
+ * @param onPlusPressed lambda that navigates to the add profile screen.
+ * @param onPrimaryDebtorClicked lambda that navigates to the primary debtor's expanded profile.
+ * @param onPrimaryCreditorClicked lambda that navigates to the primary creditor's expanded profile.
+ * @param submitTransaction lambda that submits a transaction to the database.
+ * @param modifier controls the form of the composable.
+ */
 @Composable
 fun SummaryScreen(
     repository: RepositoryInterface,
@@ -98,13 +113,13 @@ fun SummaryScreen(
                 }
             }
 
-            DebtorItem(
+            DebtorItem( // Primary Debtor Card
                 label = stringResource(R.string.summary_debtor),
                 summaryViewModel = summaryViewModel,
                 visitProfile = { onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!)}
             )
 
-            CreditorItem(
+            CreditorItem( // Primary Creditor Card
                 label = stringResource(R.string.summary_creditor),
                 summaryViewModel = summaryViewModel,
                 visitProfile = {onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!)}
@@ -178,6 +193,13 @@ fun SummaryScreen(
     }
 }
 
+/**
+ * Displays information about the profile that owes you the most money.
+ * @param label Describes the significance of the balance information.
+ * @param summaryViewModel The summary screen's view model
+ * @param visitProfile lambda that navigates to the display profile's expanded profile screen.
+ * @param modifier dictates the form of the composable.
+ */
 @Composable
 fun DebtorItem(
     label: String,
@@ -267,6 +289,13 @@ fun DebtorItem(
 
     }
 }
+/**
+ * Displays information about the profile that you owe the most money to.
+ * @param label Describes the significance of the balance information.
+ * @param summaryViewModel The summary screen's view model
+ * @param visitProfile lambda that navigates to the display profile's expanded profile screen.
+ * @param modifier dictates the form of the composable.
+ */
 @Composable
 fun CreditorItem(
     label: String,
@@ -358,6 +387,12 @@ fun CreditorItem(
     }
 }
 
+/**
+ * Button used to expand each profile card in order to display additional information.
+ * @param expanded Whether the profile is currently expanded or not.
+ * @param onClick Lambda that expands or contracting the profile.
+ * @param modifier Defines the form of the composable.
+ */
 @Composable
 private fun ProfileExpansionButton(
     expanded: Boolean,

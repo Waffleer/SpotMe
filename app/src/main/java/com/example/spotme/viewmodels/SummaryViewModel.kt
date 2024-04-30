@@ -12,17 +12,31 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
+/**
+ * Retains the account's total balance
+ */
 data class TotalBalance(val totalBalance: Double = 0.0)
 
+/**
+ * Contains the profile of the guy who you owe the most money to.
+ */
 data class LargestCreditor(
     val largestCreditor: Profile
         = StaticDataSource.eProfiles[4]
 )
+
+/**
+ * Contains the profile of the guy who owes you the most money.
+ */
 data class LargestDebtor(
     val largestDebtor: Profile
         = StaticDataSource.eProfiles[3]
 )
 
+/**
+ * Contains the oldest debt
+ * (not in use currently)
+ */
 data class OldestDebt(
     val oldestDebt: Debt = Debt(
             debtId = 0,
@@ -35,10 +49,17 @@ data class OldestDebt(
         )
 )
 
+/**
+ * Contains every profile with every debt and transaction.
+ */
 data class Everything(
     val profilesWithEverything: List<ProfileWithEverything> = listOf()
 )
 
+/**
+ * Extracts all necessary information from the database and stores them as stateflow.
+ * @param spotMeRepository the project's repository.
+ */
 class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
 
     var totalBalance: StateFlow<TotalBalance>
