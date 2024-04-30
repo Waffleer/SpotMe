@@ -37,6 +37,9 @@
     <string name="profileCreated">Profile Created: </string>
     <string name="debtsTrans">Debts and Transactions</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="profile_edited">Profile Successfully Edited</string>
+    <string name="enter_name">Enter a Profile Name</string>
+
 
     //Summary Screen stuff
     <string name="summary_balance">Overall Balance:\u0020</string>
