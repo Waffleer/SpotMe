@@ -24,13 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Repository
 import com.example.spotme.ui.AddDebtTransactionScreen
@@ -46,8 +44,6 @@ import com.example.spotme.viewmodels.DBTransactionViewModel
 import com.example.spotme.viewmodels.DetailsViewModel
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
 import com.example.spotme.viewmodels.FilterType
-import com.example.spotme.viewmodels.ProfileViewModel
-import com.example.spotme.viewmodels.SpotMeViewModel
 import kotlinx.coroutines.launch
 
 
@@ -109,12 +105,10 @@ fun SpotMeAppBar(
 /**
  * Runs the app and sets up screen navigation
  *
- * @param localViewModel the intermediary between the UI and data layers
  * @param navController manages navigation between screen locations
  */
 @Composable
 fun SpotMeApp(
-    localViewModel: SpotMeViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
     //get current backstack entry
@@ -129,11 +123,10 @@ fun SpotMeApp(
     val localDatabase = LocalDatabase.getInstance(LocalContext.current)
     val spotMeRepository = Repository.getRepository(localDatabase)
     // <--------------------------------------------------------->
-    val detailsViewModel: DetailsViewModel = DetailsViewModel(spotMeRepository)
+    val detailsViewModel = DetailsViewModel(spotMeRepository)
     val expandedProfileViewModel by remember { mutableStateOf(ExpandedProfileViewModel(spotMeRepository))}
-    val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
-    val dbProfileViewModel: DBProfileViewModel = DBProfileViewModel(spotMeRepository)
-    val dbTransactionViewModel: DBTransactionViewModel = DBTransactionViewModel(spotMeRepository, updateProfile_ = { pid: Long, amount: Double ->
+    val dbProfileViewModel = DBProfileViewModel(spotMeRepository)
+    val dbTransactionViewModel = DBTransactionViewModel(spotMeRepository, updateProfile_ = { pid: Long, amount: Double ->
         coroutineScope.launch {//Passing though the edit amount from dbProfileViewModel
             dbProfileViewModel.editProfileAmount(pid, amount)
         }
@@ -157,12 +150,11 @@ fun SpotMeApp(
     ){ innerPadding ->
         // Local UI State from SpotMeViewModel/LocalUiState
         val detailsUiState by detailsViewModel.uiState.collectAsState()
-        val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
         val profileState by dbProfileViewModel.uiState.collectAsState()
-        val detailsCurrentProfile = StaticDataSource.profiles[0]
+        //val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
+        //val detailsCurrentProfile = StaticDataSource.profiles[0]
 
         // <----- Submit Transaction to Database lambda ----->
-        val context = LocalContext.current
         val submitTransactionToDatabase: (Long, Double, String) -> Unit = { userId, amount, description ->
             coroutineScope.launch {
                 dbTransactionViewModel.createTransaction(userId, amount, description)
@@ -297,7 +289,6 @@ fun SpotMeApp(
             }
             composable(route = SpotMeScreen.AddProfile.name) {
                 AddProfileScreen(
-                    profileViewModel = ProfileViewModel,
                     addProfileToDatabase = submitProfileToDatabase
                 )
             }

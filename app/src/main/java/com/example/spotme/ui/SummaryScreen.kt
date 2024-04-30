@@ -1,7 +1,6 @@
 package com.example.spotme.ui
 
 import android.icu.text.NumberFormat
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -40,10 +39,7 @@ import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.NavigationBar
-import androidx.compose.ui.draw.shadow
 import com.example.spotme.ui.elements.AddProfileNavButton
 import com.example.spotme.ui.elements.TestingNavButton
 import com.example.spotme.ui.elements.ToDetailsNavButton
@@ -61,7 +57,7 @@ import com.example.spotme.ui.elements.details.AddTransactionCard
  *
  * @param repository the project's repository
  * @param onDetailsPressed lambda that navigates to the details screen.
- * @param onPlusPressed lambda that navigates to the add profile screen.
+ * @param onAddProfilePressed lambda that navigates to the add profile screen.
  * @param onPrimaryDebtorClicked lambda that navigates to the primary debtor's expanded profile.
  * @param onPrimaryCreditorClicked lambda that navigates to the primary creditor's expanded profile.
  * @param submitTransaction lambda that submits a transaction to the database.
@@ -82,8 +78,8 @@ fun SummaryScreen(
     val totalBalance by summaryViewModel.totalBalance.collectAsState()
     val primaryDebtor by summaryViewModel.primaryDebtor.collectAsState()
     val primaryCreditor by summaryViewModel.primaryCreditor.collectAsState()
-    val oldestDebt by summaryViewModel.oldestDebt.collectAsState()
     val everything by summaryViewModel.everything.collectAsState()
+    //val oldestDebt by summaryViewModel.oldestDebt.collectAsState()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),

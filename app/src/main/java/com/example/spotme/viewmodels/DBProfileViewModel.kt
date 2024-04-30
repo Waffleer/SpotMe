@@ -1,19 +1,13 @@
 package com.example.spotme.viewmodels
 
-
-
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.res.stringResource
 import com.example.spotme.database.RepositoryInterface
 import androidx.lifecycle.ViewModel
-import com.example.spotme.R
 import com.example.spotme.data.PaymentType
 import com.example.spotme.database.Debt
 import com.example.spotme.database.Profile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import java.util.Date
 import kotlin.system.exitProcess
@@ -34,12 +28,12 @@ class DBProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     }
 
     suspend fun editProfileAmount(pid: Long, amount: Double){
-        var prof: Profile = repo.getProfileByIdNonFlow(pid)
+        val prof: Profile = repo.getProfileByIdNonFlow(pid)
         repo.updateProfile(prof.copy(totalDebt = amount))
     }
 
     suspend fun editDebtAmount(did: Long, amount: Double){
-        var debt: Debt = repo.getDebtByIdNonFlow(did)
+        val debt: Debt = repo.getDebtByIdNonFlow(did)
         repo.updateDebt(debt.copy(totalDebt = amount))
     }
 
@@ -55,7 +49,7 @@ class DBProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
      * @param paymentPreference the new payment preference
      */
     suspend fun editProfile(pid: Long, name: String, description: String, paymentPreference: String) {
-        var profile : Profile = repo.getProfileByIdNonFlow(pid)
+        val profile : Profile = repo.getProfileByIdNonFlow(pid)
         repo.updateProfile(
             profile.copy(
                 name = name,

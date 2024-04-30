@@ -2,9 +2,6 @@ package com.example.spotme.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -12,19 +9,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.spotme.R
 import kotlinx.coroutines.launch
 import com.example.spotme.data.*
-import com.example.spotme.database.RepositoryInterface
 import com.example.spotme.viewmodels.ProfileViewModel
-import java.util.Date
 
 @Composable
 fun AddProfileScreen(
-    profileViewModel: ProfileViewModel.Companion,
     addProfileToDatabase: (String, String, String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -32,7 +23,6 @@ fun AddProfileScreen(
     var description by remember { mutableStateOf("") }
     var paymentPreference by remember { mutableStateOf(PaymentType.NONE) }
 
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -60,7 +50,7 @@ fun AddProfileScreen(
         Column(
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
-            val paymentTypes = PaymentType.values()
+            val paymentTypes = PaymentType.entries
             for (i in paymentTypes.indices step 2) {
                 val rowPaymentTypes = paymentTypes.slice(i until i + 2)
                 Row {

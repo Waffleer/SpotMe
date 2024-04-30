@@ -1,7 +1,6 @@
 package com.example.spotme.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +17,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
@@ -34,12 +32,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spotme.R
-import com.example.spotme.ui.elements.AddProfileNavButton
-import com.example.spotme.ui.elements.NavButton
 import com.example.spotme.ui.elements.ToEditProfileNavButton
-import com.example.spotme.ui.elements.ToSummaryNavButton
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
-import com.example.spotme.viewmodels.ProfileEntity
 import java.text.SimpleDateFormat
 
 /**
@@ -163,7 +157,7 @@ fun ExpandedProfileScreen(
                                     .padding(8.dp)
                             ) {
                                 Text(
-                                    text = "${debt.debt.name}",
+                                    text = debt.debt.name,
                                     modifier = Modifier.padding(bottom = 8.dp),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 16.sp,
@@ -172,7 +166,7 @@ fun ExpandedProfileScreen(
                                 if (debt.debt.description != "") {
                                     Text(text = "${debt.debt.description}\n")
                                 }
-                                debt.transactions?.forEach { trans ->
+                                debt.transactions.forEach { trans ->
                                     val statusText = if (trans.canceled) {
                                         "Canceled"
                                     } else {
@@ -187,7 +181,7 @@ fun ExpandedProfileScreen(
                                     Text(text = trans.description)
                                     Text(text = "Status: $statusText")
                                     val formatter1 = SimpleDateFormat("MMM dd yyyy HH:mma")
-                                    Text(text = "${formatter1.format(trans.createdDate)}")
+                                    Text(text = formatter1.format(trans.createdDate))
 
                                     Divider(
                                         color = Color.Gray,

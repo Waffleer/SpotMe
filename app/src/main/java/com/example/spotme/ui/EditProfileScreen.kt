@@ -56,9 +56,8 @@ fun EditProfileScreen(
     ) {
     val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
     val eProfile = profileEntity.profileWithEverything.profile
-    val eDebts = profileEntity.profileWithEverything.debtsWithTransactions
 
-    var userId by remember {mutableStateOf(eProfile.profileId)}
+    val userId by remember {mutableStateOf(eProfile.profileId)}
     var name by remember {mutableStateOf(eProfile.name)}
     var description by remember { mutableStateOf(eProfile.description) }
     var expanded by remember { mutableStateOf(false) }

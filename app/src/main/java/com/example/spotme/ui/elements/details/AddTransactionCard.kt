@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,8 +49,8 @@ import com.example.spotme.R
 @Composable
 fun AddTransactionCard(
     names: List<Pair<String, Long?>>,
+    submitTransaction: (Long, Double, String) -> Unit,
     modifier: Modifier = Modifier,
-    submitTransaction: (Long, Double, String) -> Unit
 ) {
     val h: Long = 0
     var amount by remember { mutableStateOf("") }
@@ -261,7 +260,7 @@ private fun AddTransactionButton(
     IconButton(
         onClick = onClick,
         modifier = modifier
-        //                    modifier = Modifier.align(Alignment.End)
+        // modifier = Modifier.align(Alignment.End)
 
     ) {
         Icon(
