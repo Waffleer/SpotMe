@@ -29,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Repository
 import com.example.spotme.ui.AddDebtTransactionScreen
@@ -151,8 +152,9 @@ fun SpotMeApp(
         // Local UI State from SpotMeViewModel/LocalUiState
         val detailsUiState by detailsViewModel.uiState.collectAsState()
         val profileState by dbProfileViewModel.uiState.collectAsState()
-        //val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
-        //val detailsCurrentProfile = StaticDataSource.profiles[0]
+        //Needs to initialize the stateflow for my sorting, i hate that this is necessary
+        val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() // What the hell? -JS
+        val detailsCurrentProfile = StaticDataSource.profiles[0]
 
         // <----- Submit Transaction to Database lambda ----->
         val submitTransactionToDatabase: (Long, Double, String) -> Unit = { userId, amount, description ->
