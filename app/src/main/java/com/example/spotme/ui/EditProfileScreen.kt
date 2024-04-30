@@ -26,6 +26,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,20 +43,27 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spotme.R
+import com.example.spotme.data.PaymentType
+import com.example.spotme.viewmodels.ExpandedProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
+        expandedProfileViewModel: ExpandedProfileViewModel,
+        editProfile: (Long, String, String, String) -> Unit,
+        navigateBackToProfile: () -> Unit,
+        modifier: Modifier = Modifier
+    ) {
+    val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
+    val eProfile = profileEntity.profileWithEverything.profile
+    val eDebts = profileEntity.profileWithEverything.debtsWithTransactions
 
-) {
-    var description by remember { mutableStateOf("") }
+    var userId by remember {mutableStateOf(eProfile.profileId)}
+    var name by remember {mutableStateOf(eProfile.name)}
+    var description by remember { mutableStateOf(eProfile.description) }
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("") }
+    var selectedText by remember { mutableStateOf(eProfile.paymentPreference) }
     val context = LocalContext.current
-    val h: Long = 0
-
-    var userId by remember {mutableStateOf(h)}
-
 
     Box(
         modifier = Modifier
@@ -88,8 +96,8 @@ fun EditProfileScreen(
                 Column(){
 
                     OutlinedTextField(
-                        value = description, //TODO change all of this stuff to NAME
-                        onValueChange = { description = it },
+                        value = name,
+                        onValueChange = { name = it },
                         label = { Text("Name") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
@@ -118,16 +126,9 @@ fun EditProfileScreen(
                             .padding(dimensionResource(R.dimen.padding_very_small))
                     )
 
-                    val prefers = listOf(
-                        "Cash",
-                        "Venmo",
-                        "PayPal",
-                        "Cash App",
-                        "Apple Pay",
-                        "Google Pay",
-                        "Zelle",
-                    )
+                    // DropDown Prepopulation
                     val dropdownHint = "Preferred Payment Method"
+                    val paymentTypes = PaymentType.entries
 
                     //DROP DOWN MENU
                     Box(
@@ -157,13 +158,13 @@ fun EditProfileScreen(
                                 onDismissRequest = { expanded = false }
                             ) {
                                 Text(text = dropdownHint)
-                                prefers.forEach { item ->
+                                paymentTypes.forEach { item ->
                                     DropdownMenuItem(
-                                        text = { Text(text = item) },
+                                        text = { Text(text = item.name) },
                                         onClick = {
-                                            selectedText = item
+                                            selectedText = item.name
                                             expanded = false
-                                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
                                             Log.d("j_selectedText_changed", "selectedText: $selectedText")
                                         }
                                     )
@@ -181,20 +182,19 @@ fun EditProfileScreen(
                 ) {
                     IconButton(
                         onClick = {
-//                            if (amount != "" && description != "") {
-//                                submitTransaction(userId, amount.toDouble(), description)
-//                                amount = ""
-//                                description = ""
-//                            } else if (amount == ""){
-//                                Toast.makeText(context, context.resources.getString(R.string.enter_amount), Toast.LENGTH_SHORT).show()
-//                            } else {
-//                                Toast.makeText(context, context.resources.getString(R.string.enter_description), Toast.LENGTH_SHORT).show()
-//                            }
+                            if (name != "" && description != "") {
+                                editProfile(userId!!, name, description, selectedText)
+                                Toast.makeText(context, context.resources.getString(R.string.profile_edited), Toast.LENGTH_SHORT).show()
+                                navigateBackToProfile()
+                            } else if (name == ""){
+                                Toast.makeText(context, context.resources.getString(R.string.enter_name), Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, context.resources.getString(R.string.enter_description), Toast.LENGTH_SHORT).show()
+                           }
                         },
                         modifier = Modifier
                             //.align(Alignment.End)
                             .size(25.dp)
-
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Done,

@@ -193,9 +193,9 @@ fun SummaryScreen(
                         modifier = Modifier
                             .padding(4.dp)
                     )
-                    AddProfileNavButton(
+                    AddProfileNavButton( //TODO
                         labelResourceId = R.string.add_profile,
-                        onClick = {},
+                        onClick = { onAddProfilePressed() },
                         modifier = Modifier
                             .padding(4.dp)
                     )

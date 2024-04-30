@@ -163,13 +163,24 @@ fun SpotMeApp(
 
         // <----- Submit Transaction to Database lambda ----->
         val context = LocalContext.current
-        // Submits transaction to database
         val submitTransactionToDatabase: (Long, Double, String) -> Unit = { userId, amount, description ->
             coroutineScope.launch {
                 dbTransactionViewModel.createTransaction(userId, amount, description)
             }
         }
-        // <------------------------------------------------->
+        // <----- Add Profile to Database Lambda ----->
+        val submitProfileToDatabase: (String, String, String) -> Unit = { username, description, paymentPref ->
+            coroutineScope.launch {
+                dbProfileViewModel.createProfile(username,description, paymentPref)
+            }
+        }
+        // <----- Edit Profile ----->
+        val editProfile: (Long, String, String, String) -> Unit = { pid, name, description, paymentPref ->
+            coroutineScope.launch {
+                dbProfileViewModel.editProfile(pid, name, description, paymentPref)
+            }
+
+        }
 
         // ExpandedProfileScreen Stuff
         NavHost(
@@ -244,7 +255,9 @@ fun SpotMeApp(
 
             composable(route = SpotMeScreen.EditProfileScreen.name) {
                 EditProfileScreen(
-
+                    expandedProfileViewModel = expandedProfileViewModel,
+                    editProfile = editProfile,
+                    navigateBackToProfile = {navController.navigateUp()}
                 )
 
             }
@@ -284,7 +297,8 @@ fun SpotMeApp(
             }
             composable(route = SpotMeScreen.AddProfile.name) {
                 AddProfileScreen(
-                    profileViewModel = ProfileViewModel
+                    profileViewModel = ProfileViewModel,
+                    addProfileToDatabase = submitProfileToDatabase
                 )
             }
 

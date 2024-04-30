@@ -169,7 +169,9 @@ fun ExpandedProfileScreen(
                                     fontSize = 16.sp,
                                     textDecoration = TextDecoration.Underline
                                 )
-                                Text(text = "${debt.debt.description}\n")
+                                if (debt.debt.description != "") {
+                                    Text(text = "${debt.debt.description}\n")
+                                }
                                 debt.transactions?.forEach { trans ->
                                     val statusText = if (trans.canceled) {
                                         "Canceled"

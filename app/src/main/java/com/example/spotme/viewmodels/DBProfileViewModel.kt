@@ -3,8 +3,10 @@ package com.example.spotme.viewmodels
 
 
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.stringResource
 import com.example.spotme.database.RepositoryInterface
 import androidx.lifecycle.ViewModel
+import com.example.spotme.R
 import com.example.spotme.data.PaymentType
 import com.example.spotme.database.Debt
 import com.example.spotme.database.Profile
@@ -45,6 +47,23 @@ class DBProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
 
     }
 
+    /**
+     * Edit a profile by id.
+     * @param pid the profile ID
+     * @param name the new name of the profile
+     * @param description the new description of the profile
+     * @param paymentPreference the new payment preference
+     */
+    suspend fun editProfile(pid: Long, name: String, description: String, paymentPreference: String) {
+        var profile : Profile = repo.getProfileByIdNonFlow(pid)
+        repo.updateProfile(
+            profile.copy(
+                name = name,
+                description = description,
+                paymentPreference = paymentPreference
+            )
+        )
+    }
 
     suspend fun createProfile(name: String, description: String, paymentPreference: PaymentType) {
         val date = Date()
@@ -56,6 +75,23 @@ class DBProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
         }
         println("profId = :$profId")
         val debt = Debt(null, profId, "", 0.0, "", false, date)
+        repo.insertDebt(debt)
+        _uiState.update {currentState ->
+            currentState.copy(
+                ProfileId = profId
+            )
+        }
+    }
+    suspend fun createProfile(name: String, description: String, paymentPreference: String) {
+        val date = Date()
+        val prof = Profile(null, name, description, paymentPreference, 0.0, date)
+        val profId: Long? = repo.insertProfile(prof)
+        if(profId == null){
+            println("Profile ID is null")
+            exitProcess(-1)
+        }
+        println("profId = :$profId")
+        val debt = Debt(null, profId, name + "'s Debt", 0.0, "", false, date)
         repo.insertDebt(debt)
         _uiState.update {currentState ->
             currentState.copy(

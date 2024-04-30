@@ -25,12 +25,12 @@ import java.util.Date
 @Composable
 fun AddProfileScreen(
     profileViewModel: ProfileViewModel.Companion,
-    //repository: RepositoryInterface,
+    addProfileToDatabase: (String, String, String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val name = remember { mutableStateOf(TextFieldValue()) }
-    val description = remember { mutableStateOf(TextFieldValue()) }
-    val paymentPreference = remember { mutableStateOf(PaymentType.NONE) }
+    var name by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var paymentPreference by remember { mutableStateOf(PaymentType.NONE) }
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -43,15 +43,15 @@ fun AddProfileScreen(
         verticalArrangement = Arrangement.Top
     ) {
         TextField(
-            value = name.value,
-            onValueChange = { name.value = it },
+            value = name,
+            onValueChange = { name = it },
             label = { Text("Name") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
-            value = description.value,
-            onValueChange = { description.value = it },
+            value = description,
+            onValueChange = { description = it },
             label = { Text("Description") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -70,8 +70,8 @@ fun AddProfileScreen(
                             modifier = Modifier.padding(end = 16.dp)
                         ) {
                             RadioButton(
-                                selected = paymentPreference.value == paymentType,
-                                onClick = { paymentPreference.value = paymentType }
+                                selected = paymentPreference == paymentType,
+                                onClick = { paymentPreference = paymentType }
                             )
                             Text(paymentType.title)
                         }
@@ -83,6 +83,8 @@ fun AddProfileScreen(
         Button(
             onClick = {
                 coroutineScope.launch {
+                    addProfileToDatabase(name, description, paymentPreference.toString())
+                    /*
                     val defaultDebt = Debt(
                         id = null,
                         userID = null,
@@ -98,17 +100,17 @@ fun AddProfileScreen(
                     ProfileViewModel.insertProfile(
                         Profile(
                             id = null,
-                            name = name.value.text,
-                            description = description.value.text,
+                            name = name,
+                            description = description,
                             amount = 0.0,
                             debts = listOf(defaultDebt),
-                            paymentPreference = paymentPreference.value
+                            paymentPreference = paymentPreference
                         )
-                    )
+                    )*/
                     // Reset fields after insertion
-                    name.value = TextFieldValue()
-                    description.value = TextFieldValue()
-                    paymentPreference.value = PaymentType.NONE
+                    name = ""
+                    description = ""
+                    paymentPreference = PaymentType.NONE
                 }
             },
             modifier = Modifier.fillMaxWidth()
