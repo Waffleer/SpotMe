@@ -2,6 +2,9 @@ package com.example.spotme.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -9,8 +12,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.example.spotme.R
 import kotlinx.coroutines.launch
 import com.example.spotme.data.*
 import com.example.spotme.database.RepositoryInterface
@@ -35,7 +40,7 @@ fun AddProfileScreen(
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
         TextField(
             value = name.value,
@@ -80,14 +85,14 @@ fun AddProfileScreen(
                 coroutineScope.launch {
                     val defaultDebt = Debt(
                         id = null,
-                        userID = null, // Assuming this is set later when the profile is created
-                        name = "Default Debt", // Default debt name
-                        description = "Default Debt Description", // Default debt description
-                        transactions = emptyList(), // No transactions for default debt initially
-                        amount = 0.0, // Default amount
-                        canceled = false, // Default is not canceled
-                        createdDate = Date(), // Current date
-                        hidden = false // Default is not hidden
+                        userID = null,
+                        name = "Default Debt",
+                        description = "Default Debt Description",
+                        transactions = emptyList(),
+                        amount = 0.0,
+                        canceled = false,
+                        createdDate = Date(),
+                        hidden = false
                     )
 
                     ProfileViewModel.insertProfile(
@@ -95,8 +100,8 @@ fun AddProfileScreen(
                             id = null,
                             name = name.value.text,
                             description = description.value.text,
-                            amount = 0.0, // Assuming initial amount for profile is 0.0
-                            debts = listOf(defaultDebt), // Adding default debt to profile
+                            amount = 0.0,
+                            debts = listOf(defaultDebt),
                             paymentPreference = paymentPreference.value
                         )
                     )
