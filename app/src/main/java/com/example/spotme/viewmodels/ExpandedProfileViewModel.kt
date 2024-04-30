@@ -14,13 +14,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
+/** Contains the currently selected profile with everything */
 data class ProfileEntity(
     val profileWithEverything: ProfileWithEverything = StaticDataSource.profileWithEverything
 )
 
+/** Contains the ID of the currently selected profile */
 data class ExpandedProfileUIState(
-    val currentProfileId: Long = 2
+    val currentProfileId: Long = 0,
 )
+
+/**
+ * The view model for the expanded profile screen as well as any other screen
+ * that needs to be able to select or access the currently selected profile.
+ */
 class ExpandedProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     val repo = spotMeRepository
     private val _uiState = MutableStateFlow(ExpandedProfileUIState())
@@ -29,6 +36,7 @@ class ExpandedProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel
     var profileWithEverything: StateFlow<ProfileEntity> //Stores State collected from database
             = spotMeRepository.getSpecificProfileWithEverything(uiState.value.currentProfileId)
         .map { // convert to a flow of DatabaseUiState
+            Log.d("x_test", "test: " + it.profile.name)
             ProfileEntity(it?: StaticDataSource.profileWithEverything)
         }.stateIn(
             // Convert Flow to StateFlow
@@ -45,6 +53,18 @@ class ExpandedProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel
         }
         Log.d("x_setCurrentProfile", "profileId: " + id)
         profileWithEverything = repo.getSpecificProfileWithEverything(id)
+            .map { // convert to a flow of DatabaseUiState
+                ProfileEntity(it?: StaticDataSource.profileWithEverything)
+            }.stateIn(
+                // Convert Flow to StateFlow
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(ExpandedProfileViewModel.TIMEOUT_MILLIS),
+                initialValue = ProfileEntity()
+            )
+    }
+
+    fun setToNewestProfile() {
+        profileWithEverything = repo.getNewestProfile()
             .map { // convert to a flow of DatabaseUiState
                 ProfileEntity(it?: StaticDataSource.profileWithEverything)
             }.stateIn(

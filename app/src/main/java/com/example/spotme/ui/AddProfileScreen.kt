@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.spotme.R
+import com.example.spotme.SpotMeScreen
 import kotlinx.coroutines.launch
 import com.example.spotme.data.*
 import com.example.spotme.ui.elements.AddProfileNavButton
@@ -27,6 +28,7 @@ import com.example.spotme.viewmodels.ProfileViewModel
 fun AddProfileScreen(
     addProfileToDatabase: (String, String, String) -> Unit,
     navController: NavController,
+    postOpNavigation: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var name by remember { mutableStateOf("") }
@@ -90,6 +92,7 @@ fun AddProfileScreen(
                         name = ""
                         description = ""
                         paymentPreference = PaymentType.NONE
+                        postOpNavigation()
                     }
                 },
                 modifier = Modifier.fillMaxWidth()

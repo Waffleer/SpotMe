@@ -46,7 +46,7 @@ object StaticDataSource {
     )
 
     val profileWithEverything: ProfileWithEverything = ProfileWithEverything(
-        profile = com.example.spotme.database.Profile(1, "placeholder", "Placeholder","venmo",0.0,java.util.Date()),
+        profile = com.example.spotme.database.Profile(1, "static-placeholder", "Placeholder","venmo",0.0,java.util.Date()),
         debtsWithTransactions = listOf()
     )
 

@@ -277,7 +277,13 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.AddProfile.name) {
                 AddProfileScreen(
                     addProfileToDatabase = submitProfileToDatabase,
-                    navController = navController
+                    navController = navController,
+                    postOpNavigation = {
+                        //var newId = expandedProfileViewModel.newestProfileId.value
+                        expandedProfileViewModel.setToNewestProfile()
+                        //Log.d("x_newId", "New ID: " + newId)
+                        navController.navigate(SpotMeScreen.ExpandedProfile.name)
+                    }
                 )
             }
         }
