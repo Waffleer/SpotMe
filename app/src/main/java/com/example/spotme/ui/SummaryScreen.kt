@@ -45,6 +45,8 @@ import com.example.spotme.ui.elements.TestingNavButton
 import com.example.spotme.ui.elements.ToDetailsNavButton
 import com.example.spotme.ui.elements.ToSummaryNavButton
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
+import com.example.spotme.ui.elements.NavCard
 import com.example.spotme.ui.elements.details.AddTransactionCard
 
 /**
@@ -66,13 +68,11 @@ import com.example.spotme.ui.elements.details.AddTransactionCard
 @Composable
 fun SummaryScreen(
     repository: RepositoryInterface,
-    onDetailsPressed: () -> Unit,
-    onTestPressed: () -> Unit,
+    navController: NavController,
     onPrimaryDebtorClicked: (Long) -> Unit,
     onPrimaryCreditorClicked: (Long) -> Unit,
     submitTransaction: (Long, Double, String) -> Unit,
     modifier: Modifier = Modifier,
-    onAddProfilePressed: () -> Unit,
 ) {
     val summaryViewModel by remember { mutableStateOf(SummaryViewModel(repository))}
     val totalBalance by summaryViewModel.totalBalance.collectAsState()
@@ -166,51 +166,8 @@ fun SummaryScreen(
                     .wrapContentHeight()
             )
         }
-
-        //jank navbar
-        Card(
-            shape = RoundedCornerShape(16.dp), // Adjust the radius as needed
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-        ) {
-        NavigationBar(
-            content = {
-                Row( //NavButtons
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                {
-                    ToSummaryNavButton(
-                        labelResourceId = R.string.home_button,
-                        onClick = {  },
-                        modifier = Modifier
-                            .padding(4.dp)
-                    )
-                    AddProfileNavButton( //TODO
-                        labelResourceId = R.string.add_profile,
-                        onClick = { onAddProfilePressed() },
-                        modifier = Modifier
-                            .padding(4.dp)
-                    )
-                    ToDetailsNavButton(
-                        labelResourceId = R.string.details,
-                        onClick = { onDetailsPressed() },
-                        modifier = Modifier
-                            .padding(4.dp)
-                    )
-                    TestingNavButton(
-                        labelResourceId = R.string.TestingScreen,
-                        onClick = { onTestPressed() },
-                        modifier = Modifier
-                            .padding(4.dp)
-                    )
-                }
-            })//end of navbar
-    }
-
+        //New Nav card
+        NavCard(navController)
     }
 }
 

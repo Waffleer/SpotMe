@@ -47,7 +47,6 @@ import com.example.spotme.viewmodels.ExpandedProfileViewModel
 import com.example.spotme.viewmodels.FilterType
 import kotlinx.coroutines.launch
 
-
 /**
  * An Enum defining each screen alongside it's title.
  *
@@ -187,13 +186,7 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.Summary.name) {
                 SummaryScreen(
                     repository = spotMeRepository,
-                    onDetailsPressed = {
-                        navController.navigate(SpotMeScreen.Details.name)
-                    },
-                    onAddProfilePressed = {
-                        AddProfileViewModel.setCurrentProfileId(it)
-                        Log.d("x_addProfileClicked","profileId: " + it.toString())
-                        navController.navigate(SpotMeScreen.AddProfile.name)},
+                    navController = navController,
                     onPrimaryCreditorClicked = {
                         expandedProfileViewModel.setCurrentProfileId(it)
                         Log.d("x_primaryCreditorClicked","profileId: " + it.toString())
@@ -204,9 +197,6 @@ fun SpotMeApp(
                         Log.d("x_primaryDebtorClicked","profileId: " + it.toString())
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                     },
-                    onTestPressed = {
-                        navController.navigate(SpotMeScreen.TestingScreen.name)
-                    },
                     submitTransaction = submitTransactionToDatabase
                 )
             }
@@ -214,6 +204,7 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.Details.name) {
                 DetailsScreen(
                     uiState = detailsUiState,
+                    navController = navController,
                     onProfilePressed = {
                         expandedProfileViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
@@ -227,13 +218,7 @@ fun SpotMeApp(
                     },
                     onFilterAmountLowPressed = {
                         detailsViewModel.setFilterType(FilterType.AMOUNT_LOW)
-                    },
-                    onTestPressed = {
-                        navController.navigate(SpotMeScreen.TestingScreen.name)
-                    },
-                    onSummaryPressed = {
-                        navController.navigate(SpotMeScreen.Summary.name)
-                    },
+                    }
                 )
             }
 
@@ -291,14 +276,10 @@ fun SpotMeApp(
             }
             composable(route = SpotMeScreen.AddProfile.name) {
                 AddProfileScreen(
-                    addProfileToDatabase = submitProfileToDatabase
+                    addProfileToDatabase = submitProfileToDatabase,
+                    navController = navController
                 )
             }
-
-            /* Add Navigation to other screens here like so:
-            composable(route = SubShopScreen.Order.name) {
-
-            }*/
         }
     }
 }
