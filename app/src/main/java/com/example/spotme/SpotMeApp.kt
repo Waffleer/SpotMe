@@ -236,6 +236,7 @@ fun SpotMeApp(
                 EditProfileScreen(
                     expandedProfileViewModel = expandedProfileViewModel,
                     editProfile = editProfile,
+                    navController = navController,
                     navigateBackToProfile = {navController.navigateUp()}
                 )
 
@@ -244,8 +245,10 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.AddDebtTransaction.name) {
                 AddDebtTransactionScreen(
                     expandedProfileViewModel = expandedProfileViewModel,
-                    submitTransaction = submitTransactionToDatabase
-                )
+                    submitTransaction = submitTransactionToDatabase,
+                    navController = navController,
+
+                    )
             }
 
             composable(route = SpotMeScreen.TestingScreen.name) {

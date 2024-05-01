@@ -1,29 +1,48 @@
 package com.example.spotme.ui
 
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.spotme.R
-import com.example.spotme.SpotMeScreen
-import kotlinx.coroutines.launch
 import com.example.spotme.data.*
-import com.example.spotme.ui.elements.AddProfileNavButton
 import com.example.spotme.ui.elements.NavCard
-import com.example.spotme.ui.elements.ToDetailsNavButton
-import com.example.spotme.ui.elements.ToSummaryNavButton
-import com.example.spotme.viewmodels.ProfileViewModel
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProfileScreen(
     addProfileToDatabase: (String, String, String) -> Unit,
@@ -34,70 +53,184 @@ fun AddProfileScreen(
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var paymentPreference by remember { mutableStateOf(PaymentType.NONE) }
+    val paymentTypes = PaymentType.entries
+    var selectedText by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
 
-    val coroutineScope = rememberCoroutineScope()
-
-    Column() {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())
+    ) {
         Column(
             modifier = modifier
-                .fillMaxSize()
-                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+                //.padding(dimensionResource(R.dimen.padding_medium))
                 .weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
         ) {
-            TextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text("Name") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            TextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Description") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Payment Preference")
-            Column(
-                modifier = Modifier.padding(vertical = 4.dp)
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_small)),
+                contentAlignment = Alignment.TopCenter
             ) {
-                val paymentTypes = PaymentType.entries
-                for (i in paymentTypes.indices step 2) {
-                    val rowPaymentTypes = paymentTypes.slice(i until i + 2)
-                    Row {
-                        for (paymentType in rowPaymentTypes) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(end = 16.dp)
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(15.dp))
+                        .padding(top = 120.dp, start = 10.dp, end = 10.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(dimensionResource(R.dimen.padding_small))
+                    ) {
+                        Row {
+                            Text(
+                                text = stringResource(id = R.string.AddProfileScreen),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold, // Set the fontWeight to FontWeight.Bold
+
+                                modifier = Modifier
+                                    .padding(start = dimensionResource(R.dimen.padding_small))
+                                    .weight(1F)
+
+                            )
+                        }
+                        Column() {
+
+                            OutlinedTextField(
+                                value = name,
+                                onValueChange = { name = it },
+                                label = { Text("Name") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Text,
+                                    imeAction = ImeAction.Done
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = { } //submitButtonLogic() } //TODO HANDLE LATER
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(dimensionResource(R.dimen.padding_very_small))
+                            )
+                            OutlinedTextField(
+                                value = description,
+                                onValueChange = { description = it },
+                                label = { Text("Description") },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Text,
+                                    imeAction = ImeAction.Done
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = { } //submitButtonLogic() } //TODO HANDLE LATER
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(dimensionResource(R.dimen.padding_very_small))
+                            )
+
+
+                            val context = LocalContext.current
+                            val dropdownHint = "Preferred Payment Method"
+
+                            val coroutineScope = rememberCoroutineScope()
+
+
+                            //DROP DOWN MENU
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(dimensionResource(R.dimen.padding_small))
                             ) {
-                                RadioButton(
-                                    selected = paymentPreference == paymentType,
-                                    onClick = { paymentPreference = paymentType }
-                                )
-                                Text(paymentType.title)
+                                ExposedDropdownMenuBox(
+                                    expanded = expanded,
+                                    onExpandedChange = {
+                                        expanded = !expanded
+                                    }
+                                ) {
+                                    TextField(
+                                        value = selectedText,
+                                        onValueChange = {
+                                            selectedText = it
+                                        },
+                                        readOnly = true,
+                                        trailingIcon = {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                                expanded = expanded
+                                            )
+                                        },
+                                        modifier = Modifier.menuAnchor()
+                                    )
+
+                                    ExposedDropdownMenu(
+                                        expanded = expanded,
+                                        onDismissRequest = { expanded = false }
+                                    ) {
+                                        Text(text = dropdownHint)
+                                        paymentTypes.forEach { item ->
+                                            DropdownMenuItem(
+                                                text = { Text(text = item.name) },
+                                                onClick = {
+                                                    selectedText = item.name
+                                                    paymentPreference = item // Update paymentPreference here
+                                                    expanded = false
+                                                    Toast.makeText(
+                                                        context,
+                                                        item.name,
+                                                        Toast.LENGTH_SHORT
+                                                    )
+                                                        .show()
+                                                    Log.d(
+                                                        "j_selectedText_changed",
+                                                        "selectedText: $selectedText"
+                                                    )
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+                            }//end of drop down menu
+
+
+                            Column(
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(dimensionResource(R.dimen.padding_small))
+                            ) {
+                                IconButton(
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            addProfileToDatabase(
+                                                name,
+                                                description,
+                                                paymentPreference.toString()
+                                            )
+                                            // Reset fields after insertion
+                                            name = ""
+                                            description = ""
+                                            paymentPreference = PaymentType.NONE
+                                            postOpNavigation()
+                                        }
+                                    },
+                                    modifier = Modifier
+                                        //.align(Alignment.End)
+                                        .size(25.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Done,
+                                        contentDescription = stringResource(R.string.create_button),
+                                        tint = MaterialTheme.colorScheme.secondary,
+                                        modifier = Modifier
+                                            .size(dimensionResource(R.dimen.large_icon_size))
+
+                                    )
+                                }
+
+
                             }
+
                         }
                     }
                 }
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {
-                    coroutineScope.launch {
-                        addProfileToDatabase(name, description, paymentPreference.toString())
-                        // Reset fields after insertion
-                        name = ""
-                        description = ""
-                        paymentPreference = PaymentType.NONE
-                        postOpNavigation()
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Add Profile")
             }
         }
         NavCard(navController)
