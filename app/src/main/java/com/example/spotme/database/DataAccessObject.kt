@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
  * Data Access object
  */
 @Dao
-interface DataAccessObject { // TODO currently setup for sandwiches. Change that.
+interface DataAccessObject {
 
     /** Get ALL profiles with EVERYTHING. */
     @Transaction

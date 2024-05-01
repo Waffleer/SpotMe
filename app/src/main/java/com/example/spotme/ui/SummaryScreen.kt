@@ -58,8 +58,7 @@ import com.example.spotme.ui.elements.details.AddTransactionCard
  * And also allows you to submit transactions via a transaction card.
  *
  * @param repository the project's repository
- * @param onDetailsPressed lambda that navigates to the details screen.
- * @param onAddProfilePressed lambda that navigates to the add profile screen.
+ * @param navController used by the NavCard to navigate between screens.
  * @param onPrimaryDebtorClicked lambda that navigates to the primary debtor's expanded profile.
  * @param onPrimaryCreditorClicked lambda that navigates to the primary creditor's expanded profile.
  * @param submitTransaction lambda that submits a transaction to the database.

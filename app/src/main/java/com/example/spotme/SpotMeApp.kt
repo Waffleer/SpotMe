@@ -39,7 +39,6 @@ import com.example.spotme.ui.EditProfileScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
 import com.example.spotme.ui.TestingScreen
-import com.example.spotme.viewmodels.AddProfileViewModel
 import com.example.spotme.viewmodels.DBProfileViewModel
 import com.example.spotme.viewmodels.DBTransactionViewModel
 import com.example.spotme.viewmodels.DetailsViewModel
@@ -60,7 +59,6 @@ enum class SpotMeScreen(@StringRes val title: Int) {
     AddDebtTransaction(title = R.string.add_debt_transaction),
     TestingScreen(title = R.string.TestingScreen),
     EditProfileScreen(title = R.string.EditProfileScreen)
-    // TODO add other screens here
 }
 
 /**
