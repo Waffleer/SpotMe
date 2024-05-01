@@ -59,6 +59,7 @@
     <string name="remove_profile">Remove Profile</string>
     <string name="TestingScreen">Testing Screen</string>
     <string name="EditProfileScreen">Edit Profile</string>
+    <string name="AddProfileScreen">Add Profile</string>
     <string name="add_transaction">Add Transaction</string>
     <string name="remove_transaction">Remove Transaction</string>
 

@@ -4,8 +4,11 @@ import androidx.annotation.StringRes
 import com.example.spotme.R
 
 enum class PaymentType(val title: String) {
-    PAYPAL("paypal"),
-    VENMO("venmo"),
-    MONERO("monero"),
-    NONE("none"),
+    CASH("Cash"),
+    PAYPAL("PayPal"),
+    VENMO("Venmo"),
+    MONERO("Monero"),
+    APPLEPAY("Apple Pay"),
+    GOOGLEPAY("Google Pay"),
+    NONE("None"),
 }
