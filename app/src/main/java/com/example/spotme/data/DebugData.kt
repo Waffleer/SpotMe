@@ -11,7 +11,7 @@ object DebugData {
     val profiles = listOf(
         Profile(
             1,
-            "Apple",
+            "Austin",
             "Love apples",
             PaymentType.NONE.toString(),
             20.0,
@@ -113,9 +113,8 @@ object DebugData {
      * Resets the db to initial debug data
      */
     fun resetInitialData(db: LocalDatabase) {
-
-        // Run on a background thread
         /*
+        // Run on a background thread
         Executors.newSingleThreadExecutor().execute {
 
             // Get the database
@@ -133,7 +132,6 @@ object DebugData {
             profiles.forEach { dao.insertProfile(it) }
             debts.forEach { dao.insertDebt(it) }
             transactions.forEach { dao.insertTransaction(it) }
-        }
-        */
+        }*/
     }
 }

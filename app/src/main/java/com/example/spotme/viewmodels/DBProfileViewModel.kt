@@ -1,5 +1,7 @@
 package com.example.spotme.viewmodels
 
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.example.spotme.database.RepositoryInterface
 import androidx.lifecycle.ViewModel
 import com.example.spotme.data.PaymentType
@@ -20,8 +22,6 @@ class DBProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
     val repo = spotMeRepository
     private val _uiState = MutableStateFlow(ProfileState())
     val uiState: StateFlow<ProfileState> = _uiState.asStateFlow()
-
-
 
     suspend fun removeProfileById(id: Long) {
 
@@ -68,7 +68,7 @@ class DBProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             exitProcess(-1)
         }
         println("profId = :$profId")
-        val debt = Debt(null, profId, "", 0.0, "", false, date)
+        val debt = Debt(null, profId, "Primary Debt", 0.0, "", false, date)
         repo.insertDebt(debt)
         _uiState.update {currentState ->
             currentState.copy(
@@ -85,7 +85,7 @@ class DBProfileViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             exitProcess(-1)
         }
         println("profId = :$profId")
-        val debt = Debt(null, profId, name + "'s Debt", 0.0, "", false, date)
+        val debt = Debt(null, profId, "Primary Debt", 0.0, "", false, date)
         repo.insertDebt(debt)
         _uiState.update {currentState ->
             currentState.copy(

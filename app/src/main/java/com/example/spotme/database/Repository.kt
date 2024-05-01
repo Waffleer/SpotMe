@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
  * Interface outlining SubRepository class
  */
 interface RepositoryInterface { //
-
      /** Gets ALL profiles with ALL of their debts and transactions */
     fun getEverything(): Flow<List<ProfileWithEverything>>
     /** Get newest profile ID */
@@ -106,7 +105,7 @@ class Repository(val dao: DataAccessObject):
     override fun getNewestProfile(): Flow<ProfileWithEverything>
         = dao.getNewestProfile()
     override fun getProfiles(): Flow<List<Profile>>
-            = dao.getProfiles()
+        = dao.getProfiles()
     override fun getProfilesWithDebts(): Flow<List<ProfileWithDebts>>
         = dao.getProfilesWithDebts()
     override fun getSpecificProfileWithEverything(profileId: Long?): Flow<ProfileWithEverything>

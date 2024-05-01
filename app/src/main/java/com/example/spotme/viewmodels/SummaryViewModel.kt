@@ -22,7 +22,7 @@ data class TotalBalance(val totalBalance: Double = 0.0)
  */
 data class LargestCreditor(
     val largestCreditor: Profile
-        = StaticDataSource.eProfiles[4]
+        = StaticDataSource.criticalProfileDefaults[1]
 )
 
 /**
@@ -30,7 +30,7 @@ data class LargestCreditor(
  */
 data class LargestDebtor(
     val largestDebtor: Profile
-        = StaticDataSource.eProfiles[3]
+        = StaticDataSource.criticalProfileDefaults[0]
 )
 
 /**
@@ -62,6 +62,7 @@ data class Everything(
  */
 class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
 
+    /** The account's total balance */
     var totalBalance: StateFlow<TotalBalance>
             = spotMeRepository.getTotalBalance()
         .map {
@@ -72,26 +73,29 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             initialValue = TotalBalance()
         )
 
+    /** The guy to whom you owe the most money */
     var primaryCreditor: StateFlow<LargestCreditor>
             = spotMeRepository.getLargestCreditor()
         .map {
-            LargestCreditor(it?: StaticDataSource.eProfiles[4])
+            LargestCreditor(it?: StaticDataSource.criticalProfileDefaults[1])
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = LargestCreditor()
         )
 
+    /** The guy who owes you the most money */
     var primaryDebtor: StateFlow<LargestDebtor>
             = spotMeRepository.getLargestDebtor()
         .map {
-            LargestDebtor(it?: StaticDataSource.eProfiles[3])
+            LargestDebtor(it?: StaticDataSource.criticalProfileDefaults[0])
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = LargestDebtor()
         )
 
+    /** The oldest debt */
     var oldestDebt: StateFlow<OldestDebt>
         = spotMeRepository.getOldestDebt()
         .map{
@@ -109,6 +113,7 @@ class SummaryViewModel(spotMeRepository: RepositoryInterface): ViewModel() {
             initialValue = OldestDebt()
         )
 
+    /** All profiles, all debts, and all transactions */
     var everything: StateFlow<Everything>
         = spotMeRepository.getEverything()
         .map {

@@ -17,7 +17,7 @@ import com.example.spotme.data.DebugData
  */
 @Database(
     entities = [Profile::class, Debt::class, Transaction::class],
-    version = 5
+    version = 7
 ) //TODO update entities
 @TypeConverters(DateConverter::class)
 abstract class LocalDatabase : RoomDatabase() {

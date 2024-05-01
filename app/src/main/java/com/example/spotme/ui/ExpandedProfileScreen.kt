@@ -40,14 +40,15 @@ import java.text.SimpleDateFormat
  * Composable function to display an expanded profile screen.
  *
  * @param expandedProfileViewModel the view model for the expanded profile screen.
+ * @param onEditProfilePressed navigates to the edit profile screen.
  * @param modifier [Modifier] to be applied to the layout.
  */
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun ExpandedProfileScreen(
     expandedProfileViewModel: ExpandedProfileViewModel,
-    modifier: Modifier = Modifier,
     onEditProfilePressed: () -> Unit,
+    modifier: Modifier = Modifier,
     ) {
     val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
     val eProfile = profileEntity.profileWithEverything.profile
