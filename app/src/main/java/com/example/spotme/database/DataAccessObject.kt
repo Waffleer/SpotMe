@@ -23,9 +23,11 @@ interface DataAccessObject {
     /** Get all profiles. */
     @Query("SELECT * FROM Profile")
     fun getProfiles(): Flow<List<Profile>>
+
     /** Gets the newest profile with ALL debts and ALL transactions */
     @Query("SELECT * FROM Profile ORDER BY createdDate DESC LIMIT 1")
     fun getNewestProfile(): Flow<ProfileWithEverything>
+
     /** Get a specific profile with all debts and transactions.
      * @param profileId the id of the profile you want to get */
     @Query("SELECT * FROM Profile WHERE profileId = :profileId")
@@ -52,6 +54,14 @@ interface DataAccessObject {
     @Query("SELECT * FROM Debt ORDER BY createdDate LIMIT 1")
     fun getOldestDebt(): Flow<Debt>
 
+    /** Get ALL debts */
+    @Query("SELECT * FROM Debt")
+    fun getDebts(): Flow<List<Debt>>
+
+    /** Get ALL transactions */
+    @Query("SELECT * FROM 'Transaction'")
+    fun getTransactions(): Flow<List<com.example.spotme.database.Transaction>>
+
     // <--- Get Specific Entity --->
 
     /** Get a specific profile.
@@ -60,7 +70,7 @@ interface DataAccessObject {
     fun getSpecificProfile(profileId: Long?): Flow<Profile>
 
 
-     /** Get a specific profile but as a non flow object.
+    /** Get a specific profile but as a non flow object.
      * @param profileId the ID of the profile you want to get */
     @Query("SELECT * FROM Profile WHERE profileId = :profileId")
     suspend fun getSpecificProfileNonFlow(profileId: Long?): Profile
@@ -119,7 +129,6 @@ interface DataAccessObject {
     suspend fun deleteProfile(
         profile: Profile,
     )
-
 
 
     /**
