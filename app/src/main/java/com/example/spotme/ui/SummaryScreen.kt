@@ -1,7 +1,6 @@
 package com.example.spotme.ui
 
 import android.icu.text.NumberFormat
-import android.icu.text.SimpleDateFormat
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -12,9 +11,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,45 +34,65 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.spotme.R
 import com.example.spotme.database.RepositoryInterface
-import com.example.spotme.ui.elements.NavButton
 import com.example.spotme.viewmodels.SummaryViewModel
 import kotlin.math.absoluteValue
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.NavigationBar
+import com.example.spotme.ui.elements.AddProfileNavButton
+import com.example.spotme.ui.elements.TestingNavButton
+import com.example.spotme.ui.elements.ToDetailsNavButton
+import com.example.spotme.ui.elements.ToSummaryNavButton
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
+import com.example.spotme.ui.elements.NavCard
 import com.example.spotme.ui.elements.details.AddTransactionCard
 
-
+/**
+ * Displays a summary of account information including:
+ *  Overall Balance
+ *  Who owes you the most money (Primary Debtor)
+ *  Who you owe the most money to (Primary Creditor)
+ *
+ * And also allows you to submit transactions via a transaction card.
+ *
+ * @param repository the project's repository
+ * @param navController used by the NavCard to navigate between screens.
+ * @param onPrimaryDebtorClicked lambda that navigates to the primary debtor's expanded profile.
+ * @param onPrimaryCreditorClicked lambda that navigates to the primary creditor's expanded profile.
+ * @param submitTransaction lambda that submits a transaction to the database.
+ * @param modifier controls the form of the composable.
+ */
 @Composable
 fun SummaryScreen(
     repository: RepositoryInterface,
-    onDetailsPressed: () -> Unit,
-    onPlusPressed: () -> Unit,
-    onTestPressed: () -> Unit,
+    navController: NavController,
     onPrimaryDebtorClicked: (Long) -> Unit,
     onPrimaryCreditorClicked: (Long) -> Unit,
     submitTransaction: (Long, Double, String) -> Unit,
-    modifier: Modifier = Modifier
-    ) {
+    modifier: Modifier = Modifier,
+) {
     val summaryViewModel by remember { mutableStateOf(SummaryViewModel(repository))}
     val totalBalance by summaryViewModel.totalBalance.collectAsState()
     val primaryDebtor by summaryViewModel.primaryDebtor.collectAsState()
     val primaryCreditor by summaryViewModel.primaryCreditor.collectAsState()
-    val oldestDebt by summaryViewModel.oldestDebt.collectAsState()
     val everything by summaryViewModel.everything.collectAsState()
+    //val oldestDebt by summaryViewModel.oldestDebt.collectAsState()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center
     ) {
-        Column(modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .padding(dimensionResource(R.dimen.padding_medium))
-            .weight(1f),
+        Column(
+            modifier = modifier
+                .verticalScroll(rememberScrollState())
+                .padding(dimensionResource(R.dimen.padding_medium))
+                .weight(1f),
         ) {
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    //containerColor = MaterialTheme.colorScheme.tertiaryContainer //could be used later if we figure out color schemes
                 ),
                 modifier = modifier
                     .fillMaxWidth()
@@ -86,23 +105,29 @@ fun SummaryScreen(
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = modifier
                     )
-                    Text(NumberFormat.getCurrencyInstance().format(totalBalance.totalBalance),
+                    var color = MaterialTheme.colorScheme.onTertiaryContainer
+                    if (totalBalance.totalBalance < 0) {
+                        color = Color.Red
+                    }
+                    Text(
+                        NumberFormat.getCurrencyInstance().format(totalBalance.totalBalance),
                         style = MaterialTheme.typography.headlineMedium,
+                        color = color,
                         modifier = modifier
                     )
                 }
             }
 
-            DebtorItem(
+            DebtorItem( // Primary Debtor Card
                 label = stringResource(R.string.summary_debtor),
                 summaryViewModel = summaryViewModel,
-                visitProfile = { onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!)}
+                visitProfile = { onPrimaryDebtorClicked(primaryDebtor.largestDebtor.profileId!!) }
             )
 
-            CreditorItem(
+            CreditorItem( // Primary Creditor Card
                 label = stringResource(R.string.summary_creditor),
                 summaryViewModel = summaryViewModel,
-                visitProfile = {onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!)}
+                visitProfile = { onPrimaryCreditorClicked(primaryCreditor.largestCreditor.profileId!!) }
             )
             /* REMOVED BECAUSE WE MADE DEBTS USELESS
             Card(
@@ -126,54 +151,32 @@ fun SummaryScreen(
                         style = MaterialTheme.typography.titleMedium)
                 }
             }*/
-            val names = everything.profilesWithEverything.map { Pair(it.profile.name, it.profile.profileId) }
+            val names = everything.profilesWithEverything.map {
+                Pair(
+                    it.profile.name,
+                    it.profile.profileId
+                )
+            }
             AddTransactionCard(
                 names = names,
                 submitTransaction = submitTransaction,
                 modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-
             )
         }
-
-        //Basic Nav Buttons
-        Row( //NavButtons
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-        {
-            NavButton(
-                labelResourceId = R.string.details,
-                onClick = { onDetailsPressed() },
-                modifier = Modifier
-                    //.padding(8.dp)
-            )
-            NavButton(
-                labelResourceId = R.string.add_profile,
-                onClick = {},
-                modifier = Modifier.width(140.dp)
-                    //.padding(4.dp)
-            )
-            NavButton(
-                labelResourceId = R.string.plus_button,
-                onClick = { onPlusPressed() },
-                modifier = Modifier
-                    //.padding(8.dp)
-            )
-        }
-        NavButton(
-            labelResourceId = R.string.TestingScreen,
-            onClick = { onTestPressed() },
-            modifier = Modifier
-                .padding(4.dp)
-                .fillMaxWidth()
-        )
+        //New Nav card
+        NavCard(navController)
     }
 }
 
+/**
+ * Displays information about the profile that owes you the most money.
+ * @param label Describes the significance of the balance information.
+ * @param summaryViewModel The summary screen's view model
+ * @param visitProfile lambda that navigates to the display profile's expanded profile screen.
+ * @param modifier dictates the form of the composable.
+ */
 @Composable
 fun DebtorItem(
     label: String,
@@ -249,10 +252,12 @@ fun DebtorItem(
                             .align(Alignment.CenterVertically)
                             .padding(dimensionResource(id = R.dimen.padding_small))
                     )
+                    var color = MaterialTheme.colorScheme.primaryContainer
+                    //if (profile.largestDebtor.totalDebt > 0) { color = Color.Black }
                     Text(
                         text = NumberFormat.getCurrencyInstance().format(profile.largestDebtor.totalDebt),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primaryContainer,
+                        color = color,
                         modifier = modifier.align(Alignment.CenterVertically)
                     )
                 }
@@ -261,6 +266,13 @@ fun DebtorItem(
 
     }
 }
+/**
+ * Displays information about the profile that you owe the most money to.
+ * @param label Describes the significance of the balance information.
+ * @param summaryViewModel The summary screen's view model
+ * @param visitProfile lambda that navigates to the display profile's expanded profile screen.
+ * @param modifier dictates the form of the composable.
+ */
 @Composable
 fun CreditorItem(
     label: String,
@@ -337,10 +349,12 @@ fun CreditorItem(
                             .align(Alignment.CenterVertically)
                             .padding(dimensionResource(id = R.dimen.padding_small))
                     )
+                    var color = MaterialTheme.colorScheme.primaryContainer
+                    if (profile.largestCreditor.totalDebt < 0) { color = Color.Red }
                     Text(
                         NumberFormat.getCurrencyInstance().format(profile.largestCreditor.totalDebt.absoluteValue),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primaryContainer,
+                        color = color,
                         modifier = modifier.align(Alignment.CenterVertically)
                     )
                 }
@@ -350,6 +364,12 @@ fun CreditorItem(
     }
 }
 
+/**
+ * Button used to expand each profile card in order to display additional information.
+ * @param expanded Whether the profile is currently expanded or not.
+ * @param onClick Lambda that expands or contracting the profile.
+ * @param modifier Defines the form of the composable.
+ */
 @Composable
 private fun ProfileExpansionButton(
     expanded: Boolean,

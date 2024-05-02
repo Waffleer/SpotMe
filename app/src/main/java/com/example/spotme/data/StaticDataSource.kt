@@ -46,7 +46,7 @@ object StaticDataSource {
     )
 
     val profileWithEverything: ProfileWithEverything = ProfileWithEverything(
-        profile = com.example.spotme.database.Profile(1, "placeholder", "Placeholder","venmo",0.0,java.util.Date()),
+        profile = com.example.spotme.database.Profile(1, "static-placeholder", "Placeholder","venmo",0.0,java.util.Date()),
         debtsWithTransactions = listOf()
     )
 
@@ -54,6 +54,14 @@ object StaticDataSource {
         com.example.spotme.database.Profile(1,"Nameason","Biography1","", 100.0, Date(1000)),
         com.example.spotme.database.Profile(2,"Namason jr","Biography2","paypal", 200.0, Date(0)),
         com.example.spotme.database.Profile(3,"Jason2","Jasons Bio","venmo",-100.0, Date(100000)),
+        com.example.spotme.database.Profile(-1,"No Debtors","There are no profiles that owe you money","NONE",0.0, Date()),
+        com.example.spotme.database.Profile(-1,"No Creditors","You don't owe money to any creditors","NONE",0.0, Date()),
+    )
+
+    /** Used to populate the primary debtor and creditor cards when no debtors or creditors exist */
+    val criticalProfileDefaults: List<com.example.spotme.database.Profile> = listOf(
+        com.example.spotme.database.Profile(-1,"No Debtors","There are no profiles that owe you money","NONE",0.0, Date()),
+        com.example.spotme.database.Profile(-1,"No Creditors","You don't owe money to any creditors","NONE",0.0, Date()),
     )
 
     //Only implemented profilesWithEverything for first profile (id = 1)

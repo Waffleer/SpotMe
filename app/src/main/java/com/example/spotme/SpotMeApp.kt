@@ -1,7 +1,6 @@
 package com.example.spotme
 
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,7 +33,9 @@ import com.example.spotme.data.StaticDataSource
 import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Repository
 import com.example.spotme.ui.AddDebtTransactionScreen
+import com.example.spotme.ui.AddProfileScreen
 import com.example.spotme.ui.DetailsScreen
+import com.example.spotme.ui.EditProfileScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
 import com.example.spotme.ui.TestingScreen
@@ -44,9 +44,7 @@ import com.example.spotme.viewmodels.DBTransactionViewModel
 import com.example.spotme.viewmodels.DetailsViewModel
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
 import com.example.spotme.viewmodels.FilterType
-import com.example.spotme.viewmodels.SpotMeViewModel
 import kotlinx.coroutines.launch
-
 
 /**
  * An Enum defining each screen alongside it's title.
@@ -56,10 +54,11 @@ import kotlinx.coroutines.launch
 enum class SpotMeScreen(@StringRes val title: Int) {
     Summary(title = R.string.summary_header),
     Details(title = R.string.details_screen),
-    ExpandedProfile(title = R.string.expanded_profile_screen),
+    ExpandedProfile(title = R   .string.expanded_profile_screen),
+    AddProfile(title = R.string.add_profile),
     AddDebtTransaction(title = R.string.add_debt_transaction),
-    TestingScreen(title = R.string.TestingScreen)
-    // TODO add other screens here
+    TestingScreen(title = R.string.TestingScreen),
+    EditProfileScreen(title = R.string.EditProfileScreen)
 }
 
 /**
@@ -104,12 +103,10 @@ fun SpotMeAppBar(
 /**
  * Runs the app and sets up screen navigation
  *
- * @param localViewModel the intermediary between the UI and data layers
  * @param navController manages navigation between screen locations
  */
 @Composable
 fun SpotMeApp(
-    localViewModel: SpotMeViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
     //get current backstack entry
@@ -124,11 +121,10 @@ fun SpotMeApp(
     val localDatabase = LocalDatabase.getInstance(LocalContext.current)
     val spotMeRepository = Repository.getRepository(localDatabase)
     // <--------------------------------------------------------->
-    val detailsViewModel: DetailsViewModel = DetailsViewModel(spotMeRepository)
+    val detailsViewModel = DetailsViewModel(spotMeRepository)
     val expandedProfileViewModel by remember { mutableStateOf(ExpandedProfileViewModel(spotMeRepository))}
-    val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
-    val dbProfileViewModel: DBProfileViewModel = DBProfileViewModel(spotMeRepository)
-    val dbTransactionViewModel: DBTransactionViewModel = DBTransactionViewModel(spotMeRepository, updateProfile_ = { pid: Long, amount: Double ->
+    val dbProfileViewModel = DBProfileViewModel(spotMeRepository)
+    val dbTransactionViewModel = DBTransactionViewModel(spotMeRepository, updateProfile_ = { pid: Long, amount: Double ->
         coroutineScope.launch {//Passing though the edit amount from dbProfileViewModel
             dbProfileViewModel.editProfileAmount(pid, amount)
         }
@@ -146,19 +142,38 @@ fun SpotMeApp(
                 navigateUp = {
                     navController.popBackStack() //This sends you to the last screen
                     //navController.navigate(SpotMeScreen.Summary.name) - what it was before
-                }
+                },
             )
         }
     ){ innerPadding ->
         // Local UI State from SpotMeViewModel/LocalUiState
         val detailsUiState by detailsViewModel.uiState.collectAsState()
-        val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() //Needs to initilize the stateflow for my sorting, i hate that this is necessary
         val profileState by dbProfileViewModel.uiState.collectAsState()
+        //Needs to initialize the stateflow for my sorting, i hate that this is necessary
+        val detailsProfiles by detailsViewModel.profilesFlow.collectAsState() // What the hell? -JS
         val detailsCurrentProfile = StaticDataSource.profiles[0]
 
+        // <----- Submit Transaction to Database lambda ----->
+        val submitTransactionToDatabase: (Long, Double, String) -> Unit = { userId, amount, description ->
+            coroutineScope.launch {
+                dbTransactionViewModel.createTransaction(userId, amount, description)
+            }
+        }
+        // <----- Add Profile to Database Lambda ----->
+        val submitProfileToDatabase: (String, String, String) -> Unit = { username, description, paymentPref ->
+            coroutineScope.launch {
+                dbProfileViewModel.createProfile(username,description, paymentPref)
+            }
+        }
+        // <----- Edit Profile ----->
+        val editProfile: (Long, String, String, String) -> Unit = { pid, name, description, paymentPref ->
+            coroutineScope.launch {
+                dbProfileViewModel.editProfile(pid, name, description, paymentPref)
+            }
+
+        }
 
         // ExpandedProfileScreen Stuff
-
         NavHost(
             navController = navController,
             startDestination = SpotMeScreen.Summary.name,
@@ -166,21 +181,10 @@ fun SpotMeApp(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
             composable(route = SpotMeScreen.Summary.name) {
-                val context = LocalContext.current
-                // Submits transaction to database
-                val submitTransactionToDatabase: (Long, Double, String) -> Unit = { userId, amount, description ->
-                    coroutineScope.launch {
-                        dbTransactionViewModel.createTransaction(userId, amount, description)
-                    }
-                }
                 SummaryScreen(
                     repository = spotMeRepository,
-                    onDetailsPressed = {
-                        navController.navigate(SpotMeScreen.Details.name)
-                    },
-                    onPlusPressed = {},
+                    navController = navController,
                     onPrimaryCreditorClicked = {
                         expandedProfileViewModel.setCurrentProfileId(it)
                         Log.d("x_primaryCreditorClicked","profileId: " + it.toString())
@@ -191,9 +195,6 @@ fun SpotMeApp(
                         Log.d("x_primaryDebtorClicked","profileId: " + it.toString())
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                     },
-                    onTestPressed = {
-                        navController.navigate(SpotMeScreen.TestingScreen.name)
-                    },
                     submitTransaction = submitTransactionToDatabase
                 )
             }
@@ -201,14 +202,13 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.Details.name) {
                 DetailsScreen(
                     uiState = detailsUiState,
-                    onSummeryPressed = {},
+                    navController = navController,
                     onProfilePressed = {
-                        //detailsViewModel.setCurrentProfile(it)
                         expandedProfileViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.ExpandedProfile.name)
                     },
                     onAddPressed = {
-                        detailsViewModel.setCurrentProfile(it)
+                        expandedProfileViewModel.setCurrentProfileId(it)
                         navController.navigate(SpotMeScreen.AddDebtTransaction.name)
                     },
                     onFilterAmountHighPressed = {
@@ -222,17 +222,32 @@ fun SpotMeApp(
 
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
-                    //profile = detailsUiState.currentProfile
-                    profile = detailsCurrentProfile,
                     expandedProfileViewModel = expandedProfileViewModel,
+                    navController = navController,
+                    onEditProfilePressed = {
+                        navController.navigate(SpotMeScreen.EditProfileScreen.name)
+                    },
                 )
+
+            }
+
+            composable(route = SpotMeScreen.EditProfileScreen.name) {
+                EditProfileScreen(
+                    expandedProfileViewModel = expandedProfileViewModel,
+                    editProfile = editProfile,
+                    navController = navController,
+                    navigateBackToProfile = {navController.navigateUp()}
+                )
+
             }
 
             composable(route = SpotMeScreen.AddDebtTransaction.name) {
                 AddDebtTransactionScreen(
-                    //profile = detailsUiState.currentProfile
-                    profile = detailsCurrentProfile
-                )
+                    expandedProfileViewModel = expandedProfileViewModel,
+                    submitTransaction = submitTransactionToDatabase,
+                    navController = navController,
+
+                    )
             }
 
             composable(route = SpotMeScreen.TestingScreen.name) {
@@ -261,12 +276,18 @@ fun SpotMeApp(
                     },
                 )
             }
-
-
-            /* Add Navigation to other screens here like so:
-            composable(route = SubShopScreen.Order.name) {
-
-            }*/
+            composable(route = SpotMeScreen.AddProfile.name) {
+                AddProfileScreen(
+                    addProfileToDatabase = submitProfileToDatabase,
+                    navController = navController,
+                    postOpNavigation = {
+                        //var newId = expandedProfileViewModel.newestProfileId.value
+                        expandedProfileViewModel.setToNewestProfile()
+                        //Log.d("x_newId", "New ID: " + newId)
+                        navController.navigate(SpotMeScreen.ExpandedProfile.name)
+                    }
+                )
+            }
         }
     }
 }

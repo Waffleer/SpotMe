@@ -7,12 +7,16 @@
     //Button Labels
     <string name="back_button">Back</string>
     <string name="add_button">Add</string>
+    <string name="home_button">Home</string>
+    <string name="edit_button">Edit</string>
+    <string name="list_button">List</string>
+    <string name="testing_button">Testing</string>
     <string name="create_button">Create</string>
     <string name="details_screen">Details Screen</string>
     <string name="expanded_profile_screen">Expanded Profile Screen</string>
     <string name="details">Details</string>
     <string name="plus_button">+</string>
-    <string name="add_debt_transaction">Add Debt</string>
+    <string name="add_debt_transaction">Add Transaction</string>
     <string name="groups">Group</string>
     <string name="add_group_transaction">Add Group</string>
     <string name="filter">Filter</string>
@@ -26,12 +30,16 @@
     <string name="transaction_description">Transaction Description</string>
     <string name="enter_amount">Enter an Amount Please!</string>
     <string name="enter_description">Enter a Description Please!</string>
+    <string name="transaction_submitted">Transaction Submitted!</string>
 
     //Expanded Profile Screen strings
     <string name="about">About</string>
-    <string name="memberSince">Member Since: </string>
+    <string name="profileCreated">Profile Created: </string>
     <string name="debtsTrans">Debts and Transactions</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="profile_edited">Profile Successfully Edited</string>
+    <string name="enter_name">Enter a Profile Name</string>
+
 
     //Summary Screen stuff
     <string name="summary_balance">Overall Balance:\u0020</string>
@@ -50,6 +58,8 @@
     <string name="add_profile">Add Profile</string>
     <string name="remove_profile">Remove Profile</string>
     <string name="TestingScreen">Testing Screen</string>
+    <string name="EditProfileScreen">Edit Profile</string>
+    <string name="AddProfileScreen">Add Profile</string>
     <string name="add_transaction">Add Transaction</string>
     <string name="remove_transaction">Remove Transaction</string>
 

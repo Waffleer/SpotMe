@@ -5,4 +5,10 @@
     <dimen name="padding_medium">16dp</dimen>
     <dimen name="thickness_divider">1dp</dimen>
     <dimen name="detail_card_list_padding_top">24dp</dimen>
+
+    <dimen name="navbar_icon_size">100dp</dimen>
+    <dimen name="submit_icon">35dp</dimen>
+    <dimen name="small_icon_size">30dp</dimen>
+    <dimen name="large_icon_size">60dp</dimen>
+
 </resources>
