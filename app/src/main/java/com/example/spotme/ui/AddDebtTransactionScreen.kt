@@ -56,6 +56,9 @@ fun AddDebtTransactionScreen(
     var transactionAmountState by remember { mutableStateOf("") }
     // Context
     val context = LocalContext.current
+    //for the sounds
+    val audioContext = LocalContext.current
+    val audioPlayer = MediaPlayer.create(audioContext, R.raw.applepay)
 
     val submitButtonLogic = { // For submitting transaction.
         if (transactionAmountState != "") {
@@ -64,6 +67,7 @@ fun AddDebtTransactionScreen(
                 transactionAmountState.toDoubleOrNull() ?: 0.0,
                 transactionDescriptionState
             )
+            audioPlayer.start()
             transactionAmountState = ""
             transactionDescriptionState = ""
             Toast.makeText(
