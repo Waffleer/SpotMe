@@ -4,6 +4,7 @@ import com.example.spotme.database.Debt
 import com.example.spotme.database.LocalDatabase
 import com.example.spotme.database.Profile
 import com.example.spotme.database.Transaction
+import kotlinx.coroutines.runBlocking
 import java.util.Date
 import java.util.concurrent.Executors
 
@@ -110,28 +111,38 @@ object DebugData {
     )
 
     /**
-     * Resets the db to initial debug data
+     * Resets the db to initial debug data asynchronously
+     */
+    suspend fun resetInitialDataAsync(db: LocalDatabase) {
+        // Get the database
+        val dao = db.getDao()
+
+        // Force a database call to ensure it's open
+        dao.getEverything()
+
+        // Clear the database
+        db.clearAllTables()
+
+        // Append debug data
+        profiles.forEach { dao.insertProfile(it) }
+        debts.forEach { dao.insertDebt(it) }
+        transactions.forEach { dao.insertTransaction(it) }
+    }
+
+    /**
+     * Resets the db to initial debug data in another thread
      */
     fun resetInitialData(db: LocalDatabase) {
-        /*
         // Run on a background thread
         Executors.newSingleThreadExecutor().execute {
 
-            // Get the database
-            val dao = db.getDao()
+            // Run in a coroutine
+            runBlocking {
 
-            // Force a database call to ensure it's open
-            dao.getEverything()
+                // Run the async version
+                resetInitialDataAsync(db)
 
-            // Clear the database
-            db.clearAllTables()
-
-            // Append debug data
-            for (val profile in profiles)
-                dao.insertProfile(profile)
-            profiles.forEach { dao.insertProfile(it) }
-            debts.forEach { dao.insertDebt(it) }
-            transactions.forEach { dao.insertTransaction(it) }
-        }*/
+            }
+        }
     }
 }
