@@ -64,7 +64,6 @@ fun ExpandedProfileScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.inverseOnSurface)
                 .padding(top = dimensionResource(R.dimen.detail_card_list_padding_top))
                 .verticalScroll(rememberScrollState())
                 .weight(1f),
