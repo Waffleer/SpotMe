@@ -63,6 +63,7 @@ class ExpandedProfileUITest {
                 expandedProfileViewModel = viewModel,
                 navController = navController,
                 onEditProfilePressed = {},
+                onClickeditTransactionCanceled = {a,b,c -> }
             )
         }
 
