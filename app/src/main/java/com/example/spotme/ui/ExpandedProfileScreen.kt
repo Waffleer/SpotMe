@@ -31,7 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.spotme.R
+import com.example.spotme.ui.elements.NavCard
 import com.example.spotme.ui.elements.ToEditProfileNavButton
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
 import java.text.SimpleDateFormat
@@ -47,6 +49,7 @@ import java.text.SimpleDateFormat
 @Composable
 fun ExpandedProfileScreen(
     expandedProfileViewModel: ExpandedProfileViewModel,
+    navController: NavController,
     onEditProfilePressed: () -> Unit,
     modifier: Modifier = Modifier,
     ) {
@@ -57,90 +60,92 @@ fun ExpandedProfileScreen(
     // ALL OF THE OLD CODE IS COMMENTED BELOW | Nothing is deleted
     // All I did was replace the profile stuff with eProfile and eDebt
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.inverseOnSurface)
-            .padding(top = dimensionResource(R.dimen.detail_card_list_padding_top))
-            .verticalScroll(rememberScrollState()),
-    ) {
-        Text(
-            text = eProfile.name,
+    Column() {
+        Column(
             modifier = Modifier
-                .padding(bottom = 8.dp)
-                .align(Alignment.CenterHorizontally),
-            fontSize = 35.sp,
-            fontWeight = FontWeight.Bold
-        )
-        val formatter2 = SimpleDateFormat("MMM dd yyyy")
-        Text(
-            text = stringResource(id = R.string.profileCreated) + " ${formatter2.format(eProfile.createdDate)}",
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-                .align(Alignment.CenterHorizontally),
-            fontSize = 16.sp,
-            color = Color.Gray,
-        )
-
-        // Display about information
-        Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                .border(
-                    width = 1.dp,
-                    color = Color.Gray,
-                    shape = RoundedCornerShape(8.dp),
-                )
-                .padding(16.dp)
-                .align(Alignment.CenterHorizontally)
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.inverseOnSurface)
+                .padding(top = dimensionResource(R.dimen.detail_card_list_padding_top))
+                .verticalScroll(rememberScrollState())
+                .weight(1f),
         ) {
-            Column {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.about),
-                        modifier = Modifier,
+            Text(
+                text = eProfile.name,
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                fontSize = 35.sp,
+                fontWeight = FontWeight.Bold
+            )
+            val formatter2 = SimpleDateFormat("MMM dd yyyy")
+            Text(
+                text = stringResource(id = R.string.profileCreated) + " ${formatter2.format(eProfile.createdDate)}",
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally),
+                fontSize = 16.sp,
+                color = Color.Gray,
+            )
+
+            // Display about information
+            Box(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .border(
+                        width = 1.dp,
+                        color = Color.Gray,
+                        shape = RoundedCornerShape(8.dp),
+                    )
+                    .padding(16.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Column {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.about),
+                            modifier = Modifier,
                             //.padding(bottom = 16.dp),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                        )
+                        ToEditProfileNavButton(
+                            labelResourceId = R.string.edit_profile,
+                            onClick = { onEditProfilePressed() }, //TODO make button work
+                            modifier = Modifier
+                            //.padding(4.dp)
+                        )
+                    }
+                    Text(
+                        text = "${eProfile.description}\n" +
+                                "Prefers ${eProfile.paymentPreference}" //TODO could use a venmo or paypal logo once we have the data
+                    )
+                }
+            }
+
+            // Display debts and transactions
+            Box(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .border(
+                        width = 1.dp,
+                        color = Color.Gray,
+                        shape = RoundedCornerShape(8.dp),
+                    )
+                    .padding(16.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Column {
+                    Text(
+                        text = stringResource(id = R.string.debtsTrans),
+                        modifier = Modifier.padding(bottom = 16.dp),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                     )
-                    ToEditProfileNavButton(
-                        labelResourceId = R.string.edit_profile,
-                        onClick = { onEditProfilePressed() }, //TODO make button work
-                        modifier = Modifier
-                        //.padding(4.dp)
-                    )
-                }
-                Text(
-                    text = "${eProfile.description}\n" +
-                            "Prefers ${eProfile.paymentPreference}" //TODO could use a venmo or paypal logo once we have the data
-                )
-            }
-        }
-
-        // Display debts and transactions
-        Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                .border(
-                    width = 1.dp,
-                    color = Color.Gray,
-                    shape = RoundedCornerShape(8.dp),
-                )
-                .padding(16.dp)
-                .align(Alignment.CenterHorizontally)
-        ) {
-            Column {
-                Text(
-                    text = stringResource(id = R.string.debtsTrans),
-                    modifier = Modifier.padding(bottom = 16.dp),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                )
 
                     // Display each debt and its transactions
                     eDebts.forEach { debt ->
@@ -152,7 +157,7 @@ fun ExpandedProfileScreen(
                                 .fillMaxWidth()
                                 .padding(bottom = 16.dp)
                                 .clip(RoundedCornerShape(16.dp)),
-                            ) {
+                        ) {
                             Column(
                                 modifier = Modifier
                                     .padding(8.dp)
@@ -194,8 +199,9 @@ fun ExpandedProfileScreen(
                         }
 
                     }
+                }
             }
         }
-
+        NavCard(navController)
     }
 }

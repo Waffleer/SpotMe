@@ -223,6 +223,7 @@ fun SpotMeApp(
             composable(route = SpotMeScreen.ExpandedProfile.name) {
                 ExpandedProfileScreen(
                     expandedProfileViewModel = expandedProfileViewModel,
+                    navController = navController,
                     onEditProfilePressed = {
                         navController.navigate(SpotMeScreen.EditProfileScreen.name)
                     },
