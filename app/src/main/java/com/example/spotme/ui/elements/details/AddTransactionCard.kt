@@ -46,6 +46,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spotme.R
 
+
+/**
+ * Composable function to display a card for adding transactions.
+ * Users can input transaction details such as amount, description, and select a user from a dropdown menu.
+ *
+ * @param names List of pairs containing user names and their corresponding IDs.
+ * @param submitTransaction Lambda function to submit a transaction.
+ * @param modifier Modifier for styling.
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTransactionCard(
@@ -187,9 +197,9 @@ fun AddTransactionCard(
                                         selectedText = item.first
                                         userId = item.second!!
                                         expanded = false
-                                        Toast.makeText(context, item.first, Toast.LENGTH_SHORT)
-                                            .show()
-                                        //userId = names.find { it.first.equals(item.first)}?.second!!
+
+                                        Toast.makeText(context, item.first, Toast.LENGTH_SHORT).show()
+
                                         Log.d("j_selectedText_changed", "userId: " + userId)
                                     }
                                 )
@@ -228,38 +238,6 @@ fun AddTransactionCard(
                         .padding(dimensionResource(R.dimen.padding_very_small))
                         .testTag("add_transaction_description")
                 )
-// BOTTOM BUTTON IMPLEMENTATION
-//                Column(
-//                    modifier = Modifier
-//                        .align(Alignment.CenterHorizontally)
-//                        .padding(dimensionResource(R.dimen.padding_small))
-//                ) {
-//                    IconButton(
-//                        onClick = {
-//                            if (amount != "" && description != "") {
-//                                submitTransaction(userId, amount.toDouble(), description)
-//                                amount = ""
-//                                description = ""
-//                            } else if (amount == ""){
-//                                Toast.makeText(context, context.resources.getString(R.string.enter_amount), Toast.LENGTH_SHORT).show()
-//                            } else {
-//                                Toast.makeText(context, context.resources.getString(R.string.enter_description), Toast.LENGTH_SHORT).show()
-//                            }
-//                        },
-//                        modifier = Modifier
-//                            //.align(Alignment.End)
-//                            .size(25.dp)
-//
-//                    ) {
-//                        Icon(
-//                            imageVector = Icons.Filled.Done,
-//                            contentDescription = stringResource(R.string.create_button),
-//                            tint = MaterialTheme.colorScheme.secondary
-//
-//                        )
-//                    }
-//                }
-
             }
         }
     }

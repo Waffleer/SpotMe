@@ -23,6 +23,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.spotme.R
 
+/**
+ * Composable function to create a navigation button.
+ *
+ * @param labelResourceId Resource ID for the label text of the button.
+ * @param onClick Callback function for button click.
+ * @param modifier Modifier for customizing the button layout.
+ */
+
 @Composable
 fun NavButton(
     @StringRes labelResourceId: Int,
@@ -157,31 +165,3 @@ fun ToEditProfileNavButton(
     }
 }
 
-//POTENTIALLY WILL BE USED IN THE FUTURE NOT SURE THO, TOO LAZY FOR THIS
-//@Composable
-//fun SpotMeNavigationBar(
-//    onDetailsPressed: () -> Unit,
-//    onTestPressed: () -> Unit,
-//) {
-//    Row(
-//        verticalAlignment = Alignment.CenterVertically,
-//        horizontalArrangement = Arrangement.Center,
-//        modifier = Modifier.fillMaxWidth()
-//    ) {
-//        ToDetailsNavButton(
-//            labelResourceId = R.string.details,
-//            onClick = { onDetailsPressed() },
-//            modifier = Modifier.padding(4.dp)
-//        )
-//        AddProfileNavButton(
-//            labelResourceId = R.string.add_profile,
-//            onClick = {},
-//            modifier = Modifier.padding(4.dp)
-//        )
-//        TestingNavButton(
-//            labelResourceId = R.string.TestingScreen,
-//            onClick = { onTestPressed() },
-//            modifier = Modifier.padding(4.dp)
-//        )
-//    }
-//}

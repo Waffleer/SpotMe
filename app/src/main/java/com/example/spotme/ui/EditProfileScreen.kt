@@ -49,7 +49,16 @@ import com.example.spotme.R
 import com.example.spotme.data.PaymentType
 import com.example.spotme.ui.elements.NavCard
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
-
+/**
+ * Composable function to display the edit profile screen.
+ * Allows users to edit their profile details such as name, description, and payment preference.
+ *
+ * @param expandedProfileViewModel ViewModel containing the profile data.
+ * @param editProfile Lambda function to edit the profile.
+ * @param navigateBackToProfile Lambda function to navigate back to the profile screen.
+ * @param navController NavController to handle navigation.
+ * @param modifier Modifier for styling.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
@@ -58,10 +67,12 @@ fun EditProfileScreen(
     navigateBackToProfile: () -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier
-    ) {
+) {
+    // Collecting profile data from ViewModel
     val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
     val eProfile = profileEntity.profileWithEverything.profile
 
+    // Mutable state variables for user inputs
     val userId by remember { mutableStateOf(eProfile.profileId) }
     var name by remember { mutableStateOf(eProfile.name) }
     var description by remember { mutableStateOf(eProfile.description) }
@@ -84,6 +95,7 @@ fun EditProfileScreen(
                     .padding(dimensionResource(R.dimen.padding_small)),
                 contentAlignment = Alignment.TopCenter
             ) {
+                // Card to contain profile editing fields
                 Card(
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                     modifier = Modifier
@@ -95,19 +107,19 @@ fun EditProfileScreen(
                             .padding(dimensionResource(R.dimen.padding_small))
                     ) {
                         Row {
+                            // Title for the edit profile screen
                             Text(
                                 text = stringResource(id = R.string.EditProfileScreen),
                                 fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold, // Set the fontWeight to FontWeight.Bold
-
+                                fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .padding(start = dimensionResource(R.dimen.padding_small))
                                     .weight(1F)
-
                             )
                         }
-                        Column() {
 
+                        Column() {
+                            // Input field for name
                             OutlinedTextField(
                                 value = name,
                                 onValueChange = { name = it },
@@ -123,6 +135,7 @@ fun EditProfileScreen(
                                     .fillMaxWidth()
                                     .padding(dimensionResource(R.dimen.padding_very_small))
                             )
+                            // Input field for description
                             OutlinedTextField(
                                 value = description,
                                 onValueChange = { description = it },
@@ -143,7 +156,7 @@ fun EditProfileScreen(
                             val dropdownHint = "Preferred Payment Method"
                             val paymentTypes = PaymentType.entries
 
-                            //DROP DOWN MENU
+                            // Dropdown menu for selecting payment method
                             Box(
                                 contentAlignment = Alignment.Center,
                                 modifier = Modifier
@@ -176,6 +189,7 @@ fun EditProfileScreen(
                                     ) {
                                         Text(text = dropdownHint)
                                         paymentTypes.forEach { item ->
+                                            // Dropdown menu items for each payment type
                                             DropdownMenuItem(
                                                 text = { Text(text = item.name) },
                                                 onClick = {
@@ -197,7 +211,7 @@ fun EditProfileScreen(
                                 }
                             }//end of drop down menu
 
-
+                            // Button to submit profile changes
                             Column(
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
@@ -205,6 +219,7 @@ fun EditProfileScreen(
                             ) {
                                 IconButton(
                                     onClick = {
+                                        // Validation and submission logic
                                         if (name != "" && description != "") {
                                             editProfile(userId!!, name, description, selectedText)
                                             Toast.makeText(
@@ -228,9 +243,9 @@ fun EditProfileScreen(
                                         }
                                     },
                                     modifier = Modifier
-                                        //.align(Alignment.End)
                                         .size(25.dp)
                                 ) {
+                                    // Icon for the submit button
                                     Icon(
                                         imageVector = Icons.Filled.Done,
                                         contentDescription = stringResource(R.string.create_button),
@@ -247,6 +262,7 @@ fun EditProfileScreen(
 
             }
         }
+        // Navigation card to navigate back
         NavCard(navController)
     }
 }
