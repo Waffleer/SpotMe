@@ -62,5 +62,7 @@
     <string name="AddProfileScreen">Add Profile</string>
     <string name="add_transaction">Add Transaction</string>
     <string name="remove_transaction">Remove Transaction</string>
+    <string name="cancel">cancel</string>
+    <string name="uncancel">uncancel</string>
 
 </resources>

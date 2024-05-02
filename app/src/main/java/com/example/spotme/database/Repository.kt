@@ -41,6 +41,7 @@ interface RepositoryInterface { //
     /** Get a transaction entity by ID
      * @param id the ID of the transaction you want to get */
     fun getTransactionById(id: Long): Flow<Transaction>
+    suspend fun getTransactionByIdNonFlow(id: Long): Transaction
 
     /** Get a profile by ID, but not as a flow object
      * @param id the ID of the profile you want to get */
@@ -138,6 +139,9 @@ class Repository(val dao: DataAccessObject):
     override suspend fun getSpecificProfileWithEverythingNonFlow(profileId: Long): ProfileWithEverything {
         return dao.getSpecificProfileWithEverythingNonFlow(profileId)
     }
+    override suspend fun getTransactionByIdNonFlow(id: Long): Transaction {
+        return dao.getSpecificTransactionNonFlow(id)
+    }
     override suspend fun insertProfile(profile: Profile): Long? {
         return dao.insertProfile(profile)
     }
@@ -165,6 +169,7 @@ class Repository(val dao: DataAccessObject):
     override suspend fun deleteTransaction(transaction: Transaction) {
         return dao.deleteTransaction(transaction)
     }
+
 
     /**
      * Provides a SubRepository instance

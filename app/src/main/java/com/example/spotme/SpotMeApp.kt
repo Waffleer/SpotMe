@@ -227,6 +227,11 @@ fun SpotMeApp(
                     onEditProfilePressed = {
                         navController.navigate(SpotMeScreen.EditProfileScreen.name)
                     },
+                    onClickeditTransactionCanceled = {pid, tid, state ->
+                        coroutineScope.launch {
+                            dbTransactionViewModel.editTransactionCanceled(pid, tid, state)
+                        }
+                    }
                 )
 
             }

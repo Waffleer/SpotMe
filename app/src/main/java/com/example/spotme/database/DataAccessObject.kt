@@ -90,6 +90,10 @@ interface DataAccessObject {
     @Query("SELECT * FROM 'Transaction' WHERE transactionId = :transactionId")
     fun getSpecificTransaction(transactionId: Long?): Flow<com.example.spotme.database.Transaction>
 
+    @Query("SELECT * FROM 'Transaction' WHERE transactionId = :transactionId")
+    suspend fun getSpecificTransactionNonFlow(transactionId: Long?): com.example.spotme.database.Transaction
+
+
     // <--- Get One To Many Relationships --->
 
     /** Get ALL profiles with their debts. */

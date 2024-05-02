@@ -76,6 +76,6 @@ object StaticDataSource {
         DebtWithTransactions(this.eDebts[0], this.eTransactions)
     )
     val profilesWithEverything: List<ProfileWithEverything> = listOf(
-        ProfileWithEverything(this.eProfiles[0],this.debtsWithTransactions_s)
+        ProfileWithEverything(this.eProfiles[0],this.debtsWithTransactions_s),
     )
 }

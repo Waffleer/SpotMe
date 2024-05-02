@@ -3,6 +3,7 @@ package com.example.spotme.viewmodels
 
 
 import android.util.Log
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.collectAsState
 import com.example.spotme.database.RepositoryInterface
 import androidx.lifecycle.ViewModel
@@ -38,12 +39,28 @@ class DBTransactionViewModel(
 
 
 //    suspend fun removeTransactionById(tID: Long) {
-//
+//        repo.deleteTransaction(repo.getTransactionByIdNonFlow(tID))
 //    }
 //
-//    suspend fun editTransactionCanceled(tid: Long, canceled: Boolean){
-//
-//    }
+    suspend fun editTransactionCanceled(pid: Long, tid: Long, canceled: Boolean){
+        var trans: Transaction = repo.getTransactionByIdNonFlow(tid)
+        repo.updateTransaction(trans.copy(canceled = canceled))
+
+        var pwe: ProfileWithEverything = repo.getSpecificProfileWithEverythingNonFlow(pid)
+        val debtid = pwe!!.debtsWithTransactions[0].debt.debtId
+        var amount: Double = 0.0
+        if(canceled){
+            amount = trans.amount * -1
+        }
+        else{
+            amount = trans.amount
+        }
+        if (debtid != null) {
+            updateDebt(debtid, amount + pwe.debtsWithTransactions[0].debt.totalDebt)
+        }
+        updateProfile(pid, amount + pwe.profile.totalDebt)
+    }
+
 
     /**
      * create a transaction by profileId
