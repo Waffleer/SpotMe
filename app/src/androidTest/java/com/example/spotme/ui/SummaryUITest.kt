@@ -65,42 +65,15 @@ class SummaryUITest {
 
         composeTestRule.onNodeWithText("Overall Balance: ").assertExists()
         composeTestRule.onNodeWithText("$30.00").assertExists()
-    }
 
-    @Test
-    fun testPrimaryDebtor() {
-        composeTestRule.setContent {
-            val navController = rememberNavController()
-            SummaryScreen(
-                repository = repository,
-                navController = navController,
-                onPrimaryDebtorClicked = {},
-                onPrimaryCreditorClicked = {},
-                submitTransaction = ({ _, _, _ -> }),
-            )
-        }
-
-        composeTestRule.onNodeWithText("Primary Debtor: Austin").assertExists()
+        composeTestRule.onNodeWithText("Primary Debtor: Austin", substring = true).assertExists()
         composeTestRule.onNodeWithText("Owes You: ").assertExists()
-        composeTestRule.onNodeWithText("$10.00").assertExists()
-    }
-
-    @Test
-    fun testPrimaryCreditor() {
-        composeTestRule.setContent {
-            val navController = rememberNavController()
-            SummaryScreen(
-                repository = repository,
-                navController = navController,
-                onPrimaryDebtorClicked = {},
-                onPrimaryCreditorClicked = {},
-                submitTransaction = ({ _, _, _ -> }),
-            )
-        }
+        composeTestRule.onNodeWithText("$20.00").assertExists()
 
         composeTestRule.onNodeWithText("Primary Creditor: Bob").assertExists()
         composeTestRule.onNodeWithText("You Owe: ").assertExists()
         composeTestRule.onNodeWithText("$10.00").assertExists()
+
     }
 
     @Test

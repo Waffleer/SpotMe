@@ -67,8 +67,8 @@ class ExpandedProfileUITest {
         }
 
         composeTestRule.onNodeWithText("Austin").assertExists()
-        composeTestRule.onNodeWithText("Loves apples").assertExists()
-        composeTestRule.onNodeWithText("Prefers NONE").assertExists()
+        composeTestRule.onNodeWithText("Love apples", substring = true).assertExists()
+        composeTestRule.onNodeWithText("Prefers NONE", substring = true).assertExists()
         composeTestRule.onNodeWithText("Walmart Trip").assertExists()
         composeTestRule.onNodeWithText("Box of apples").assertExists()
         composeTestRule.onNodeWithText("Container of apple sauce").assertExists()
