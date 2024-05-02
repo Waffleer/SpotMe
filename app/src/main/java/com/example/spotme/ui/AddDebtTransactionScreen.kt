@@ -123,19 +123,6 @@ fun AddDebtTransactionScreen(
                                 modifier = Modifier
                                     .padding(dimensionResource(R.dimen.padding_small))
                                     .clip(RoundedCornerShape(15.dp)),
-                                value = transactionDescriptionState,
-                                onValueChange = { transactionDescriptionState = it },
-                                label = { Text(stringResource(R.string.transaction_description)) }
-                            )
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            TextField(
-                                modifier = Modifier
-                                    .padding(dimensionResource(R.dimen.padding_small))
-                                    .clip(RoundedCornerShape(15.dp)),
                                 value = transactionAmountState,
                                 onValueChange = {
                                     transactionAmountState = it
@@ -159,6 +146,19 @@ fun AddDebtTransactionScreen(
                                     }
                                 ),
                                 leadingIcon = { Text("$") }
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            TextField(
+                                modifier = Modifier
+                                    .padding(dimensionResource(R.dimen.padding_small))
+                                    .clip(RoundedCornerShape(15.dp)),
+                                value = transactionDescriptionState,
+                                onValueChange = { transactionDescriptionState = it },
+                                label = { Text(stringResource(R.string.transaction_description)) }
                             )
                         }
                     }
