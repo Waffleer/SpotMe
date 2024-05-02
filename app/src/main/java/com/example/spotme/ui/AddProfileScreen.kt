@@ -42,6 +42,16 @@ import com.example.spotme.data.*
 import com.example.spotme.ui.elements.NavCard
 import kotlinx.coroutines.launch
 
+/**
+ * Composable function to display a screen for adding a new profile.
+ * Users can input profile details such as name, description, and preferred payment method.
+ *
+ * @param addProfileToDatabase Lambda function to add a profile to the database.
+ * @param navController NavController for navigation.
+ * @param postOpNavigation Lambda function for post-operation navigation.
+ * @param modifier Modifier for styling.
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProfileScreen(
@@ -62,7 +72,6 @@ fun AddProfileScreen(
         Column(
             modifier = modifier
                 .verticalScroll(rememberScrollState())
-                //.padding(dimensionResource(R.dimen.padding_medium))
                 .weight(1f),
         ) {
 
@@ -212,7 +221,6 @@ fun AddProfileScreen(
                                         }
                                     },
                                     modifier = Modifier
-                                        //.align(Alignment.End)
                                         .size(25.dp)
                                 ) {
                                     Icon(
