@@ -78,7 +78,6 @@ fun EditProfileScreen(
                 //.padding(dimensionResource(R.dimen.padding_medium))
                 .weight(1f),
         ) {
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
