@@ -1,5 +1,6 @@
 package com.example.spotme.ui.elements.details
 
+import android.icu.text.NumberFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +51,7 @@ fun ProfileCard(
     Box(
         modifier = Modifier
             .fillMaxWidth(),
-            //.padding(start = 5.dp, end = 5.dp),
+        //.padding(start = 5.dp, end = 5.dp),
         contentAlignment = Alignment.Center
     ) {
         Card(
@@ -86,7 +87,7 @@ fun ProfileCard(
                         )
                         Text(
                             textAlign = TextAlign.Start,
-                            text = "$${profile.amount}",
+                            text = NumberFormat.getCurrencyInstance().format(profile.amount),
                             modifier = Modifier
                                 .padding(start = 12.dp, bottom = 4.dp)
                                 .totalColor(profile.amount),

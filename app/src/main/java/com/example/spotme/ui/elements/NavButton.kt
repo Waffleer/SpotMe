@@ -1,15 +1,9 @@
 package com.example.spotme.ui.elements
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
@@ -20,13 +14,11 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.spotme.R
@@ -58,7 +50,7 @@ fun DetailsNavButton(
         modifier = modifier
             .padding(11.dp),
 
-    ) {
+        ) {
         Icon(
             imageVector = Icons.Filled.Add,
             contentDescription = stringResource(R.string.add_button),
@@ -82,7 +74,7 @@ fun ToDetailsNavButton(
             contentDescription = stringResource(R.string.list_button),
             modifier = modifier
                 .size(dimensionResource(R.dimen.navbar_icon_size))
-            )
+        )
     }
 }
 
@@ -102,7 +94,7 @@ fun AddProfileNavButton(
             contentDescription = stringResource(R.string.add_button),
             modifier = modifier
                 .size(dimensionResource(R.dimen.navbar_icon_size))
-            )
+        )
     }
 }
 
@@ -122,7 +114,7 @@ fun TestingNavButton(
             contentDescription = stringResource(R.string.testing_button),
             modifier = modifier
                 .size(dimensionResource(R.dimen.navbar_icon_size))
-            )
+        )
     }
 }
 
@@ -154,8 +146,7 @@ fun ToEditProfileNavButton(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier
-            //.padding(11.dp),
+        modifier = modifier.testTag("expanded_profile_edit_button")
     ) {
         Icon(
             imageVector = Icons.Filled.Edit,
