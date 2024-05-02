@@ -41,6 +41,18 @@ import com.example.spotme.ui.elements.details.ProfileCard
 import com.example.spotme.viewmodels.DetailsUiState
 import com.example.spotme.viewmodels.DetailsProfiles
 
+/**
+ * Composable function to display the details screen.
+ * This screen displays a list of profiles with filtering options.
+ *
+ * @param uiState ViewModel state for details screen.
+ * @param navController NavController for navigation.
+ * @param onProfilePressed Callback function for when a profile is pressed.
+ * @param onAddPressed Callback function for when the add button is pressed.
+ * @param onFilterAmountHighPressed Callback function for when the high amount filter button is pressed.
+ * @param onFilterAmountLowPressed Callback function for when the low amount filter button is pressed.
+ * @param modifier Modifier for styling.
+ */
 
 @Composable
 fun DetailsScreen(
@@ -66,6 +78,7 @@ fun DetailsScreen(
             horizontalArrangement = Arrangement.Center, // Center align items horizontally
 
         ) {
+            // Button to filter profiles by high amount
             IconButton(
                 onClick = { onFilterAmountHighPressed() },
                 modifier = Modifier
@@ -78,6 +91,7 @@ fun DetailsScreen(
 
                     )
             }
+            // Button to filter profiles by low amount
             IconButton(
                 onClick = { onFilterAmountLowPressed() },
                 modifier = Modifier
@@ -90,11 +104,10 @@ fun DetailsScreen(
                     )
             }
         }
-        Column () {
+            // Display profiles with ProfileCard
+            Column () {
             uiState.filterProfiles.forEach {
                 ProfileCard(profile = it, onProfilePressed, onAddPressed)
-                //TODO update ProfileCard Function to make it look nice
-                //TODO add + button
             }
 
 

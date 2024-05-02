@@ -40,6 +40,14 @@ import com.example.spotme.R
 import com.example.spotme.ui.elements.NavCard
 import com.example.spotme.viewmodels.ExpandedProfileViewModel
 
+/**
+ * Composable function to display the screen for adding debt transactions.
+ * This screen allows users to add debt transactions to a specific profile.
+ *
+ * @param expandedProfileViewModel ViewModel for expanded profile data.
+ * @param navController NavController for navigation.
+ * @param submitTransaction Callback function for submitting a transaction.
+ */
 
 @Composable
 fun AddDebtTransactionScreen(
@@ -119,6 +127,7 @@ fun AddDebtTransactionScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center
                         ) {
+                            // Add transaction amount
                             TextField(
                                 modifier = Modifier
                                     .padding(dimensionResource(R.dimen.padding_small))
@@ -126,14 +135,6 @@ fun AddDebtTransactionScreen(
                                 value = transactionAmountState,
                                 onValueChange = {
                                     transactionAmountState = it
-                                    // HAD TO COMMENT THIS OUT BECAUSE
-                                    // it wouldn't accept the negative sign
-                                    /*newText ->
-                            val cleanString = newText.replace(Regex("[^\\d.]"), "")
-                            val numberRegex = Regex("^\\d*\\.?\\d{0,2}")
-                            if (cleanString.matches(numberRegex)) {
-                                transactionAmountState = cleanString
-                            }*/
                                 },
                                 label = { Text("Debt Amount") },
                                 keyboardOptions = KeyboardOptions(
@@ -152,6 +153,7 @@ fun AddDebtTransactionScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center
                         ) {
+                            // Add Transaction Description
                             TextField(
                                 modifier = Modifier
                                     .padding(dimensionResource(R.dimen.padding_small))
@@ -166,6 +168,7 @@ fun AddDebtTransactionScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
+                        // Submit button
                         Button(
                             modifier = Modifier
                                 .padding(bottom = dimensionResource(R.dimen.padding_medium)),

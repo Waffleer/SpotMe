@@ -29,6 +29,15 @@ import com.example.spotme.data.Profile
 import com.example.spotme.data.StaticDataSource
 import com.example.spotme.ui.elements.DetailsNavButton
 
+/**
+ * Composable function to display a profile card.
+ *
+ * @param profile The profile to be displayed.
+ * @param onClicked Callback function for when the profile card is clicked.
+ * @param onPlusClicked Callback function for when the plus button in the profile card is clicked.
+ * @param modifier Modifier for customizing the layout of the profile card.
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileCard(
@@ -37,7 +46,11 @@ fun ProfileCard(
     onPlusClicked: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
+    /**
+     * Modifier function to apply total color to the profile card based on the total amount.
+     *
+     * @param total The total amount of the profile.
+     */
     @Composable
     fun Modifier.totalColor(total: Double): Modifier {
         val color = if (total > 0) Color.Green
@@ -51,7 +64,6 @@ fun ProfileCard(
     Box(
         modifier = Modifier
             .fillMaxWidth(),
-        //.padding(start = 5.dp, end = 5.dp),
         contentAlignment = Alignment.Center
     ) {
         Card(
@@ -66,8 +78,8 @@ fun ProfileCard(
                 ) {
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth(0.7f) //DO NOT TOUCH OR IT WILL BREAK FOR THE LOVE OF GOD
-                            .height(100.dp) //100.dp
+                            .fillMaxWidth(0.7f)
+                            .height(100.dp)
                     )
                     {
                         Text(
