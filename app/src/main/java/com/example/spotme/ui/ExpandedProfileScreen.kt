@@ -1,7 +1,7 @@
 package com.example.spotme.ui
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
+import android.icu.text.NumberFormat
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,8 +17,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -52,7 +52,7 @@ fun ExpandedProfileScreen(
     navController: NavController,
     onEditProfilePressed: () -> Unit,
     modifier: Modifier = Modifier,
-    ) {
+) {
     val profileEntity by expandedProfileViewModel.profileWithEverything.collectAsState()
     val eProfile = profileEntity.profileWithEverything.profile
     val eDebts = profileEntity.profileWithEverything.debtsWithTransactions
@@ -179,7 +179,8 @@ fun ExpandedProfileScreen(
                                     }
 
                                     Text(
-                                        text = "$${trans.amount}",
+                                        text = NumberFormat.getCurrencyInstance()
+                                            .format(trans.amount),
                                         modifier = Modifier,
                                         fontWeight = FontWeight.Bold,
                                     )

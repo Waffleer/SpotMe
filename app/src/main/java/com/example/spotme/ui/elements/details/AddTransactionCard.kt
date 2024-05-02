@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -67,7 +68,7 @@ fun AddTransactionCard(
     var description by remember { mutableStateOf("") }
     var selectedText by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    var userId by remember {mutableStateOf(h)}
+    var userId by remember { mutableStateOf(h) }
     val context = LocalContext.current
 
     //for the sounds
@@ -75,18 +76,27 @@ fun AddTransactionCard(
     val audioPlayer = MediaPlayer.create(audioContext, R.raw.applepay)
 
     // Need to check because names is empty on initial compose
-    if(!names.isEmpty()) {
+    if (!names.isEmpty()) {
         selectedText = names[0].first
         userId = names[0].second!!
-    } else { selectedText = "placeholder" }
+    } else {
+        selectedText = "placeholder"
+    }
 
-    val submitButtonLogic = { // submit button logic to only submit when fields are filled
+    val submitButtonLogic = {
+        println("SUBMIT")
+        println(amount)
+        println(description)
         if (amount != "" && description != "") {
             submitTransaction(userId, amount.toDoubleOrNull() ?: 0.0, description)
             audioPlayer.start()
             amount = ""
             description = ""
-            Toast.makeText(context, context.getText(R.string.transaction_submitted), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getText(R.string.transaction_submitted),
+                Toast.LENGTH_SHORT
+            ).show()
         } else if (amount == "") {
             Toast.makeText(
                 context,
@@ -130,24 +140,25 @@ fun AddTransactionCard(
                     )
 
                     //TOP RIGHT BUTTON IMPLEMENTATION
-Column {
-    IconButton(
-        onClick = {
-            submitButtonLogic()
-                  },
-        modifier = Modifier
-            .align(Alignment.End)
-            .size(dimensionResource(R.dimen.submit_icon))
+                    Column {
+                        IconButton(
+                            onClick = {
+                                submitButtonLogic()
+                            },
+                            modifier = Modifier
+                                .align(Alignment.End)
+                                .size(dimensionResource(R.dimen.submit_icon))
+                                .testTag("add_transaction_submit_button")
 
-    ) {
-        Icon(
-            imageVector = Icons.Filled.Done,
-            contentDescription = stringResource(R.string.create_button),
-            tint = MaterialTheme.colorScheme.secondary
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Done,
+                                contentDescription = stringResource(R.string.create_button),
+                                tint = MaterialTheme.colorScheme.secondary
 
-        )
-    }
-}
+                            )
+                        }
+                    }
                 }
 
                 //DROP DOWN MENU
@@ -162,8 +173,9 @@ Column {
                         onExpandedChange = {
                             expanded = !expanded
                         },
+                        modifier = Modifier.testTag("add_transaction_dropdown")
 
-                        ) {
+                    ) {
                         TextField(
                             value = selectedText,
                             onValueChange = {
@@ -176,8 +188,7 @@ Column {
 
                         ExposedDropdownMenu(
                             expanded = expanded,
-                            onDismissRequest = { expanded = false }
-
+                            onDismissRequest = { expanded = false },
                         ) {
                             names.forEach { item ->
                                 DropdownMenuItem(
@@ -186,7 +197,9 @@ Column {
                                         selectedText = item.first
                                         userId = item.second!!
                                         expanded = false
+
                                         Toast.makeText(context, item.first, Toast.LENGTH_SHORT).show()
+
                                         Log.d("j_selectedText_changed", "userId: " + userId)
                                     }
                                 )
@@ -206,6 +219,7 @@ Column {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(dimensionResource(R.dimen.padding_very_small))
+                        .testTag("add_transaction_amount")
                 )
 
                 OutlinedTextField(
@@ -222,6 +236,7 @@ Column {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(dimensionResource(R.dimen.padding_very_small))
+                        .testTag("add_transaction_description")
                 )
             }
         }
