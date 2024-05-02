@@ -7,14 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-/**
- * Stores SpotMeApp's UI state.
- *
- * @property subtotal the current price of the user's sub.
- * @property subType the type of sub that the user selected.
- * @property breadType the type of bread that the user selected.
- * @property selectedToppings a set of toppings recording the user's selection.
- */
 data class LocalUiState (
     // Put State Values Here:
     val debtTotal: String = "$0.00"

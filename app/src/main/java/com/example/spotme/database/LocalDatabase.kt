@@ -36,11 +36,11 @@ abstract class LocalDatabase : RoomDatabase() {
                     LocalDatabase::class.java,
                     "spotme_db"
                 )
-                    //.fallbackToDestructiveMigration() // Destroys DB to update schema
+                    .fallbackToDestructiveMigration() // Destroys DB to update schema
                     .build()
 
                 // Uncomment to reset DB to default data
-                instance?.resetInitialData()
+                //instance?.resetInitialData()
             }
             return instance as LocalDatabase
         }

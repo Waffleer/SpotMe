@@ -23,6 +23,7 @@ import kotlin.system.exitProcess
 //    val ProfileId: Long = -1
 //)
 
+
 class DBTransactionViewModel(
     spotMeRepository: RepositoryInterface,
     updateProfile_: (pid: Long, amount: Double) -> Unit,
@@ -36,44 +37,48 @@ class DBTransactionViewModel(
     //val uiState: StateFlow<TransactionState> = _uiState.asStateFlow()
 
 
-    suspend fun removeTransactionById(tID: Long) {
+//    suspend fun removeTransactionById(tID: Long) {
+//
+//    }
+//
+//    suspend fun editTransactionCanceled(tid: Long, canceled: Boolean){
+//
+//    }
 
-    }
-
-    suspend fun editTransactionCanceled(tid: Long, canceled: Boolean){
-
-    }
-
+    /**
+     * create a transaction by profileId
+     * @param profileID: Long //what id to add the transaction to
+     * @param amount: Double //the amount of the transaction
+     * @param description: String //the description string
+     */
     suspend fun createTransaction(profileID: Long, amount: Double, description: String) {
-        println("Creating Transaction")
-
+//        println("Creating Transaction")
+//
         Log.d("j_transaction_viewmodel", "ProfileID: " + profileID.toString())
 
         var pwe: ProfileWithEverything = repo.getSpecificProfileWithEverythingNonFlow(profileID)
 
-        println("3")
-
-        println("Profileid = ${pwe.profile.profileId}")
+//        println("3")
+//
+//        println("Profileid = ${pwe.profile.profileId}")
 
 
         val debtid = pwe!!.debtsWithTransactions[0].debt.debtId
-        println("Debtid = ${debtid}")
+//        println("Debtid = ${debtid}")
         // profileId to debt id, will need to search db
 
         val date = Date()
         val trans = Transaction(null, debtid, date, amount, description, false)
         val transId = repo.insertTransaction(trans)
-        println("Transactionid = ${transId}")
+//        println("Transactionid = ${transId}")
 
         if (debtid != null) {
             updateDebt(debtid, amount + pwe.debtsWithTransactions[0].debt.totalDebt)
         }
 
-        println("transID = $transId")
+//        println("transID = $transId")
 
         updateProfile(profileID, amount + pwe.profile.totalDebt)
-
-        //TODO re-compile debt and amount
 
         //_uiState.update {currentState ->
         //    currentState.copy(

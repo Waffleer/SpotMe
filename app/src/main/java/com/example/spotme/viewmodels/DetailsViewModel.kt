@@ -65,6 +65,11 @@ class DetailsViewModel (
 
     val uiState: StateFlow<DetailsUiState> = _uiState.asStateFlow()
 
+    /**
+     * updates the filter type and then updates the displayed list
+     * @param filter: FilterType? what to change it to
+     * @param pro: List<Profile>? // nullable list of profiles, this is when the local profile list is not initilizeds from the repository call
+     */
     fun setFilterType(filter: FilterType?, pro: List<Profile>? = null){
         //println("setFilter = $filter")
         if(filter != null){
@@ -114,7 +119,10 @@ class DetailsViewModel (
 //        println("filter = ${uiState.value.filterType}")
 //    }
 
-
+    /**
+     * filters the display list by amount >
+     * @param con: List<Profile> // what profile list to sort
+     */
     private fun filter_profiles_debt_amount_high(con: List<Profile>): List<Profile>{
         val sorted : MutableList<Profile> = mutableListOf()
         var profiles : MutableList<Profile> = con.toMutableList()
@@ -133,6 +141,10 @@ class DetailsViewModel (
         }
         return sorted
     }
+    /**
+     * filters the display list by amount <
+     * @param con: List<Profile> // what profile list to sort
+     */
 
     private fun filter_profiles_debt_amount_low(con: List<Profile>): List<Profile>{
         val sorted : MutableList<Profile> = mutableListOf()
@@ -157,6 +169,11 @@ class DetailsViewModel (
         return sorted
     }
 
+    /**
+     * TODO Not Implemented yet
+     * filters the display list by substring for search bar
+     * @param con: List<Profile> // what profile list to sort
+     */
     private fun filter_profiles_by_substring(con: List<Profile>): List<Profile>{
         val sorted : MutableList<Profile> = mutableListOf()
         var profiles : MutableList<Profile> = con.toMutableList()
@@ -165,6 +182,10 @@ class DetailsViewModel (
         return con
     }
 
+    /**
+     * updates currentProfile id for ui
+     * @param profile: Profile
+     */
     public fun setCurrentProfile(profile: Profile){
         //val profileWithEverything = StaticDataSource.profilesWithEverything[0]
         //val con: Profile = eProfileWithEverything_to_uProfile(profileWithEverything)
@@ -174,6 +195,7 @@ class DetailsViewModel (
             )
         }
     }
+
 
     var profilesFlow: StateFlow<DetailsProfiles>
             = repo.getProfiles()

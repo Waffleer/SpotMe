@@ -38,7 +38,7 @@ import com.example.spotme.ui.DetailsScreen
 import com.example.spotme.ui.EditProfileScreen
 import com.example.spotme.ui.ExpandedProfileScreen
 import com.example.spotme.ui.SummaryScreen
-import com.example.spotme.ui.TestingScreen
+//import com.example.spotme.ui.TestingScreen
 import com.example.spotme.viewmodels.DBProfileViewModel
 import com.example.spotme.viewmodels.DBTransactionViewModel
 import com.example.spotme.viewmodels.DetailsViewModel
@@ -250,32 +250,32 @@ fun SpotMeApp(
                     )
             }
 
-            composable(route = SpotMeScreen.TestingScreen.name) {
-                TestingScreen(
-                    //profile = detailsUiState.currentProfile
-                    uiState = profileState,
-                    onT1Pressed = { name, description, payment ->
-                        coroutineScope.launch {
-                            dbProfileViewModel.createProfile(name, description, payment)
-                        }
-                    },
-                    onT2Pressed = {id ->
-                        coroutineScope.launch {
-                            dbProfileViewModel.removeProfileById(id)
-                        }
-                    },
-                    onT3Pressed = { profileID, amount, description ->
-                        coroutineScope.launch {
-                            dbTransactionViewModel.createTransaction(profileID, amount, description)
-                        }
-                    },
-                    onT4Pressed = {tid ->
-                        coroutineScope.launch {
-                            dbTransactionViewModel.removeTransactionById(tid)
-                        }
-                    },
-                )
-            }
+//            composable(route = SpotMeScreen.TestingScreen.name) {
+//                TestingScreen(
+//                    //profile = detailsUiState.currentProfile
+//                    uiState = profileState,
+//                    onT1Pressed = { name, description, payment ->
+//                        coroutineScope.launch {
+//                            dbProfileViewModel.createProfile(name, description, payment)
+//                        }
+//                    },
+//                    onT2Pressed = {id ->
+//                        coroutineScope.launch {
+//                            dbProfileViewModel.removeProfileById(id)
+//                        }
+//                    },
+//                    onT3Pressed = { profileID, amount, description ->
+//                        coroutineScope.launch {
+//                            dbTransactionViewModel.createTransaction(profileID, amount, description)
+//                        }
+//                    },
+//                    onT4Pressed = {tid ->
+//                        coroutineScope.launch {
+//                            dbTransactionViewModel.removeTransactionById(tid)
+//                        }
+//                    },
+//                )
+//            }
             composable(route = SpotMeScreen.AddProfile.name) {
                 AddProfileScreen(
                     addProfileToDatabase = submitProfileToDatabase,
